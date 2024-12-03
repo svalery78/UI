@@ -319,6 +319,59 @@ function resetValueVM(){
    $("#vm_add_disk").prop("checked", false);
 }
 
+function addVMToTable(vmData) {
+  var table = $("#vm_table");
+  if (table.length === 0) {
+    // If table does not exist, create it
+    $("#input_form").append(`
+      <table id="vm_table" border="1">
+        <thead>
+          <tr>
+            <th>VM #</th>
+            <th>Network CIDR</th>
+            <th>vCPU</th>
+            <th>RAM</th>
+            <th>VMDK</th>
+            <th>Zone</th>
+            <th>Disk1</th>
+            <th>Disk1 Letter</th>
+            <th>Disk2</th>
+            <th>Disk2 Letter</th>
+            <th>Disk3</th>
+            <th>Disk3 Letter</th>
+            <th>Disk4</th>
+            <th>Disk4 Letter</th>
+            <th>Disk5</th>
+            <th>Disk5 Letter</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    `);
+    table = $("#vm_table");
+  }
+  table.find("tbody").append(`
+    <tr>
+      <td>${vmData.vm}</td>
+      <td>${vmData.vm_networkcidr || ''}</td>
+      <td>${vmData.vm_vcpu || ''}</td>
+      <td>${vmData.vm_ram || ''}</td>
+      <td>${vmData.vm_vmdk || ''}</td>
+      <td>${vmData.vm_zone || ''}</td>
+      <td>${vmData.vm_disk1 || ''}</td>
+      <td>${vmData.vm_disk1_letter || ''}</td>
+      <td>${vmData.vm_disk2 || ''}</td>
+      <td>${vmData.vm_disk2_letter || ''}</td>
+      <td>${vmData.vm_disk3 || ''}</td>
+      <td>${vmData.vm_disk3_letter || ''}</td>
+      <td>${vmData.vm_disk4 || ''}</td>
+      <td>${vmData.vm_disk4_letter || ''}</td>
+      <td>${vmData.vm_disk5 || ''}</td>
+      <td>${vmData.vm_disk5_letter || ''}</td>
+    </tr>
+  `);
+}
+
 
 
 $("#admin_privileges").on("change",function(){
