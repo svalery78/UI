@@ -4,19 +4,55 @@ var $need_os = $extension.find('#need_os');
 var $need_os_row = $need_os.closest('.row');
 var $count_vm = 1;
 var $VM;
-var adminListNodes;
+var $adminListNodes;
+var $isDCID;
+var $nameIS;
 
-var adminList = $extension.find("#admin_list");
-adminList.on('change', function() {
-  //alert('change adminList');      
-  adminListNodes = adminList.data('items').map(function(item){
-    return {
-      id: item.id,
-      email: item.primary_email
-    };          
-  });
-  //alert(JSON.stringify(adminListNodes));
+var ISName = $extension.find("#name_is");
+ISName.on('change', function () {
+  $nameIS = $("#name_is").val();
+  $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
+  if($("#name_is").hasClass("empty")){
+    $("#name_is").removeClass("empty");
+  } 
+  updateInputJson();
 });
+
+var adminList = vm_networkcidr("#admin_list");
+adminList.on('change', function () {
+  //alert('change adminList');      
+  $adminListNodes = adminList.data('items').map(function (item) {
+    return {
+      //id: item.id,
+      name: item.name,
+      email: item.primary_email
+    };    
+  });
+  if($("#admin_list").hasClass("empty")){
+    $("#admin_list").removeClass("empty");
+  }
+  //alert(JSON.stringify($adminListNodes));
+  updateInputJson();
+});
+
+$("#vm_role").on('change', function (){
+  $("#vm_role").removeClass("empty");
+});
+
+// $("#vm_networkcidr_action").on('changed', function(){
+//   if(!"#vm_networkcidr_action"=== "существующая"){
+//     $("#vm_networkcidr").removeClass("empty");
+//   }
+// });
+
+// var vm_networkcidr = $extension.find("#vm_networkcidr");
+// //$("#vm_networkcidr")
+// vm_networkcidr.on('changed', function(){
+//   alert("vm_networkcidr");
+//   $("#vm_networkcidr").removeClass("empty");
+// });
+
+
 
 
 $("#dr_cluster").on("change", function () {
@@ -78,13 +114,13 @@ $("#vm_service").on("change", function () {
   }
 });
 
-// $("#additional_disks").on("change",function(){
-//   if($(this).is(":checked")){
-//     $("#for_disk").show();
-//   }else{
-//     $("#for_disk").hide();
-//   }
-// });
+$("#additional_disks").on("change",function(){
+  if($(this).is(":checked")){
+    $("#for_disk").show();
+  }else{
+    $("#for_disk").hide();
+  }
+});
 
 $("#vm_add_disk").on("change", function () {
   if ($(this).is(":checked")) {
@@ -183,16 +219,19 @@ $("#add_vm").on("click", function () {
   if (!$(this).hasClass("disabled")) {
     //alert($(this).readonly());
     //$(this).prop("checked", false);
-    
-    $("#delete_vm").show();
-    $("#delete_vm").removeClass("disabled");
-    if ($count_vm < 21) {
-      //alert($count_vm);
-      addVM();
-      resetValueVM();
-      $count_vm++;
+    if (!checkingEnteredValue()) {
+      $("#delete_vm").show();
+      $("#delete_vm").removeClass("disabled");
+      if ($count_vm < 21) {
+        //alert($count_vm);
+        addVM();
+        resetValueVM();
+        $count_vm++;
+      } else {
+        $(this).addClass("disabled");
+      }
     } else {
-      $(this).addClass("disabled");
+      alert("Заполните корректно обязательные поля");
     }
     //
     //$(this).readonly(true);
@@ -209,7 +248,7 @@ $("#copy_vm").on("click", function () {
     $("#delete_vm").removeClass("disabled");
     if ($count_vm < 20) {
       //alert($count_vm);
-      addVM();      
+      addVM();
       //resetValueVM();
       $count_vm++;
     } else {
@@ -266,65 +305,88 @@ $("#delete_vm").on("click", function () {
 });
 
 function addVM() {
-  //var VM = {
-  // return $VM = {
-  //   "vm": $count_vm
-  // }
-  //var ISName = $extension.find("#name_is");
-  //alert(ISName);
-  //alert(JSON.stringify(ISName));
-  //var ISNameID = ISName.data('item').assetID;
-  //alert(ISNameID);
 
   var $package = $("#input_json").val();
-  //alert($("#input_json").val());
   $package = $package.replace(/\n+$/m, '');
   var packageData = $package && $package != '' ? JSON.parse($package) : null;
-  //var packageData = $package && $package != '' ? $package : null;
   var newArray = packageData ? packageData.nodes : [];
-  if (!packageData){
-    var ISName = $extension.find("#name_is");
-    alert("test 1");
-    alert(JSON.stringify(adminListNodes));
-    //var adminList = $extension.find("#admin_list");
-    // adminList.on('change', function() {
-    //   alert('change adminList');
-    //   alert(adminList.data('items').id);
-    // })
 
+  var vmRole = $extension.find("#vm_role");
+  var role = vmRole.data('item').reference;
 
-    packageData = {
-      //"is_id": ISName.data('item').id,
-      "is_id": $("#name_is").val(),
-      "is_dc_id": ISName.data('item').custom_fields['Идентификатор ЦОД'],
-      "admin_list": adminListNodes
-    };
-
+  var vmNetworkCIDrAction = $("#vm_networkcidr_action").val();
+  var networkCIDr;
+  //alert(vmNetworkCIDrAction);
+  if (vmNetworkCIDrAction === "существующая") {
+    var vmNetworkCIDr = $extension.find("#vm_networkcidr");
+    networkCIDr = vmNetworkCIDr.data('item').label;
+  } else {
+    networkCIDr = "new";
   }
-  //alert(newArray);
+
+  var vmOS = $extension.find("#vm_os");
+  var OS = vmOS.data('item').label;
+  var vmNFS = $extension.find("#vm_nfs");
+  var NFS = vmNFS.data('items').map(function (item) {
+    return item.name;
+  });
+
+  var vmg02SkpduProtocol = $("#vm_g02_skdpu_protocol").val();
+  var vmg02SkpduPorts = $("#vm_g02_skdpu_ports").val();
+  var g02SkpduProtocol = vmg02SkpduPorts ? vmg02SkpduPorts : (vmg02SkpduProtocol ? vmg02SkpduProtocol : "");
+
+  var vmg02SkpduPortsNumber = $("#vm_g02_skdpu_ports_number").val();
+  var g02SkpduPortsNumber = vmg02SkpduPortsNumber ? vmg02SkpduPortsNumber : (vmg02SkpduPorts === "RDP" ? "3389" : (vmg02SkpduPorts === "SSH" ? "22" : ""));
+
+  var vmg03SkpduProtocol = $("#vm_g03_skdpu_protocol").val();
+  var vmg03SkpduPorts = $("#vm_g03_skdpu_ports").val();
+  var g03SkpduProtocol = vmg03SkpduPorts ? vmg03SkpduPorts : (vmg03SkpduProtocol ? vmg03SkpduProtocol : "");
+
+  var vmg03SkpduPortsNumber = $("#vm_g03_skdpu_ports_number").val();
+  var g03SkpduPortsNumber = vmg03SkpduPortsNumber ? vmg03SkpduPortsNumber : (vmg03SkpduPorts === "RDP" ? "3389" : (vmg03SkpduPorts === "SSH" ? "22" : ""));
+
+  var vmg04SkpduProtocol = $("#vm_g04_skdpu_protocol").val();
+  var vmg04SkpduPorts = $("#vm_g04_skdpu_ports").val();
+  var g04SkpduProtocol = vmg04SkpduPorts ? vmg04SkpduPorts : (vmg04SkpduProtocol ? vmg04SkpduProtocol : "");
+
+  var vmg04SkpduPortsNumber = $("#vm_g04_skdpu_ports_number").val();
+  var g04SkpduPortsNumber = vmg04SkpduPortsNumber ? vmg04SkpduPortsNumber : (vmg04SkpduPorts === "RDP" ? "3389" : (vmg04SkpduPorts === "SSH" ? "22" : ""));
+
+
+
+
+  if (!packageData) {
+    packageData = {
+      "is_id": "",
+      "is_dc_id": "",
+      "admin_list": ""
+    };
+  }
+
   var newVM = {
     "vm": $count_vm,
-    "vm_networkcidr": $("#vm_networkcidr").val(),
+    "vm_role": role, //$("#vm_role").val(),  //
+    "vm_networkcidr": networkCIDr, //$("#vm_networkcidr").val(), //
     "vm_vcpu": $("#vm_vcpu").val(),
     "vm_ram": $("#vm_ram").val(),
     "vm_vmdk": $("#vm_vmdk").val(),
     "vm_zone": $("#vm_zone").val(),
-    "vm_os": $("#vm_os").val(),
-    "vm_nfs": $("#vm_nfs").val(),
+    "vm_os": OS, //$("#vm_os").val(),  //
+    "vm_nfs": NFS, //$("#vm_nfs").val(), //
     "vm_action_g02": $("#vm_action_g02").val(),
     "vm_g02_name": $("#vm_g02_name").val(),
-    "vm_g02_skdpu_protocol": $("#vm_g02_skdpu_protocol").val(),
-    "vm_g02_skdpu_ports_number": $("#vm_g02_skdpu_ports_number").val(),
-    "vm_action_g03": $("#vm_action_g03").val(),
+    "vm_g02_skdpu_protocol": g02SkpduProtocol, //$("#vm_g02_skdpu_protocol").val(),  //
+    "vm_g02_skdpu_ports_number": g02SkpduPortsNumber, //$("#vm_g02_skdpu_ports_number").val(), //
+    "vm_action_g03": $("#vm_action_g03").val(), //
     "vm_g03_name": $("#vm_g03_name").val(),
-    "vm_g03_skdpu_protocol": $("#vm_g03_skdpu_protocol").val(),
-    "vm_g03_skdpu_ports_number": $("#vm_g03_skdpu_ports_number").val(),
-    "vm_action_g04": $("#vm_action_g04").val(),
+    "vm_g03_skdpu_protocol": g03SkpduProtocol, //$("#vm_g03_skdpu_protocol").val(),  //
+    "vm_g03_skdpu_ports_number": g03SkpduPortsNumber, //$("#vm_g03_skdpu_ports_number").val(),  //
+    "vm_action_g04": $("#vm_action_g04").val(),  //
     "vm_g04_name": $("#vm_g04_name").val(),
-    "vm_g04_skdpu_protocol": $("vm_g04_skdpu_protocol").val(),
-    "vm_g04_skdpu_ports_number": $("#vm_g04_skdpu_ports_number").val(),
-    "vm_authorization": $("#vm_authorization").val(),
-    "vm_action_type": $("#vm_action_type").val(),
+    "vm_g04_skdpu_protocol": g04SkpduProtocol, //$("vm_g04_skdpu_protocol").val(),  //
+    "vm_g04_skdpu_ports_number": g04SkpduPortsNumber, //$("#vm_g04_skdpu_ports_number").val(),  //
+    "vm_authorization": $("#vm_authorization").val(),  //
+    "vm_action_type": $("#vm_action_type").val(),  //
     "vm_disk1": $("#vm_disk1").val(),
     "vm_disk1_letter": $("#vm_disk1_letter").val(),
     "vm_disk2": $("#vm_disk2").val(),
@@ -339,7 +401,7 @@ function addVM() {
   newArray.push(newVM);
   //var nodes =  newArray;
   var nodes = {
-    "is_id": packageData.is_id, 
+    "is_id": packageData.is_id,
     "is_dc_id": packageData.is_dc_id,
     "admin_list": packageData.admin_list,
     "nodes": newArray
@@ -353,11 +415,33 @@ function addVM() {
 }
 
 function resetValueVM() {
+  $("#vm_role").val(null);
+  $("#vm_networkcidr_action").val(null);
   $("#vm_networkcidr").val(null);
   $("#vm_vcpu").val(null);
   $("#vm_ram").val(null);
   $("#vm_vmdk").val(null);
   $("#vm_zone").val(null);
+  $("#vm_os_family").val(null);
+  $("#vm_os").val(null);
+  $("#add_nfs").prop("checked", false);
+  $("#vm_nfs").val(null);
+  $("#add_groups").val(null);
+  $("#vm_action_g02").val(null);
+  $("#vm_g02_name").val(null);
+  $("#vm_g02_skdpu_protocol").val(null);
+  $("#vm_g02_skdpu_ports_number").val(null);
+  $("#vm_g02_skdpu_ports").val(null);
+  $("#vm_action_g03").val(null);
+  $("#vm_g03_name").val(null);
+  $("#vm_g03_skdpu_protocol").val(null);
+  $("#vm_g03_skdpu_ports_number").val(null);
+  $("#vm_g03_skdpu_ports").val(null);
+  $("#vm_action_g04").val(null);
+  $("#vm_g04_name").val(null);
+  $("#vm_g04_skdpu_protocol").val(null);
+  $("#vm_g04_skdpu_ports_number").val(null);
+  $("#vm_g04_skdpu_ports").val(null);
   $("#vm_disk1").val(null);
   $("#vm_disk1_letter").val(null);
   $("#vm_disk2").val(null);
@@ -385,9 +469,9 @@ function addVMToTable() {
   $VMs = $VMs.replace(/\n+$/m, '');
   var VMsData = $VMs && $VMs != '' ? JSON.parse($VMs).nodes : null;
   //alert("addVMToTable");
-   if(!VMsData){
-      $('#input_form').val(null);
-   };
+  if (!VMsData) {
+    $('#input_form').val(null);
+  };
   var table = ' <table id="vm_table" border="1"><tr><th>';
   table += 'VM #';
   table += '</th><th>';
@@ -422,11 +506,11 @@ function addVMToTable() {
   table += 'Буква диска 5';
   table += '</th></tr>';
 
-   //  alert(VMsData.length);
-   for (var index = 0; index < VMsData.length; index++) {
-     var vmData = VMsData[index];
-     //alert(JSON.stringify(vmData));
-     
+  //  alert(VMsData.length);
+  for (var index = 0; index < VMsData.length; index++) {
+    var vmData = VMsData[index];
+    //alert(JSON.stringify(vmData));
+
     table += '<tr><td>';
     table += vmData.vm;
     table += '</td><td>';
@@ -460,7 +544,7 @@ function addVMToTable() {
     table += '</td><td>';
     table += (vmData.vm_disk5_letter || '');
     table += '</td></tr>';
-   }
+  }
   table += '</table>';
   // `);
   $('#input_form').val({ html: table });
@@ -481,6 +565,106 @@ function addVMToTable() {
   // $('#input_form1').val({ html: table2 });
 
 }
+
+function updateInputJson() {
+  var $package = $("#input_json").val();
+  //alert($("#input_json").val());
+  //alert($("#name_is").val());
+  $package = $package.replace(/\n+$/m, '');
+  var packageData = $package && $package != '' ? JSON.parse($package) : null;
+  var newArray = packageData ? packageData.nodes : [];
+  //if (!packageData){
+
+  //alert($nameIS);
+  //alert('ISName');
+  //alert(ISName); 
+  packageData = {
+    "is_id": $nameIS,
+    "is_dc_id": $isDCID,
+    "admin_list": $adminListNodes ? $adminListNodes : ""
+  };
+  //}
+  var nodes = {
+    "is_id": packageData.is_id,
+    "is_dc_id": packageData.is_dc_id,
+    "admin_list": packageData.admin_list,
+    "nodes": newArray
+  };
+  $("#input_json").val(JSON.stringify(nodes)).change();
+}
+
+function checkingEnteredValue() {
+  var isError = false;
+  if (!$("#name_is").val()) {
+    $("#name_is").addClass("empty");
+    isError = true;
+  }
+  if (!$("#vm_role").val()) {
+    $("#vm_role").addClass("empty");
+    isError = true;
+  };
+  //alert($("#for_admin").css("display"));
+  if ($("#for_admin").css("display")=="block") {
+    alert('checked');
+    if (!$adminListNodes) {
+      $("#admin_list").addClass("empty");
+      isError = true;
+    };
+  };
+  if ($("#vm_networkcidr_action").val()=== "существующая"){
+    if(!$("#vm_networkcidr").val()){
+      $("#vm_networkcidr").addClass("empty");
+      isError = true;
+    }
+  };
+   
+  // $("#vm_vcpu").val(null);
+  // $("#vm_ram").val(null);
+  // $("#vm_vmdk").val(null);
+  // $("#vm_zone").val(null);
+  // $("#vm_os_family").val(null);
+  // $("#vm_os").val(null);
+  // $("#add_nfs").prop("checked", false);
+  // $("#vm_nfs").val(null);
+  // $("#add_groups").val(null);
+  // $("#vm_action_g02").val(null);
+  // $("#vm_g02_name").val(null);
+  // $("#vm_g02_skdpu_protocol").val(null);
+  // $("#vm_g02_skdpu_ports_number").val(null); 
+  // $("#vm_g02_skdpu_ports").val(null);
+  // $("#vm_action_g03").val(null);
+  // $("#vm_g03_name").val(null);
+  // $("#vm_g03_skdpu_protocol").val(null);
+  // $("#vm_g03_skdpu_ports_number").val(null);
+  // $("#vm_g03_skdpu_ports").val(null);
+  // $("#vm_action_g04").val(null);
+  // $("#vm_g04_name").val(null);
+  // $("#vm_g04_skdpu_protocol").val(null);
+  // $("#vm_g04_skdpu_ports_number").val(null);
+  // $("#vm_g04_skdpu_ports").val(null);
+  // $("#vm_disk1").val(null);
+  // $("#vm_disk1_letter").val(null);
+  // $("#vm_disk2").val(null);
+  // $("#vm_disk2_letter").val(null);
+  // $("#vm_disk3").val(null);
+  // $("#vm_disk3_letter").val(null);
+  // $("#vm_disk4").val(null);
+  // $("#vm_disk4_letter").val(null);
+  // $("#vm_disk5").val(null);
+  // $("#vm_disk5_letter").val(null);
+  // $("#disk2").hide();
+  // $("#disk3").hide();
+  // $("#disk4").hide();
+  // $("#disk5").hide();
+  // $("#delete_disk").hide();
+  // $("#add_disk").removeClass("disabled");
+  // $("#delete_disk").removeClass("disabled");
+  // $("#additional_disks").hide();
+  // $("#vm_add_disk").prop("checked", false);
+  return isError;
+};
+
+
 
 
 

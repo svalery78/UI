@@ -58,9 +58,15 @@
   <div class="section" id="vm_1">
     <span class="section-header">Виртуальная машина</span>
 
+
     <div class="row vertical">
-      <label for="vm_networkcidr_action" title="Какая требуется подсеть (NetworkCIDR)">Какая требуется подсеть
-        (NetworkCIDR)</label>
+      <label for="vm_role" title="Укажите роль сервера">Укажите роль сервера</label>
+      <div id="vm_role" class="required" data-custom-view="роли_вм"></div>
+    </div>
+
+    
+    <div class="row vertical">
+      <label for="vm_networkcidr_action" title="Какая требуется подсеть (NetworkCIDR)">Какая требуется подсеть (NetworkCIDR)</label>
       <select id="vm_networkcidr_action" class="required">
         <option value=""></option>
         <option value="новая">Новая</option>
@@ -71,8 +77,7 @@
 
     <div class="row vertical">
       <label for="vm_networkcidr" title="Укажите подсеть (NetworkCIDR)">Укажите подсеть (NetworkCIDR)</label>
-      <div id="vm_networkcidr" class="required" data-custom-view="подсети" data-filter-name="#подсеть для ИС"
-        data-filter-value="name_is"></div>
+      <div id="vm_networkcidr" class="required" data-custom-view="подсети" data-filter-name="#подсеть для ИС" data-filter-value="name_is"></div>
     </div>
 
     <div class="row vertical">
@@ -95,28 +100,26 @@
       <select id="vm_zone" class="required">
         <option value=""></option>
         <option value="продуктивная">Продуктивная</option>
-        <option value="препрод">Препрод</option>
+        <option value="предпрод">Предпрод</option>
         <option value="тестовая">Тестовая</option>
       </select>
     </div>
 
 
     <div class="row vertical" data-searchable>
-      <label for="vm_os_family" title="Семейство ОС">Семейство ОС</label>
-      <div id="vm_os_family" class="required" data-custom-view="семейство_ос"></div>
-    </div>
+  <label for="vm_os_family" title="Семейство ОС">Семейство ОС</label>
+  <div id="vm_os_family" class="required" data-custom-view="семейство_ос"></div>
+</div>
 
     <div class="row vertical">
       <label for="vm_os" title="Требуемый образ ОС">Требуемый образ ОС</label>
-      <div id="vm_os" class="required" data-custom-view="образы_вм" data-filter-name="#Семейство ОС"
-        data-filter-value="vm_os_family"></div>
+      <div id="vm_os" class="required" data-custom-view="образы_вм" data-filter-name="#Семейство ОС" data-filter-value="vm_os_family"></div>
     </div>
 
 
     <div class="row vertical checkbox">
       <input id="add_nfs" type="checkbox">
-      <label for="add_nfs" title="Предоставить доступ к существующим NFS ресурсам">Предоставить доступ к существующим
-        NFS ресурсам</label>
+      <label for="add_nfs" title="Предоставить доступ к существующим NFS ресурсам">Предоставить доступ к существующим NFS ресурсам</label>
     </div>
 
     <div class="row vertical">
@@ -125,7 +128,7 @@
     </div>
 
 
-
+    
 
     <div class="row vertical">
       <label for="add_groups" title="Сколько требуется групп доступа">Сколько требуется групп доступа</label>
@@ -137,7 +140,7 @@
       </select>
     </div>
 
-
+    
 
     <div class="row vertical">
       <label for="vm_action_g02" title="Действие для первой группы">Действие для первой группы</label>
@@ -150,8 +153,7 @@
 
     <div class="row vertical">
       <label for="vm_g02_name" title="Имя группы">Имя группы</label>
-      <input id="vm_g02_name" type="text" autocomplete="off" maxlength="20" class="required"
-        pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+      <input id="vm_g02_name" type="text" autocomplete="off" maxlength="20" class="required" pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
     </div>
 
     <div class="row vertical">
@@ -184,8 +186,7 @@
 
     <div class="row vertical">
       <label for="vm_g03_name" title="Имя группы">Имя группы</label>
-      <input id="vm_g03_name" type="text" autocomplete="off" maxlength="20" class="required"
-        pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+      <input id="vm_g03_name" type="text" autocomplete="off" maxlength="20" class="required" pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
     </div>
 
     <div class="row vertical">
@@ -206,7 +207,7 @@
       <label for="vm_g03_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
       <input id="vm_g03_skdpu_protocol" type="text" autocomplete="off">
     </div>
-
+    
     <div class="row vertical">
       <label for="vm_action_g04" title="Действие для третьей группы">Действие для третьей группы</label>
       <select id="vm_action_g04" class="required">
@@ -218,8 +219,7 @@
 
     <div class="row vertical">
       <label for="vm_g04_name" title="Имя группы">Имя группы</label>
-      <input id="vm_g04_name" type="text" autocomplete="off" maxlength="20" class="required"
-        pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+      <input id="vm_g04_name" type="text" autocomplete="off" maxlength="20" class="required" pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
     </div>
 
     <div class="row vertical">
@@ -252,6 +252,13 @@
         <option value="add" selected>add</option>
       </select>
     </div>
+    
+
+
+
+
+
+
 
     <div class="row vertical checkbox">
       <input id="vm_add_disk" type="checkbox">
@@ -332,20 +339,22 @@
     </div>
   </div>
 
-  <div class="section" id="addDeleteVM"><span class="section"></span>
-    <div class="row vertical stock">
-      <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
-      <span class="btn check" id="copy_vm"><span class="button">Копировать ВМ</span></span>
-      <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
-          ВМ</span></span>
-      <br>
-      <br>
+    <div class="section" id="addDeleteVM"><span class="section"></span>
+      <div class="row vertical stock">
+        <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
+        <span class="btn check" id="copy_vm"><span class="button">Копировать ВМ</span></span>
+        <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
+            ВМ</span></span>
+        <br>
+        <br>
+      </div>
     </div>
-  </div>
 
 
   <div class="section" id="tech_details">
     <span class="section-header">Техническая информация</span>
+
+
     <div class="row vertical">
       <label for="input_form" title="input_form">Таблица ВМ</label>
       <div id="input_form" class="rich-text" style="border: none"></div>
@@ -354,6 +363,12 @@
       <label for="input_json" title="Создаваемые ВМ">Создаваемые ВМ</label>
       <textarea id="input_json" readonly></textarea>
     </div>
+
+
+    <!--div class="row vertical">
+      <label for="input_form1" title="input_form">Таблица ВМ1</label>
+      <div id="input_form1" class="rich-text"></div>
+  </div-->
   </div>
 </body>
 
