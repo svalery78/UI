@@ -7,18 +7,23 @@ var $VM;
 var $adminListNodes;
 var $isDCID;
 var $nameIS;
+var $role;
+var $networkCIDr;
+var $OS;
+var $NFS;
+var $addNFS;
 
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
   $nameIS = $("#name_is").val();
   $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
-  if($("#name_is").hasClass("empty")){
+  if ($("#name_is").hasClass("empty")) {
     $("#name_is").removeClass("empty");
-  } 
+  }
   updateInputJson();
 });
 
-var adminList = vm_networkcidr("#admin_list");
+var adminList = $extension.find("#admin_list");
 adminList.on('change', function () {
   //alert('change adminList');      
   $adminListNodes = adminList.data('items').map(function (item) {
@@ -26,32 +31,102 @@ adminList.on('change', function () {
       //id: item.id,
       name: item.name,
       email: item.primary_email
-    };    
+    };
   });
-  if($("#admin_list").hasClass("empty")){
-    $("#admin_list").removeClass("empty");
-  }
+  if (adminList.hasClass("empty")) {
+    adminList.removeClass("empty");
+  };
   //alert(JSON.stringify($adminListNodes));
   updateInputJson();
 });
 
-$("#vm_role").on('change', function (){
-  $("#vm_role").removeClass("empty");
+var vmRole = $extension.find("#vm_role");
+vmRole.on('change', function () {
+  vmRole.removeClass("empty");
+  $role = vmRole.data('item').reference;
 });
 
-// $("#vm_networkcidr_action").on('changed', function(){
-//   if(!"#vm_networkcidr_action"=== "существующая"){
-//     $("#vm_networkcidr").removeClass("empty");
-//   }
-// });
+var vmNetworkCIDrAction = $extension.find("#vm_networkcidr_action");
+var vmNetworkCIDr = $extension.find("#vm_networkcidr");
+vmNetworkCIDrAction.on('change', function () {
+  if (vmNetworkCIDrAction !== "существующая") {
+    //alert("vmNetworkCIDrAction");
+    if (vmNetworkCIDr.hasClass("empty")) {
+      vmNetworkCIDr.removeClass("empty");
+    }
+  }
+});
 
-// var vm_networkcidr = $extension.find("#vm_networkcidr");
-// //$("#vm_networkcidr")
-// vm_networkcidr.on('changed', function(){
-//   alert("vm_networkcidr");
-//   $("#vm_networkcidr").removeClass("empty");
-// });
 
+vmNetworkCIDr.on('change', function () {
+  if (vmNetworkCIDrAction === "существующая") {
+    //  var vmNetworkCIDr =$extension.find("#vm_networkcidr");
+    $networkCIDr = vmNetworkCIDr.data('item').label;
+  } else {
+    $networkCIDr = "new";
+  }
+  if (vmNetworkCIDr.hasClass("empty")) {
+    vmNetworkCIDr.removeClass("empty");
+  }
+});
+
+var vmVCPU = $extension.find("#vm_vcpu");
+vmVCPU.on('change', function () {
+  if (vmVCPU.hasClass("empty")) {
+    vmVCPU.removeClass("empty");
+  }
+});
+
+var vmRAM = $extension.find("#vm_ram");
+vmRAM.on('change', function () {
+  if (vmRAM.hasClass("empty")) {
+    vmRAM.removeClass("empty");
+  }
+});
+
+var vmVMDK = $extension.find("#vm_vmdk");
+vmVMDK.on('change', function () {
+  if (vmVMDK.hasClass("empty")) {
+    vmVMDK.removeClass("empty");
+  }
+});
+
+var vmOS = $extension.find("#vm_os");
+vmOS.on('change', function () {
+  if (vmOS.hasClass("empty")) {
+    vmOS.removeClass("empty");
+  }
+  $OS = vmOS.data('item').label;
+});
+
+var vmZone = $extension.find("#vm_zone");
+vmZone.on('change', function () {
+  if ($("#vm_zone_disp").hasClass("empty")) {
+    $("#vm_zone_disp").removeClass("empty");
+  }
+});
+
+//var vmOS = $extension.find("#vm_os");
+
+var vmNFS = $extension.find("#vm_nfs");
+vmNFS.on('change', function () {
+  $NFS = vmNFS.data('items').map(function (item) {
+    return item.name;
+  });
+  if (vmNFS.hasClass("empty")) {
+    vmNFS.removeClass("empty");
+  }
+
+});
+
+
+$("#add_nfs").on("change", function () {
+  if ($(this).is(":checked")) {
+    $addNFS = true;
+  } else {
+    $addNFS = false;
+  }
+});
 
 
 
@@ -114,13 +189,13 @@ $("#vm_service").on("change", function () {
   }
 });
 
-$("#additional_disks").on("change",function(){
-  if($(this).is(":checked")){
-    $("#for_disk").show();
-  }else{
-    $("#for_disk").hide();
-  }
-});
+// $("#additional_disks").on("change",function(){
+//   if($(this).is(":checked")){
+//     $("#for_disk").show();
+//   }else{
+//     $("#for_disk").hide();
+//   }
+// });
 
 $("#vm_add_disk").on("change", function () {
   if ($(this).is(":checked")) {
@@ -311,25 +386,27 @@ function addVM() {
   var packageData = $package && $package != '' ? JSON.parse($package) : null;
   var newArray = packageData ? packageData.nodes : [];
 
-  var vmRole = $extension.find("#vm_role");
-  var role = vmRole.data('item').reference;
+  //alert($("add_nfs").val());
 
-  var vmNetworkCIDrAction = $("#vm_networkcidr_action").val();
-  var networkCIDr;
-  //alert(vmNetworkCIDrAction);
-  if (vmNetworkCIDrAction === "существующая") {
-    var vmNetworkCIDr = $extension.find("#vm_networkcidr");
-    networkCIDr = vmNetworkCIDr.data('item').label;
-  } else {
-    networkCIDr = "new";
-  }
+  //var vmRole =$extension.find("#vm_role");
+  //var role = vmRole.data('item').reference;
 
-  var vmOS = $extension.find("#vm_os");
-  var OS = vmOS.data('item').label;
-  var vmNFS = $extension.find("#vm_nfs");
-  var NFS = vmNFS.data('items').map(function (item) {
-    return item.name;
-  });
+  // var vmNetworkCIDrAction =$("#vm_networkcidr_action").val();
+  // var networkCIDr;
+  // //alert(vmNetworkCIDrAction);
+  // if (vmNetworkCIDrAction === "существующая"){
+  //   var vmNetworkCIDr =$extension.find("#vm_networkcidr");
+  //   networkCIDr = vmNetworkCIDr.data('item').label;
+  // } else{
+  //   networkCIDr = "new";
+  // }
+
+  //var vmOS = $extension.find("#vm_os");
+  //var OS = vmOS.data('item').label;
+  //var vmNFS = $extension.find("#vm_nfs");
+  //var NFS = vmNFS.data('items').map(function (item) {
+  //  return item.name;
+  //});
 
   var vmg02SkpduProtocol = $("#vm_g02_skdpu_protocol").val();
   var vmg02SkpduPorts = $("#vm_g02_skdpu_ports").val();
@@ -365,14 +442,14 @@ function addVM() {
 
   var newVM = {
     "vm": $count_vm,
-    "vm_role": role, //$("#vm_role").val(),  //
-    "vm_networkcidr": networkCIDr, //$("#vm_networkcidr").val(), //
+    "vm_role": $role, //$("#vm_role").val(),  //
+    "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
     "vm_vcpu": $("#vm_vcpu").val(),
     "vm_ram": $("#vm_ram").val(),
     "vm_vmdk": $("#vm_vmdk").val(),
     "vm_zone": $("#vm_zone").val(),
-    "vm_os": OS, //$("#vm_os").val(),  //
-    "vm_nfs": NFS, //$("#vm_nfs").val(), //
+    "vm_os": $OS, //$("#vm_os").val(),  //
+    "vm_nfs": $NFS, //$("#vm_nfs").val(), //
     "vm_action_g02": $("#vm_action_g02").val(),
     "vm_g02_name": $("#vm_g02_name").val(),
     "vm_g02_skdpu_protocol": g02SkpduProtocol, //$("#vm_g02_skdpu_protocol").val(),  //
@@ -603,27 +680,53 @@ function checkingEnteredValue() {
     $("#vm_role").addClass("empty");
     isError = true;
   };
-  //alert($("#for_admin").css("display"));
-  if ($("#for_admin").css("display")=="block") {
-    alert('checked');
+
+  if ($("#for_admin").css("display") == "block") {
+    //alert('checked');
     if (!$adminListNodes) {
       $("#admin_list").addClass("empty");
       isError = true;
     };
   };
-  if ($("#vm_networkcidr_action").val()=== "существующая"){
-    if(!$("#vm_networkcidr").val()){
+
+  if ($("#vm_networkcidr_action").val() === "существующая") {
+    if (!$("#vm_networkcidr").val()) {
       $("#vm_networkcidr").addClass("empty");
       isError = true;
     }
   };
-   
-  // $("#vm_vcpu").val(null);
-  // $("#vm_ram").val(null);
-  // $("#vm_vmdk").val(null);
-  // $("#vm_zone").val(null);
-  // $("#vm_os_family").val(null);
-  // $("#vm_os").val(null);
+  if (!$("#vm_vcpu").val() || $("#vm_vcpu").hasClass("txt invalid")) {
+    $("#vm_vcpu").addClass("empty");
+    isError = true;
+  };
+  if (!$("#vm_ram").val() || $("#vm_ram").hasClass("txt invalid")) {
+    $("#vm_ram").addClass("empty");
+    isError = true;
+  };
+  if (!$("#vm_vmdk").val() || $("#vm_vmdk").hasClass("txt invalid")) {
+    $("#vm_vmdk").addClass("empty");
+    isError = true;
+  };
+  if (!$("#vm_zone").val()) {
+    $("#vm_zone_disp").addClass("empty");
+    isError = true;
+  };
+  if (!$("#vm_os").val()) {
+    $("#vm_os").addClass("empty");
+    isError = true;
+  };
+
+  if ($addNFS) {        
+    if (!$NFS) {
+      alert('addNFS');
+      $("#vm_nfs").addClass("empty");
+      isError = true;
+    };
+  };
+
+
+
+
   // $("#add_nfs").prop("checked", false);
   // $("#vm_nfs").val(null);
   // $("#add_groups").val(null);
@@ -662,7 +765,7 @@ function checkingEnteredValue() {
   // $("#additional_disks").hide();
   // $("#vm_add_disk").prop("checked", false);
   return isError;
-};
+}
 
 
 
