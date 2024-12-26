@@ -55,6 +55,18 @@
     </div>
   </div>
 
+  <div class="row vertical hide" data-hidden>
+    <select id="vm_authorization" class="hide">
+      <option value="interactive" selected>interactive</option>
+    </select>
+  </div>
+
+  <div class="row vertical hide" data-hidden>
+    <select id="vm_action_type" class="hide">
+      <option value="add" selected>add</option>
+    </select>
+  </div>
+
   <div class="section" id="vm_1">
     <span class="section-header">Виртуальная машина</span>
 
@@ -68,11 +80,13 @@
     <div class="row vertical">
       <label for="vm_networkcidr_action" title="Какая требуется подсеть (NetworkCIDR)">Какая требуется подсеть
         (NetworkCIDR)</label>
-      <select id="vm_networkcidr_action" class="required">
-        <option value=""></option>
-        <option value="новая">Новая</option>
-        <option value="существующая">Существующая</option>
-      </select>
+      <div class="vm_networkcidr_action_required">
+        <select id="vm_networkcidr_action" class="required">
+          <option value=""></option>
+          <option value="новая">Новая</option>
+          <option value="существующая">Существующая</option>
+        </select>
+      </div>
     </div>
 
 
@@ -162,8 +176,8 @@
         <div id="vm_action_g02_disp">
           <select id="vm_action_g02" class="required">
             <option value=""></option>
-            <option value="создать">Создать</option>
-            <option value="добавить">Добавить</option>
+            <option value="create">Создать</option>
+            <option value="add">Добавить</option>
           </select>
         </div>
       </div>
@@ -189,14 +203,16 @@
 
       <div class="row vertical">
         <label for="vm_g02_skdpu_ports_number" title="Номер порта">Номер порта</label>
-        <input id="vm_g02_skdpu_ports_number" type="number" autocomplete="off">
+        <div id="vm_g02_skdpu_ports_number_required">
+          <input id="vm_g02_skdpu_ports_number" type="number" autocomplete="off" min="1">
+        </div>        
       </div>
 
       <div class="row vertical">
         <label for="vm_g02_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
-        <div id ="vm_g02_skdpu_protocol_required">
+        <div id="vm_g02_skdpu_protocol_required">
           <input id="vm_g02_skdpu_protocol" type="text" autocomplete="off" class="required">
-        </div>        
+        </div>
       </div>
 
     </div>
@@ -208,8 +224,8 @@
         <div id="vm_action_g03_disp">
           <select id="vm_action_g03">
             <option value=""></option>
-            <option value="создать">Создать</option>
-            <option value="добавить">Добавить</option>
+            <option value="create">Создать</option>
+            <option value="add">Добавить</option>
           </select>
         </div>
       </div>
@@ -233,15 +249,16 @@
         </div>
       </div>
 
-
       <div class="row vertical">
         <label for="vm_g03_skdpu_ports_number" title="Номер порта">Номер порта</label>
-        <input id="vm_g03_skdpu_ports_number" type="number" autocomplete="off">
+        <div id="vm_g03_skdpu_ports_number_required">
+          <input id="vm_g03_skdpu_ports_number" type="number" autocomplete="off" min="1">
+        </div>        
       </div>
 
       <div class="row vertical">
         <label for="vm_g03_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
-        <div id ="vm_g03_skdpu_protocol_required">
+        <div id="vm_g03_skdpu_protocol_required">
           <input id="vm_g03_skdpu_protocol" type="text" autocomplete="off" class="required">
         </div>
       </div>
@@ -255,8 +272,8 @@
         <div id="vm_action_g04_disp">
           <select id="vm_action_g04" class="required">
             <option value=""></option>
-            <option value="создать">Создать</option>
-            <option value="добавить">Добавить</option>
+            <option value="create">Создать</option>
+            <option value="add">Добавить</option>
           </select>
         </div>
       </div>
@@ -281,28 +298,18 @@
       </div>
       <div class="row vertical">
         <label for="vm_g04_skdpu_ports_number" title="Номер порта">Номер порта</label>
-        <input id="vm_g04_skdpu_ports_number" type="number" autocomplete="off">
+        <div id="vm_g04_skdpu_ports_number_required">
+           <input id="vm_g04_skdpu_ports_number" type="number" autocomplete="off" min="1">
+        </div>       
       </div>
 
       <div class="row vertical">
         <label for="vm_g04_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
-        <div id ="vm_g04_skdpu_protocol_required">
+        <div id="vm_g04_skdpu_protocol_required">
           <input id="vm_g04_skdpu_protocol" type="text" autocomplete="off" class="required">
         </div>
       </div>
 
-    </div>
-
-    <div class="row vertical hide" data-hidden>
-      <select id="vm_authorization" class="hide">
-        <option value="interactive" selected>interactive</option>
-      </select>
-    </div>
-
-    <div class="row vertical hide" data-hidden>
-      <select id="vm_action_type" class="hide">
-        <option value="add" selected>add</option>
-      </select>
     </div>
 
     <div class="row vertical checkbox">
@@ -317,13 +324,13 @@
           <label for="vm_disk1" title="Диск 1 GB">Диск 1 GB</label>
           <div id="vm_disk1_required">
             <input id="vm_disk1" type="number" autocomplete="off" min="40" class="required">
-          </div>          
+          </div>
         </div>
         <div class="row vertical">
           <label for="vm_disk1_letter" title="Буква диска">Буква диска/Точка монтирования</label>
           <div id="vm_disk1_letter_required">
             <input id="vm_disk1_letter" type="text" autocomplete="off" class="required">
-          </div>          
+          </div>
         </div>
       </div>
 
@@ -368,7 +375,7 @@
           <label for="vm_disk4_letter" title="Буква диска">Буква диска/Точка монтирования</label>
           <div id="vm_disk4_letter_required">
             <input id="vm_disk4_letter" type="text" autocomplete="off" class="required">
-          </div>          
+          </div>
         </div>
       </div>
 
@@ -383,7 +390,7 @@
           <label for="vm_disk5_letter" title="Буква диска">Буква диска/Точка монтирования</label>
           <div id="vm_disk5_letter_required">
             <input id="vm_disk5_letter" type="text" autocomplete="off" class="required">
-          </div>          
+          </div>
         </div>
       </div>
 
