@@ -738,7 +738,6 @@ $("#add_vm").on("click", function () {
         if (!checkingEnteredValue()) {
             $("#delete_vm").show();
             $("#delete_vm").removeClass("disabled");
-            $("#number_vm_display").show();
             if ($count_vm < 21) {
                 //alert($count_vm);
                 addVM();
@@ -774,7 +773,6 @@ $("#copy_vm").on("click", function () {
         if (!checkingEnteredValue()) {
             $("#delete_vm").show();
             $("#delete_vm").removeClass("disabled");
-            $("#number_vm_display").show();
             if ($count_vm < 21) {
                 //alert($count_vm);
                 addVM();
@@ -834,7 +832,6 @@ $("#delete_vm").on("click", function () {
         if ($count_vm == 1) {
             $(this).addClass("disabled");
             $(this).hide();
-            $("#number_vm_display").hide();
         }
         //
         //$(this).readonly(true);
