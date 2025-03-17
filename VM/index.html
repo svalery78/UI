@@ -126,14 +126,14 @@
 
     <div class="row vertical">
       <label for="vm_instance" title="Среда">Среда</label>
-      <div id="vm_zone_disp" class="required" data-custom-view="зоны">
+      <div id="vm_instance" class="required" data-custom-view="зоны">
       </div>
     </div>
 
     <div class="row vertical">
       <label for="vm_zone" title="Зона размещения ВМ">Зона размещения ВМ</label>
       <div id="vm_zone" class="required" data-custom-view="зоны_вм" data-filter-name="#среда"
-        data-filter-value="vm_zone_disp"></div>
+        data-filter-value="vm_instance"></div>
     </div>
 
 
@@ -340,12 +340,6 @@
             <input id="vm_disk1" type="number" min="1" autocomplete="off" class="required">
           </div>
         </div>
-        <!--div class="row vertical" style="display:none">
-          <label for="vm_disk1_letter" title="Буква диска">Буква диска/Точка монтирования</label>
-          <div id="vm_disk1_letter_required">
-            <input id="vm_disk1_letter" type="text" autocomplete="off" class="required">
-          </div>          
-        </div-->
       </div>
 
       <div id="disk2" style="display:none">
@@ -355,12 +349,6 @@
             <input id="vm_disk2" type="number" min="1" autocomplete="off" class="required">
           </div>
         </div>
-        <!--div class="row vertical" style="display:none">
-          <label for="vm_disk2_letter" title="Буква диска">Буква диска/Точка монтирования</label>
-          <div id="vm_disk2_letter_required">
-            <input id="vm_disk2_letter" type="text" autocomplete="off" class="required">
-          </div>
-        </div-->
       </div>
 
       <div id="disk3" style="display:none">
@@ -370,12 +358,6 @@
             <input id="vm_disk3" type="number" min="1" autocomplete="off" class="required">
           </div>
         </div>
-        <!--div class="row vertical" style="display:none">
-          <label for="vm_disk3_letter" title="Буква диска">Буква диска/Точка монтирования</label>
-          <div id="vm_disk3_letter_required">
-            <input id="vm_disk3_letter" type="text" autocomplete="off" class="required">
-          </div>
-        </div-->
       </div>
 
       <div id="disk4" style="display:none">
@@ -385,12 +367,6 @@
             <input id="vm_disk4" type="number" min="1" autocomplete="off" class="required">
           </div>
         </div>
-        <!--div class="row vertical" style="display:none">
-          <label for="vm_disk4_letter" title="Буква диска">Буква диска/Точка монтирования</label>
-          <div id="vm_disk4_letter_required">
-            <input id="vm_disk4_letter" type="text" autocomplete="off" class="required">
-          </div>          
-        </div-->
       </div>
 
       <div id="disk5" style="display:none">
@@ -400,12 +376,6 @@
             <input id="vm_disk5" type="number" min="1" autocomplete="off" class="required">
           </div>
         </div>
-        <!--div class="row vertical" style="display:none">
-          <label for="vm_disk5_letter" title="Буква диска">Буква диска/Точка монтирования</label>
-          <div id="vm_disk5_letter_required">
-            <input id="vm_disk5_letter" type="text" autocomplete="off" class="required">
-          </div>          
-        </div-->
       </div>
 
       <div class="section" id="addDeleteDisk"><span class="section"></span>
@@ -465,10 +435,6 @@
       <label for="input_json" title="Создаваемые ВМ">Создаваемые ВМ</label>
       <textarea id="input_json" readonly></textarea>
     </div>
-
-    <!--div class="row vertical">
-      <label for="input_form1" title="input_form">Таблица ВМ1</label>
-      <div id="input_form1"  class="rich-text" aria-readonly></div-->
   </div>
 
 </body>
