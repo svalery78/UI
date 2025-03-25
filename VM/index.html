@@ -40,14 +40,13 @@
     </div>
     <div class="row vertical">
       <label for="name_is" title="Наименование ИС">Наименование ИС</label>
-      <div id="name_is" data-custom-view="ис" class="required" data-filter-name="user" data-filter-value="requestor">
-      </div>
+      <div id="name_is" data-custom-view="ис" class="required" data-filter-name="user" data-filter-value="requestor"></div>
     </div>
 
     <div class="row vertical hide" data-internal data-hidden>
       <div id="requestor" class="hide person-suggest"></div>
     </div>
-
+  
     <div class="row vertical checkbox">
       <input id="admin_privileges" type="checkbox">
       <label for="admin_privileges" title="Выдача прав администратора ВМ">Выдача прав администратора ВМ</label>
@@ -72,7 +71,7 @@
     </div>
   </div>
 
-  <div class="section" id="vm_1">
+<div class="section" id="vm_1">
     <span class="section-header">Виртуальная машина</span>
 
 
@@ -81,7 +80,7 @@
       <div id="vm_role" class="required" data-custom-view="роли_вм"></div>
     </div>
 
-
+    
     <div class="row vertical">
       <label for="vm_networkcidr_action" title="Какая требуется подсеть (NetworkCIDR)">Какая требуется подсеть
         (NetworkCIDR)</label>
@@ -98,8 +97,7 @@
     <div id="vm_networkcidr_display" style="display:none">
       <div class="row vertical">
         <label for="vm_networkcidr" title="Укажите подсеть (NetworkCIDR)">Укажите подсеть (NetworkCIDR)</label>
-        <div id="vm_networkcidr" class="required" data-custom-view="подсети" data-filter-name="#подсеть для ИС"
-          data-filter-value="name_is"></div>
+        <div id="vm_networkcidr" class="required" data-custom-view="подсети" data-filter-name="#подсеть для ИС" data-filter-value="name_is"></div>
       </div>
     </div>
 
@@ -107,21 +105,21 @@
       <label for="vm_vcpu" title="vCPU">vCPU</label>
       <div id="vm_cpu_required">
         <input id="vm_vcpu" type="number" autocomplete="off" min="1" max="26" class="required">
-      </div>
+      </div>      
     </div>
 
     <div class="row vertical">
       <label for="vm_ram" title="RAM GB">RAM GB</label>
       <div id="vm_ram_required">
         <input id="vm_ram" type="number" autocomplete="off" min="1" max="128" class="required">
-      </div>
+      </div>      
     </div>
 
     <div class="row vertical">
       <label for="vm_vmdk" title="VMDK GB">Системный диск GB</label>
       <div id="vm_vmdk_required">
         <input id="vm_vmdk" type="number" autocomplete="off" min="22" max="63488" class="required">
-      </div>
+      </div>      
     </div>
 
     <div class="row vertical">
@@ -132,46 +130,44 @@
 
     <div class="row vertical">
       <label for="vm_zone" title="Зона размещения ВМ">Зона размещения ВМ</label>
-      <div id="vm_zone" class="required" data-custom-view="зоны_вм" data-filter-name="#среда"
-        data-filter-value="vm_instance"></div>
+      <div id="vm_zone" class="required" data-custom-view="зоны_вм" data-filter-name="#среда" data-filter-value="vm_instance"></div>
     </div>
 
 
     <div class="row vertical" data-searchable>
-      <label for="vm_os_family" title="Семейство ОС">Семейство ОС</label>
-      <div id="vm_os_family" class="required" data-custom-view="семейство_ос"></div>
-    </div>
+  <label for="vm_os_family" title="Семейство ОС">Семейство ОС</label>
+  <div id="vm_os_family" class="required" data-custom-view="семейство_ос"></div>
+</div>
 
     <div class="row vertical">
       <label for="vm_os" title="Требуемый образ ОС">Требуемый образ ОС</label>
-      <div id="vm_os" class="required" data-custom-view="образы_вм_для_св" data-filter-name="#Семейство ОС"
-        data-filter-value="vm_os_family"></div>
+      <div id="vm_os" class="required" data-custom-view="образы_вм_для_св" data-filter-name="#Семейство ОС" data-filter-value="vm_os_family"></div>
     </div>
-
 
     <div class="row vertical">
       <div id="vm_linux_description_display" style="display:none">
         <label for="vm_linux_description" title="Постфикс имени ВМ на ОС linux">Постфикс имени ВМ на ОС linux</label>
-        <input id="vm_linux_description" type="text" autocomplete="off">
+        <div id="vm_linux_description_required">
+          <input id="vm_linux_description" type="text" autocomplete="off" maxlength="11" pattern="^[a-z0-9\-]+$">
+        </div>
       </div>
     </div>
 
 
     <div class="row vertical checkbox">
       <input id="add_nfs" type="checkbox">
-      <label for="add_nfs" title="Предоставить доступ к существующим NFS ресурсам">Предоставить доступ к существующим
-        NFS ресурсам</label>
+      <label for="add_nfs" title="Предоставить доступ к существующим NFS ресурсам">Предоставить доступ к существующим NFS ресурсам</label>
     </div>
 
     <div class="row vertical">
-      <div id="vm_nfs_display" style="display:none">
+      <div id="vm_nfs_display"  style="display:none">
         <label for="vm_nfs" title="Укажите NFS ресурсы">Укажите NFS ресурсы</label>
         <div id="vm_nfs" class="required" data-multiple data-min="1" data-custom-view="nfs"></div>
       </div>
     </div>
 
 
-
+    
 
     <div class="row vertical">
       <label for="add_groups" title="Сколько требуется групп доступа">Сколько требуется групп доступа</label>
@@ -219,20 +215,22 @@
         <label for="vm_g02_skdpu_ports_number" title="Номер порта">Номер порта</label>
         <div id="vm_g02_skdpu_ports_number_required">
           <input id="vm_g02_skdpu_ports_number" type="number" autocomplete="off" min="1">
-        </div>
+        </div>        
       </div>
 
-      <div class="row vertical">
-        <label for="vm_g02_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
-        <div id="vm_g02_skdpu_protocol_required">
-          <input id="vm_g02_skdpu_protocol" type="text" autocomplete="off" class="required">
+      <div id="vm_g02_skdpu_protocol_disp" style="display:none">
+        <div class="row vertical">
+          <label for="vm_g02_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+          <div id="vm_g02_skdpu_protocol_required">
+            <input id="vm_g02_skdpu_protocol" type="text" autocomplete="off" class="required">
+          </div>
         </div>
       </div>
 
     </div>
 
     <div id="add_groups_2_disp" style="display:none">
-      <br>
+<br>
       <div class="row vertical">
         <label for="vm_action_g03" title="Действие для второй группы">Действие для второй группы</label>
         <div id="vm_action_g03_disp">
@@ -267,20 +265,22 @@
         <label for="vm_g03_skdpu_ports_number" title="Номер порта">Номер порта</label>
         <div id="vm_g03_skdpu_ports_number_required">
           <input id="vm_g03_skdpu_ports_number" type="number" autocomplete="off" min="1">
-        </div>
+        </div>        
       </div>
 
-      <div class="row vertical">
-        <label for="vm_g03_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
-        <div id="vm_g03_skdpu_protocol_required">
-          <input id="vm_g03_skdpu_protocol" type="text" autocomplete="off" class="required">
+      <div id="vm_g03_skdpu_protocol_disp" style="display:none">
+        <div class="row vertical">
+          <label for="vm_g03_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+          <div id="vm_g03_skdpu_protocol_required">
+            <input id="vm_g03_skdpu_protocol" type="text" autocomplete="off" class="required">
+          </div>
         </div>
       </div>
 
     </div>
 
     <div id="add_groups_3_disp" style="display:none">
-      <br>
+<br>
       <div class="row vertical">
         <label for="vm_action_g04" title="Действие для третьей группы">Действие для третьей группы</label>
         <div id="vm_action_g04_disp">
@@ -313,14 +313,16 @@
       <div class="row vertical">
         <label for="vm_g04_skdpu_ports_number" title="Номер порта">Номер порта</label>
         <div id="vm_g04_skdpu_ports_number_required">
-          <input id="vm_g04_skdpu_ports_number" type="number" autocomplete="off" min="1">
-        </div>
+           <input id="vm_g04_skdpu_ports_number" type="number" autocomplete="off" min="1">
+        </div>       
       </div>
 
-      <div class="row vertical">
-        <label for="vm_g04_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
-        <div id="vm_g04_skdpu_protocol_required">
-          <input id="vm_g04_skdpu_protocol" type="text" autocomplete="off" class="required">
+      <div id="vm_g04_skdpu_protocol_disp" style="display:none">
+        <div class="row vertical">
+          <label for="vm_g04_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+          <div id="vm_g04_skdpu_protocol_required">
+            <input id="vm_g04_skdpu_protocol" type="text" autocomplete="off" class="required">
+          </div>
         </div>
       </div>
 
@@ -338,7 +340,7 @@
           <label for="vm_disk1" title="Диск 1 GB">Диск 1 GB</label>
           <div id="vm_disk1_required">
             <input id="vm_disk1" type="number" min="1" autocomplete="off" class="required">
-          </div>
+          </div>          
         </div>
       </div>
 
@@ -392,37 +394,37 @@
     </div>
 
   </div>
+  
 
-
-  <div class="section" id="addDeleteVM"><span class="section"></span>
-    <div class="row vertical stock">
-      <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
-      <span class="btn check" id="copy_vm"><span class="button">Копировать ВМ</span></span>
-      <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
-          ВМ</span></span>
-      <br>
-      <br>
-    </div>
-  </div>
-
-  <div class="row vertical" id="number_vm_display" style="display: none">
-    <label for="number" title="Укажите номер выгружаемой ВМ">Укажите номер выгружаемой ВМ</label>
-    <input id="number" type="number" autocomplete="off" min="1" max="20">
-    <span class="btn check" id="unload_vm"><span class="button">Выгрузить ВМ</span></span>
-  </div>
-
-  <div class="section" id="tip">
-    <span class="section-header">После окончания добавления списка создаваемых ВМ нажмите чек-бокс ниже.</span>
-
-    <div class="row vertical checkbox">
-      <input id="finish" type="checkbox" class="required">
-      <label for="finish" title="Заполнение формы завершено.">Заполнение формы завершено.</label>
+<div class="section" id="addDeleteVM"><span class="section"></span>
+      <div class="row vertical stock">
+        <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
+        <span class="btn check" id="copy_vm"><span class="button">Копировать ВМ</span></span>
+        <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
+            ВМ</span></span>
+        <br>
+        <br>
+      </div>
     </div>
 
+<div class="row vertical" id="number_vm_display" style="display: none">
+  <label for="number" title="Укажите номер выгружаемой ВМ">Укажите номер выгружаемой ВМ</label>
+  <input id="number" type="number" autocomplete="off" min="1" max="20">
+  <span class="btn check" id="unload_vm"><span class="button">Выгрузить ВМ</span></span>
+</div>
+
+<div class="section" id="tip">
+  <span class="section-header">После окончания добавления списка создаваемых ВМ нажмите чек-бокс ниже</span>
+
+  <div class="row vertical checkbox">
+    <input id="finish" type="checkbox" class="required">
+    <label for="finish" title="Заполнение формы завершено.">Заполнение формы завершено</label>
   </div>
 
+</div>
 
-  <div class="section" id="tech_details">
+
+<div class="section" id="tech_details">
     <span class="section-header">Техническая информация</span>
 
 
@@ -435,6 +437,7 @@
       <label for="input_json" title="Создаваемые ВМ">Создаваемые ВМ</label>
       <textarea id="input_json" readonly></textarea>
     </div>
+ 
   </div>
 
 </body>
