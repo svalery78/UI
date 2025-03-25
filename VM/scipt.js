@@ -916,8 +916,11 @@ function addVM() {
     newArray.push(newVM);
     var newVMAdditional = {
         vm: $count_vm,
+        vmRole: vmRole.val(),        
         vmOS: vmOS.val(),
         vmOSFamily: vmOSFamily.val(),
+        vmInstance: vmInstance.val(),
+        vmZone: vmZone.val(),
         vmNFS: vmNFS.val(),
         vmg02SkpduPorts: vmg02SkpduPorts.val(),
         vmg02SkpduPortsNumber: vmg02SkpduPortsNumber.val(),
@@ -1526,10 +1529,10 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
         $("#vm_vmdk").removeClass("required");
         $("#vm_vmdk_required").removeClass("empty");
     };
-    $("#vm_instance").val({ reference: vmData.vm_instance }); //.change();
-    $instance = $("#vm_instance").val();
-    $("#vm_zone").val({ reference: vmData.vm_zone });
-    $zone =  $("#vm_zone").val();
+    $("#vm_instance").val(vmDataAdditional.vm_instance); //.change();
+    $instance = vmData.vm_instance;
+    $("#vm_zone").val(vmDataAdditional.vm_zone);
+    $zone =  vmData.vm_zone;
     $("#vm_os").val(vmDataAdditional.vmOS);
     $OS = $("#vm_os").val();
     $("#vm_os_family").val(vmDataAdditional.vmOSFamily);
