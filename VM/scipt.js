@@ -1529,9 +1529,11 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
         $("#vm_vmdk").removeClass("required");
         $("#vm_vmdk_required").removeClass("empty");
     };
-    $("#vm_instance").val(vmDataAdditional.vm_instance); //.change();
+    alert(vmDataAdditional.vmZone);    
+    $("#vm_instance").val(vmDataAdditional.vmInstance); //.change();
     $instance = vmData.vm_instance;
-    $("#vm_zone").val(vmDataAdditional.vm_zone);
+    $("#vm_zone").val(vmDataAdditional.vmZone);
+    alert(vmData.vm_zone); 
     $zone =  vmData.vm_zone;
     $("#vm_os").val(vmDataAdditional.vmOS);
     $OS = $("#vm_os").val();
@@ -1598,7 +1600,10 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
 
         }
     }
-    if (!$("#vm_zone").val()) $("#vm_zone").val({ reference: vmData.vm_zone });
+    // if (!$("#vm_zone").val()){
+    //     alert('vm_azome_null');
+    //     $("#vm_zone").val(vmDataAdditional.vmZone);
+    // } 
 
 
 }
