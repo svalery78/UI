@@ -25,6 +25,7 @@ var $g04Action;
 var $g04SkpduProtocol = "";
 var $g04SkpduPortsNumber = "";
 var $VM_additional = [];
+var createVM;
 
 $("#input_form").readonly(true);
 
@@ -207,6 +208,7 @@ var vmg04SkpduPortsNumber = $extension.find("#vm_g04_skdpu_ports_number");
 var vmg04SkpduPortsNumberRequired = $extension.find("#vm_g04_skdpu_ports_number_required");
 
 var vmAddGroups = $extension.find("#add_groups");
+
 vmAddGroups.on('change', function () {
     $addGroups = vmAddGroups.val();
     //alert($addGroups);
@@ -907,7 +909,7 @@ function addVM() {
         "vm_g04_skdpu_ports_number": $g04SkpduPortsNumber, //$("#vm_g04_skdpu_ports_number").val(),  //
         //"vm_authorization": $("#vm_authorization").val(),  //
         //"vm_action_type": $("#vm_action_type").val(),  //
-        "vm_disk1": $("#vm_disk1").val(),       
+        "vm_disk1": $("#vm_disk1").val(),
         "vm_disk2": $("#vm_disk2").val(),
         "vm_disk3": $("#vm_disk3").val(),
         "vm_disk4": $("#vm_disk4").val(),
@@ -916,12 +918,13 @@ function addVM() {
     newArray.push(newVM);
     var newVMAdditional = {
         vm: $count_vm,
-        vmRole: vmRole.val(),        
+        vmRole: vmRole.val(),
         vmOS: vmOS.val(),
         vmOSFamily: vmOSFamily.val(),
         vmInstance: vmInstance.val(),
         vmZone: vmZone.val(),
         vmNFS: vmNFS.val(),
+        vmAddGroups: vmAddGroups.val(), 
         vmg02SkpduPorts: vmg02SkpduPorts.val(),
         vmg02SkpduPortsNumber: vmg02SkpduPortsNumber.val(),
         vmg02SkpduProtocol: vmg02SkpduProtocol.val(),
@@ -1510,10 +1513,10 @@ function updateProtocolVisibility(vmSkpduPorts, vmSkpduProtocol, vmSkpduProtocol
 function fillFormWithVMData(vmData, vmDataAdditional) {
     // Основные поля
     $("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;
-    $role =  $("#vm_role").val();
+    $role = $("#vm_role").val();
     $("#vm_networkcidr_action").val(vmData.vm_networkcidr === "new" ? "новая" : "существующая").change();
     $("#vm_networkcidr").val({ reference: vmData.vm_networkcidr }); //.change();
-    $networkCIDr =  $("#vm_networkcidr").val();
+    $networkCIDr = $("#vm_networkcidr").val();
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");
@@ -1529,39 +1532,45 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
         $("#vm_vmdk").removeClass("required");
         $("#vm_vmdk_required").removeClass("empty");
     };
-    alert(vmDataAdditional.vmZone);    
-    $("#vm_instance").val(vmDataAdditional.vmInstance); //.change();
+    // Устанавливаем значение "Среды" и триггерим событие изменения
+    $("#vm_instance").val(vmDataAdditional.vmInstance).trigger('change');
+    // Ждем обновления списка зон (если требуется асинхронная загрузка)
+    setTimeout(function () {
+        // Устанавливаем зону после обновления данных
+        $("#vm_zone").val(vmDataAdditional.vmZone).trigger('change');
+        $zone = vmData.vm_Zone;
+    }, 300); // Задержка для обработки изменений
     $instance = vmData.vm_instance;
-    $("#vm_zone").val(vmDataAdditional.vmZone);
-    alert(vmData.vm_zone); 
-    $zone =  vmData.vm_zone;
-    $("#vm_os").val(vmDataAdditional.vmOS);
-    $OS = $("#vm_os").val();
-    $("#vm_os_family").val(vmDataAdditional.vmOSFamily);
+    $("#vm_os_family").val(vmDataAdditional.vmOSFamily).trigger('change');
+    setTimeout(function () {
+        $("#vm_os").val(vmDataAdditional.vmOS).trigger('change');
+        $OS = vmData.vm_os;
+    }, 300);
     $("#vm_linux_description").val(vmData.vm_linux_description);
     //alert(vmData.vm_nfs.length);
     $("#add_nfs").prop("checked", vmData.vm_nfs.length > 0).change();
     if (vmData.vm_nfs) $("#vm_nfs").val(vmDataAdditional.vmNFS); //.change();
     $NFS = $("#vm_nfs").val();
     // Группы доступа
-    if (vmData.vm_action_g02 && vmData.vm_action_g03 && vmData.vm_action_g04) {
-        $("#add_groups").val(3).change();
-    } else {
-        if (vmData.vm_action_g02 && vmData.vm_action_g03) {
-            $("#add_groups").val(2).change();
-        } else {
-            if (vmData.vm_action_g02) {
-                $("#add_groups").val(1).change();
-            }
-        }
-    };
+    // if (vmData.vm_action_g02 && vmData.vm_action_g03 && vmData.vm_action_g04) {
+    //     $("#add_groups").val(3).change();
+    // } else {
+    //     if (vmData.vm_action_g02 && vmData.vm_action_g03) {
+    //         $("#add_groups").val(2).change();
+    //     } else {
+    //         if (vmData.vm_action_g02) {
+    //             $("#add_groups").val(1).change();
+    //         }
+    //     }
+    // };
+    $("#add_groups").val(vmDataAdditional.vmAddGroups).change();
     //alert("add_groups=" + $("#add_groups").val());
 
     if ($("#add_groups").val() >= 1) {
         fillFormWithG02(vmData, vmDataAdditional);
     }
 
-    if ($("#add_groups").val() >= 2) {  
+    if ($("#add_groups").val() >= 2) {
         fillFormWithG03(vmData, vmDataAdditional);
     }
 
@@ -1677,6 +1686,40 @@ function fillFormWithG04(vmData, vmDataAdditional) {
     updateProtocolVisibility($("#vm_g04_skdpu_ports"), $("#vm_g04_skdpu_protocol"), $("#vm_g04_skdpu_protocol_disp"));
 }
 
+function finishChecked() {
+    $("#vm_1").hide();
+    $("#add_vm").hide();
+    $("#copy_vm").hide();
+    $("#delete_vm").hide();
+    $("#is_ex_change").addClass("disabled");
+    $("#justification").readonly(true);
+    $("#inc_desc").readonly(true);
+    $("#dr_cluster").addClass("disabled");
+    $("#name_is").readonly(true);
+    $("#admin_privileges").addClass("disabled");
+    $("#admin_list").readonly(true);
+    $("#vm_authorization").readonly(true);
+    resetValueVM();
+}
+
+function finishUnChecked() {
+    $("#vm_1").show();
+    if ($count_vm < 21) {
+        $("#add_vm").show();
+        $("#copy_vm").show();
+    }
+    if ($count_vm > 1) {
+        $("#delete_vm").show();
+    }
+    $("#is_ex_change").removeClass("disabled");
+    $("#justification").readonly(false);
+    $("#inc_desc").readonly(false);
+    $("#dr_cluster").removeClass("disabled");
+    $("#name_is").readonly(false);
+    $("#admin_privileges").removeClass("disabled");
+    $("#admin_list").readonly(false);
+    $("#vm_authorization").readonly(false);
+}
 
 $("#admin_privileges").on("change", function () {
     if (!$(this).hasClass("disabled")) {
@@ -1692,51 +1735,27 @@ $("#admin_privileges").on("change", function () {
 });
 
 $("#finish").on("change", function () {
-    if ($(this).is(":checked")) {
-        //alert("finish checked");        
-        if ($("#input_json").val() && $("#input_json").val() != null && $("#input_json").val() != "" && $("#name_is").val()) {
-            $("#vm_1").hide();
-            $("#add_vm").hide();
-            $("#copy_vm").hide();
-            $("#delete_vm").hide();
-            $("#is_ex_change").addClass("disabled");
-            $("#justification").readonly(true);
-            $("#inc_desc").readonly(true);
-            $("#dr_cluster").addClass("disabled");
-            $("#name_is").readonly(true);
-            $("#admin_privileges").addClass("disabled");
-            $("#admin_list").readonly(true);
-            $("#vm_authorization").readonly(true);
-            resetValueVM();
+    if (createVM || createVM == false) {
+        if ($(this).is(":checked")) {
+            if ($("#input_json").val() && $("#input_json").val() != null && $("#input_json").val() != "" && $("#name_is").val()) {
+                finishChecked();
+            } else {
+                alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
+                $(this).prop("checked", false);
+                if (!$("#name_is").val()) {
+                    $("#name_is").addClass("empty");
+                };
+                $("#finish").addClass("required");
+            };
 
         } else {
-            alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
-            $(this).prop("checked", false);
-            if (!$("#name_is").val()) {
-                $("#name_is").addClass("empty");
-            };
-            $("#finish").addClass("required");
-        };
-
+            finishUnChecked();
+        }
     } else {
-        $("#vm_1").show();
-        if ($count_vm < 21) {
-            $("#add_vm").show();
-            $("#copy_vm").show();
-        }
-        if ($count_vm > 1) {
-            $("#delete_vm").show();
-        }
-        $("#is_ex_change").removeClass("disabled");
-        $("#justification").readonly(false);
-        $("#inc_desc").readonly(false);
-        $("#dr_cluster").removeClass("disabled");
-        $("#name_is").readonly(false);
-        $("#admin_privileges").removeClass("disabled");
-        $("#admin_list").readonly(false);
-        $("#vm_authorization").readonly(false);
+        finishChecked();
     }
 });
+
 //если новый запрос из селфсервиса, скрыть поле комментарий
 if (ITRP.record.new) {
     if (ITRP.context === 'self_service') {
@@ -1781,3 +1800,17 @@ $("#is_dis").on("change", function () {
         $("#correctness_block").hide();
     }
 });
+
+$(document).ready(function () {
+
+    if ($("#input_json").val()) {
+        createVM = false;
+    } else {
+        createVM = true;
+    };
+
+
+});
+
+
+
