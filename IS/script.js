@@ -1,12 +1,7 @@
 var $ = ITRP.$;            // jQuery
 var $extension = $(this);  // The UI Extension container with custom HTML
 //---
-if (ITRP.record.new){
-  if (ITRP.context === 'self_service') {
-    $("#self_service_new_request_wizard_note-container").parent().parent().hide();
-  }
-}
-$("#req_note").hide();
+
 function setrec(iarr){
   iarr.forEach(function(id){
     $("#"+id).required(true);
@@ -14,9 +9,76 @@ function setrec(iarr){
   });
 }
 
-document.getElementById('is_code').addEventListener('input', function (event) {
-  this.value = this.value.toLowerCase().replace(/[^a-z0-9]/g, '').replace(/^[\d]/, '');
+//document.getElementById('is_code').addEventListener('input', function (event) {
+//  this.value = this.value.toLowerCase().replace(/[^a-z0-9]/g, '').replace(/^[\d]/, '');
+//});
+
+// 1. Жесткая фиксация required при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    var field = document.getElementById('is_code');
+    field.setAttribute('required', 'required');
+    field.required = true;
 });
+
+// 2. Обработчик ввода с двойной страховкой
+document.getElementById('is_code').addEventListener('input', function() {
+    var field = this;
+    
+    // Фильтрация
+    field.value = field.value
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '')
+        .replace(/^\d/, '')
+        .slice(0, 6);
+    
+    // Двойное подтверждение required
+    field.setAttribute('required', 'required');
+    field.required = true;
+});
+
+// 3. Улучшенный обработчик blur
+document.getElementById('is_code').addEventListener('blur', function() {
+    var field = this;
+    
+    // Тройная страховка required
+    field.setAttribute('required', 'required');
+    field.required = true;
+    setTimeout(function() { field.required = true; }, 10);
+    
+    // Очистка при 1 символе
+    if (field.value.length === 1) {
+        field.value = '';
+        setTimeout(function() {
+            field.setAttribute('required', 'required');
+            field.required = true;
+        }, 20);
+    }
+});
+
+// 4. Атомарная проверка формы
+var form = document.querySelector('form');
+if (form) {
+    form.addEventListener('submit', function(e) {
+        var field = document.getElementById('is_code');
+        if (!field.value || field.value.length < 2) {
+            e.preventDefault();
+            field.focus();
+            field.setAttribute('required', 'required');
+            field.required = true;
+            
+            // Создаем свое сообщение вместо alert
+            var error = document.getElementById('custom-error');
+            if (!error) {
+                error = document.createElement('div');
+                error.id = 'custom-error';
+                error.style.color = 'red';
+                field.parentNode.insertBefore(error, field.nextSibling);
+            }
+            error.textContent = 'Введите 2-6 символов (первый - буква)';
+        }
+    });
+}
+
 
 $("#type,#period,#state").on("change",function(){
   console.log(true);
@@ -65,7 +127,7 @@ $("#type,#period,#state").on("change",function(){
           break;
         }
       case "эксплуатация_гис":
-      case "развитие_(модернизация)_гис":
+      case "развитие_( alert('document.addEventListener(DOMContentLoaded - ' + field.value());модернизация)_гис":
       case "вывод_ис_гиз_эксплуатации":
       case "гис_выведена_из_эксплуатации":
         setrec(["expl", "expl_date", "customer_dev", "oper", "balance_holder"]);
@@ -126,7 +188,6 @@ $("#is_gis").on("change",function(){
     $("#hl_sys").parent().hide();
   }
 });
-
 var codeIS = $extension.find("#is_code");
 codeIS.on('change', function () {
 
@@ -145,6 +206,7 @@ codeIS.on('change', function () {
                 if (data.messages){
                     alert("Значение уже занято, введите новое значение");
                     codeIS.val(null);
+                    codeIS.addClass("required");
                 }
 
             },
@@ -155,8 +217,6 @@ codeIS.on('change', function () {
         });
     };
 });
-
-
 ITRP.hooks.register('after-prefill', function() { //UI готова
   $("#product_manager").readonly(true); //Дисейблим поле
 });
@@ -165,51 +225,3 @@ ITRP.hooks.register('after-prefill', function() { //UI готова
   console.log(prod_man);
   $("#product_manager").val(prod_man);
 });*/
-$("#no_account").on("change",function(){
-  if ($(this).is(":checked")){
-    $("#4me_account_row").hide();
-    $("#4me_account").val(null).change();
-  }else{
-    $("#4me_account_row").show();
-  }
-});
-$("#hpsm").on("change",function(){
-  if($(this).is(":checked")){
-    $("#direction").parent().show();
-    $("#admin_group").parent().show();
-  }else{
-    $("#direction").parent().hide();
-    $("#admin_group").parent().hide();
-    $("#direction").val("");
-    $("#admin_group").val("");
-  }
-});
-
-function show(el) {
-  el.show();
-}
-function hide(el) {
-  el.hide();
-  ITRP.clearFormData(el);
-  var text_elements = el.find(":is(input, div, select, textarea)");
-  text_elements.change();
-}
-
-//Обработка поля chg_sup
-$("#chg_sup").on("change",function(){
-    if ($(this).is(":checked")){
-      show($("#oper_org"));
-    }else{
-      hide($("#oper_org"));
-    }
-  }).change();
-
-
-//Обработка поля chg_inf
-$("#chg_inf").on("change",function(){
-    if ($(this).is(":checked")){
-      show($("#resp_inf"));
-    }else{
-      hide($("#resp_inf"));
-    }
-  }).change();
