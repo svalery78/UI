@@ -1,0 +1,19 @@
+button {
+    padding: 8px 16px;
+    margin: 4px;
+    font-size: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  #delete_disk, #delete_vm {
+    background-color: #f44336;
+  }
+  #delete_disk:hover, #delete_vm:hover {
+    background-color: #da190b;
+  }
