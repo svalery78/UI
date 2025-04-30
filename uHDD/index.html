@@ -30,7 +30,7 @@
       </select>
     </div>
 
-    <div class="row vertical" style="display:none">
+    <div id="row_inc_desc" class="row vertical" style="display:none">
       <label for="inc_desc"
         title="Опишите инцидент, который уже произошел или может произойти, если экстренно не выполнить запрос на изменение">Краткое
         описание инцидента <i class="ii icon-help"></i></label>
@@ -71,17 +71,17 @@
           data-filter-value="vm_hostname"></div>
       </div>
 
-      <div class="row vertical">
+      <div id="row_current_size1" class="row vertical" style="display:none">
         <label for="current_size1" title="Текущий размер">Текущий размер</label>
-        <input id="current_size1" type="text" autocomplete="off">
+        <input id="current_size1" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_scsi_id1" class="row vertical" style="display:none">
         <label for="scsi_id1" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id1" type="text" autocomplete="off">
+        <input id="scsi_id1" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_hdd_cap1" class="row vertical" style="display:none">
         <label for="hdd_cap1" title="Укажите размер диска">Укажите размер диска</label>
         <input id="hdd_cap1" type="number" autocomplete="off" min="1" class="required">
       </div>
@@ -103,17 +103,17 @@
           data-filter-value="vm_hostname"></div>
       </div>
 
-      <div class="row vertical">
+      <div id="row_current_size2" class="row vertical" style="display:none">
         <label for="current_size2" title="Текущий размер">Текущий размер</label>
-        <input id="current_size2" type="text" autocomplete="off">
+        <input id="current_size2" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_scsi_id2" class="row vertical" style="display:none">
         <label for="scsi_id2" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id2" type="text" autocomplete="off">
+        <input id="scsi_id2" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_hdd_cap2" class="row vertical" style="display:none">
         <label for="hdd_cap2" title="Укажите размер диска">Укажите размер диска</label>
         <input id="hdd_cap2" type="number" autocomplete="off" min="1" class="required">
       </div>
@@ -135,17 +135,17 @@
           data-filter-value="vm_hostname"></div>
       </div>
 
-      <div class="row vertical">
+      <div id="row_current_size3" class="row vertical" style="display:none">
         <label for="current_size3" title="Текущий размер">Текущий размер</label>
-        <input id="current_size3" type="text" autocomplete="off">
+        <input id="current_size3" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_scsi_id3" class="row vertical" style="display:none">
         <label for="scsi_id3" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id3" type="text" autocomplete="off">
+        <input id="scsi_id3" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_hdd_cap3" class="row vertical" style="display:none">
         <label for="hdd_cap3" title="Укажите размер диска">Укажите размер диска</label>
         <input id="hdd_cap3" type="number" autocomplete="off" min="1" class="required">
       </div>
@@ -167,17 +167,17 @@
           data-filter-value="vm_hostname"></div>
       </div>
 
-      <div class="row vertical">
+      <div id="row_current_size4" class="row vertical" style="display:none">
         <label for="current_size4" title="Текущий размер">Текущий размер</label>
-        <input id="current_size4" type="text" autocomplete="off">
+        <input id="current_size4" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_scsi_id4" class="row vertical" style="display:none">
         <label for="scsi_id4" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id4" type="text" autocomplete="off">
+        <input id="scsi_id4" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_hdd_cap4" class="row vertical" style="display:none">
         <label for="hdd_cap4" title="Укажите размер диска">Укажите размер диска</label>
         <input id="hdd_cap4" type="number" autocomplete="off" min="1" class="required">
       </div>
@@ -199,17 +199,17 @@
           data-filter-value="vm_hostname"></div>
       </div>
 
-      <div class="row vertical">
+      <div id="row_current_size5" class="row vertical" style="display:none">
         <label for="current_size5" title="Текущий размер">Текущий размер</label>
-        <input id="current_size5" type="text" autocomplete="off">
+        <input id="current_size5" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_scsi_id5" class="row vertical" style="display:none">
         <label for="scsi_id5" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id5" type="text" autocomplete="off">
+        <input id="scsi_id5" type="text" autocomplete="off" readonly>
       </div>
 
-      <div class="row vertical">
+      <div id="row_hdd_cap5" class="row vertical" style="display:none">
         <label for="hdd_cap5" title="Укажите размер диска">Укажите размер диска</label>
         <input id="hdd_cap5" type="number" autocomplete="off" min="1" class="required">
       </div>
@@ -254,7 +254,7 @@
 
     </div>
 
-    <div class="row vertical">
+    <!--div class="row vertical">
       <button type="button" id="add_disk">Добавить диск</button>
       <button type="button" id="delete_disk" style="display:none;">Удалить диск</button>
     </div>
@@ -266,7 +266,7 @@
 
     <div class="row vertical">
       <button type="button" id="save">Сохранить</button>
-    </div>
+    </div-->
 
   </div>
 
