@@ -3,7 +3,7 @@
 
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="scipt.js"></script>
+  <script src="script.js"></script>
   <link rel="stylesheet" href="1.css">
 </head>
 
@@ -54,166 +54,201 @@
           data-filter-name="#Информационная система" data-filter-value="name_is"></div>
       </div>
 
-      <div class="row vertical">
-        <label for="vm_disk_operation1" title="Укажите тип операции">Укажите тип операции</label>
-        <select id="vm_disk_operation1" class="required">
-          <option value=""></option>
-          <option value="add">Подключение нового диска</option>
-          <option value="delete">Удаление диска</option>
-          <option value="resize_up">Увеличение диска</option>
-          <option value="resize_down">Уменьшение диска</option>
-        </select>
+      <div id="disk1">
+        <span class="section-header">Диск1</span>
+        <div class="row vertical">
+          <label for="vm_disk_operation1" title="Укажите тип операции">Укажите тип операции</label>
+          <select id="vm_disk_operation1" class="required">
+            <option value=""></option>
+            <option value="add">Подключение нового диска</option>
+            <option value="delete">Удаление диска</option>
+            <option value="resize_up">Увеличение диска</option>
+            <option value="resize_down">Уменьшение диска</option>
+          </select>
+        </div>
+
+        <div id="row_vm_disk1" class="row vertical">
+          <label for="vm_disk1" title="Диск 1">Диск 1</label>
+          <div id="vm_disk1" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
+            data-filter-value="vm_hostname"></div>
+        </div>
+
+        <div id="row_current_size1" class="row vertical" style="display:none">
+          <label for="current_size1" title="Текущий размер">Текущий размер</label>
+          <input id="current_size1" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_scsi_id1" class="row vertical" style="display:none">
+          <label for="scsi_id1" title="SCSI ID">SCSI ID</label>
+          <input id="scsi_id1" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_hdd_cap1" class="row vertical" style="display:none">
+          <label for="hdd_cap1" title="Укажите размер диска">Укажите размер диска</label>
+          <input id="hdd_cap1" type="number" autocomplete="off" min="1" class="required">
+        </div>
       </div>
 
-      <div class="row vertical">
-        <label for="vm_disk1" title="Диск 1">Диск 1</label>
-        <div id="vm_disk1" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
-          data-filter-value="vm_hostname"></div>
+      <div id="disk2" style="display:none">
+        <span class="section-header">Диск2</span>
+        <div class="row vertical">
+          <label for="vm_disk_operation2" title="Укажите тип операции">Укажите тип операции</label>
+          <select id="vm_disk_operation2" class="required">
+            <option value=""></option>
+            <option value="add">Подключение нового диска</option>
+            <option value="delete">Удаление диска</option>
+            <option value="resize_up">Увеличение диска</option>
+            <option value="resize_down">Уменьшение диска</option>
+          </select>
+        </div>
+
+        <div id="row_vm_disk2" class="row vertical">
+          <label for="vm_disk2" title="Диск 2">Диск 2</label>
+          <div id="vm_disk2" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
+            data-filter-value="vm_hostname"></div>
+        </div>
+
+        <div id="row_current_size2" class="row vertical" style="display:none">
+          <label for="current_size2" title="Текущий размер">Текущий размер</label>
+          <input id="current_size2" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_scsi_id2" class="row vertical" style="display:none">
+          <label for="scsi_id2" title="SCSI ID">SCSI ID</label>
+          <input id="scsi_id2" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_hdd_cap2" class="row vertical" style="display:none">
+          <label for="hdd_cap2" title="Укажите размер диска">Укажите размер диска</label>
+          <input id="hdd_cap2" type="number" autocomplete="off" min="1" class="required">
+        </div>
       </div>
 
-      <div id="row_current_size1" class="row vertical" style="display:none">
-        <label for="current_size1" title="Текущий размер">Текущий размер</label>
-        <input id="current_size1" type="text" autocomplete="off" readonly>
+      <div id="disk3" style="display:none">
+        <span class="section-header">Диск3</span>
+        <div class="row vertical">
+          <label for="vm_disk_operation3" title="Укажите тип операции">Укажите тип операции</label>
+          <select id="vm_disk_operation3" class="required">
+            <option value=""></option>
+            <option value="add">Подключение нового диска</option>
+            <option value="delete">Удаление диска</option>
+            <option value="resize_up">Увеличение диска</option>
+            <option value="resize_down">Уменьшение диска</option>
+          </select>
+        </div>
+
+        <div id="row_vm_disk3" class="row vertical">
+          <label for="vm_disk3" title="Диск 3">Диск 3</label>
+          <div id="vm_disk3" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
+            data-filter-value="vm_hostname"></div>
+        </div>
+
+        <div id="row_current_size3" class="row vertical" style="display:none">
+          <label for="current_size3" title="Текущий размер">Текущий размер</label>
+          <input id="current_size3" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_scsi_id3" class="row vertical" style="display:none">
+          <label for="scsi_id3" title="SCSI ID">SCSI ID</label>
+          <input id="scsi_id3" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_hdd_cap3" class="row vertical" style="display:none">
+          <label for="hdd_cap3" title="Укажите размер диска">Укажите размер диска</label>
+          <input id="hdd_cap3" type="number" autocomplete="off" min="1" class="required">
+        </div>
       </div>
 
-      <div id="row_scsi_id1" class="row vertical" style="display:none">
-        <label for="scsi_id1" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id1" type="text" autocomplete="off" readonly>
+      <div id="disk4" style="display:none">
+        <span class="section-header">Диск4</span>
+        <div class="row vertical">
+          <label for="vm_disk_operation4" title="Укажите тип операции">Укажите тип операции</label>
+          <select id="vm_disk_operation4" class="required">
+            <option value=""></option>
+            <option value="add">Подключение нового диска</option>
+            <option value="delete">Удаление диска</option>
+            <option value="resize_up">Увеличение диска</option>
+            <option value="resize_down">Уменьшение диска</option>
+          </select>
+        </div>
+
+        <div id="row_vm_disk4" class="row vertical">
+          <label for="vm_disk4" title="Диск 4">Диск 4</label>
+          <div id="vm_disk4" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
+            data-filter-value="vm_hostname"></div>
+        </div>
+
+        <div id="row_current_size4" class="row vertical" style="display:none">
+          <label for="current_size4" title="Текущий размер">Текущий размер</label>
+          <input id="current_size4" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_scsi_id4" class="row vertical" style="display:none">
+          <label for="scsi_id4" title="SCSI ID">SCSI ID</label>
+          <input id="scsi_id4" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_hdd_cap4" class="row vertical" style="display:none">
+          <label for="hdd_cap4" title="Укажите размер диска">Укажите размер диска</label>
+          <input id="hdd_cap4" type="number" autocomplete="off" min="1" class="required">
+        </div>
       </div>
 
-      <div id="row_hdd_cap1" class="row vertical" style="display:none">
-        <label for="hdd_cap1" title="Укажите размер диска">Укажите размер диска</label>
-        <input id="hdd_cap1" type="number" autocomplete="off" min="1" class="required">
+      <div id="disk5" style="display:none">
+        <span class="section-header">Диск5</span>
+        <div class="row vertical">
+          <label for="vm_disk_operation5" title="Укажите тип операции">Укажите тип операции</label>
+          <select id="vm_disk_operation5" class="required">
+            <option value=""></option>
+            <option value="add">Подключение нового диска</option>
+            <option value="delete">Удаление диска</option>
+            <option value="resize_up">Увеличение диска</option>
+            <option value="resize_down">Уменьшение диска</option>
+          </select>
+        </div>
+
+        <div id="row_vm_disk5" class="row vertical">
+          <label for="vm_disk5" title="Диск 5">Диск 5</label>
+          <div id="vm_disk5" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
+            data-filter-value="vm_hostname"></div>
+        </div>
+
+        <div id="row_current_size5" class="row vertical" style="display:none">
+          <label for="current_size5" title="Текущий размер">Текущий размер</label>
+          <input id="current_size5" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_scsi_id5" class="row vertical" style="display:none">
+          <label for="scsi_id5" title="SCSI ID">SCSI ID</label>
+          <input id="scsi_id5" type="text" autocomplete="off" readonly>
+        </div>
+
+        <div id="row_hdd_cap5" class="row vertical" style="display:none">
+          <label for="hdd_cap5" title="Укажите размер диска">Укажите размер диска</label>
+          <input id="hdd_cap5" type="number" autocomplete="off" min="1" class="required">
+        </div>
       </div>
 
-      <div class="row vertical">
-        <label for="vm_disk_operation2" title="Укажите тип операции">Укажите тип операции</label>
-        <select id="vm_disk_operation2" class="required">
-          <option value=""></option>
-          <option value="add">Подключение нового диска</option>
-          <option value="delete">Удаление диска</option>
-          <option value="resize_up">Увеличение диска</option>
-          <option value="resize_down">Уменьшение диска</option>
-        </select>
+      <div class="section" id="addDeleteDisk"><span class="section"></span>
+        <div class="row vertical stock">
+          <span class="btn check" id="add_disk"><span class="button">Добавить диск</span></span>
+          <span class="btn check" id="delete_disk" style="display:none"><span class="button">Удалить
+              диск</span></span>
+          <br>
+          <br>
+        </div>
       </div>
 
-      <div class="row vertical">
-        <label for="vm_disk2" title="Диск 2">Диск 2</label>
-        <div id="vm_disk2" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
-          data-filter-value="vm_hostname"></div>
-      </div>
+    </div>
 
-      <div id="row_current_size2" class="row vertical" style="display:none">
-        <label for="current_size2" title="Текущий размер">Текущий размер</label>
-        <input id="current_size2" type="text" autocomplete="off" readonly>
+    <div class="section" id="addDeleteVM"><span class="section"></span>
+      <div class="row vertical stock">
+        <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
+        <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
+            ВМ</span></span>
+        <br>
+        <br>
       </div>
-
-      <div id="row_scsi_id2" class="row vertical" style="display:none">
-        <label for="scsi_id2" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id2" type="text" autocomplete="off" readonly>
-      </div>
-
-      <div id="row_hdd_cap2" class="row vertical" style="display:none">
-        <label for="hdd_cap2" title="Укажите размер диска">Укажите размер диска</label>
-        <input id="hdd_cap2" type="number" autocomplete="off" min="1" class="required">
-      </div>
-
-      <div class="row vertical">
-        <label for="vm_disk_operation3" title="Укажите тип операции">Укажите тип операции</label>
-        <select id="vm_disk_operation3" class="required">
-          <option value=""></option>
-          <option value="add">Подключение нового диска</option>
-          <option value="delete">Удаление диска</option>
-          <option value="resize_up">Увеличение диска</option>
-          <option value="resize_down">Уменьшение диска</option>
-        </select>
-      </div>
-
-      <div class="row vertical">
-        <label for="vm_disk3" title="Диск 3">Диск 3</label>
-        <div id="vm_disk3" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
-          data-filter-value="vm_hostname"></div>
-      </div>
-
-      <div id="row_current_size3" class="row vertical" style="display:none">
-        <label for="current_size3" title="Текущий размер">Текущий размер</label>
-        <input id="current_size3" type="text" autocomplete="off" readonly>
-      </div>
-
-      <div id="row_scsi_id3" class="row vertical" style="display:none">
-        <label for="scsi_id3" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id3" type="text" autocomplete="off" readonly>
-      </div>
-
-      <div id="row_hdd_cap3" class="row vertical" style="display:none">
-        <label for="hdd_cap3" title="Укажите размер диска">Укажите размер диска</label>
-        <input id="hdd_cap3" type="number" autocomplete="off" min="1" class="required">
-      </div>
-
-      <div class="row vertical">
-        <label for="vm_disk_operation4" title="Укажите тип операции">Укажите тип операции</label>
-        <select id="vm_disk_operation4" class="required">
-          <option value=""></option>
-          <option value="add">Подключение нового диска</option>
-          <option value="delete">Удаление диска</option>
-          <option value="resize_up">Увеличение диска</option>
-          <option value="resize_down">Уменьшение диска</option>
-        </select>
-      </div>
-
-      <div class="row vertical">
-        <label for="vm_disk4" title="Диск 4">Диск 4</label>
-        <div id="vm_disk4" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
-          data-filter-value="vm_hostname"></div>
-      </div>
-
-      <div id="row_current_size4" class="row vertical" style="display:none">
-        <label for="current_size4" title="Текущий размер">Текущий размер</label>
-        <input id="current_size4" type="text" autocomplete="off" readonly>
-      </div>
-
-      <div id="row_scsi_id4" class="row vertical" style="display:none">
-        <label for="scsi_id4" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id4" type="text" autocomplete="off" readonly>
-      </div>
-
-      <div id="row_hdd_cap4" class="row vertical" style="display:none">
-        <label for="hdd_cap4" title="Укажите размер диска">Укажите размер диска</label>
-        <input id="hdd_cap4" type="number" autocomplete="off" min="1" class="required">
-      </div>
-
-      <div class="row vertical">
-        <label for="vm_disk_operation5" title="Укажите тип операции">Укажите тип операции</label>
-        <select id="vm_disk_operation5" class="required">
-          <option value=""></option>
-          <option value="add">Подключение нового диска</option>
-          <option value="delete">Удаление диска</option>
-          <option value="resize_up">Увеличение диска</option>
-          <option value="resize_down">Уменьшение диска</option>
-        </select>
-      </div>
-
-      <div class="row vertical">
-        <label for="vm_disk5" title="Диск 5">Диск 5</label>
-        <div id="vm_disk5" class="required" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM"
-          data-filter-value="vm_hostname"></div>
-      </div>
-
-      <div id="row_current_size5" class="row vertical" style="display:none">
-        <label for="current_size5" title="Текущий размер">Текущий размер</label>
-        <input id="current_size5" type="text" autocomplete="off" readonly>
-      </div>
-
-      <div id="row_scsi_id5" class="row vertical" style="display:none">
-        <label for="scsi_id5" title="SCSI ID">SCSI ID</label>
-        <input id="scsi_id5" type="text" autocomplete="off" readonly>
-      </div>
-
-      <div id="row_hdd_cap5" class="row vertical" style="display:none">
-        <label for="hdd_cap5" title="Укажите размер диска">Укажите размер диска</label>
-        <input id="hdd_cap5" type="number" autocomplete="off" min="1" class="required">
-      </div>
-
     </div>
 
     <div class="section" id="tip">
@@ -255,21 +290,20 @@
     </div>
 
     <!--div class="row vertical">
-      <button type="button" id="add_disk">Добавить диск</button>
-      <button type="button" id="delete_disk" style="display:none;">Удалить диск</button>
-    </div>
-
-    <div class="row vertical">
-      <button type="button" id="add_vm">Добавить ВМ</button>
-      <button type="button" id="delete_vm" style="display:none;">Удалить последнюю ВМ</button>
-    </div>
-
-    <div class="row vertical">
-      <button type="button" id="save">Сохранить</button>
-    </div-->
-
+    <button type="button" id="add_disk">Добавить диск</button>
+    <button type="button" id="delete_disk" style="display:none;">Удалить диск</button>
   </div>
 
+  <div class="row vertical">
+    <button type="button" id="add_vm">Добавить ВМ</button>
+    <button type="button" id="delete_vm" style="display:none;">Удалить последнюю ВМ</button>
+  </div>
+
+  <div class="row vertical">
+    <button type="button" id="save">Сохранить</button>
+  </div-->
+
+  </div>
 
 </body>
 

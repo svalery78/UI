@@ -2,6 +2,11 @@ var $ = ITRP.$;            // jQuery
 var $extension = $(this);  // The UI Extension container with custom HTML
 
 //$(document).ready(function () {
+//  alert('document ready');
+  var currentDisk = 1;
+  var maxDisks = 5;
+  var vmCounter = 0;
+  var maxVM = 10;
 // Helper function to show/hide rows
 function toggleRowVisibility(selector, show) {
   $(selector).toggle(show);
@@ -43,11 +48,6 @@ $('#justification').on('change', function () {
 });
 
 // 2. Жесткие диски
-
-// var HDDSize1;
-// var HDDScsi1;
-// var HDDSize2;
-// var HDDScsi2;
 
 var vmDiskOperation1 = $extension.find("#vm_disk_operation1");
 vmDiskOperation1.on('change', function () {
@@ -100,6 +100,36 @@ HDD5.on('change', function () {
 });
 
 
+$("#add_disk").on("click", function () {
+  if (!$(this).hasClass("disabled")) {
+      //alert("not disabled");
+      $("#delete_disk").show();
+      //if($("#delete_disk").class("disabled")){
+      $("#delete_disk").removeClass("disabled");
+      if (currentDisk < maxDisks) {
+        currentDisk++;
+        showDiskFields(currentDisk);
+        if (currentDisk === maxDisks) {
+          $('#add_disk').hide();
+        };
+      };
+  };
+});   
+
+$("#delete_disk").on("click", function () {
+  if (!$(this).hasClass("disabled")) {
+    $('#add_disk').show();
+    $('#add_disk').removeClass("disabled");
+    if (currentDisk > 1) {
+      hideDiskFields(currentDisk);
+      currentDisk--;      
+      if (currentDisk === 1) {
+        $('#delete_disk').hide();
+      };
+    };
+  };
+});
+
 
 function vmdiskOperation(vmDiskOperationN, numberDisk) {
   if (vmDiskOperationN.hasClass('empty')) vmDiskOperationN.removeClass('empty');
@@ -115,18 +145,26 @@ function vmdiskOperation(vmDiskOperationN, numberDisk) {
   if (vmDiskOperationN.val() == 'add' || vmDiskOperationN.val() == 'resize_up'
     || vmDiskOperationN.val() == 'resize_down') {
     toggleRowVisibility('#row_hdd_cap' + numberDisk, true);
+    $('#hdd_cap' + numberDisk).toggleClass('required', true);
+
   } else {
     toggleRowVisibility('#row_hdd_cap' + numberDisk, false);
     $('#hdd_cap' + numberDisk).val(null);
-    $('#hdd_cap' + numberDisk).toggleClass('required', true);
+    $('#hdd_cap' + numberDisk).toggleClass('required', false);
+  };
+
+  if(vmDiskOperationN.val() == 'add'){
+    toggleRowVisibility('#row_vm_disk' + numberDisk, false);
+    $('#vm_disk' + numberDisk).toggleClass('required', false);
+  }else{
+    toggleRowVisibility('#row_vm_disk' + numberDisk, true);
+    $('#vm_disk' + numberDisk).toggleClass('required', true);
   };
 }
 
-//function HDD(HDDN, numberDisk, HDDSize, HDDScsi) {
+
 function HDD(HDDN, numberDisk) {
   if (HDDN.data('item').id) {
-    //alert('HDDN - ' + JSON.stringify(HDDN.data('item').id));
-    //HDD(HDD1, 1, HDDSize1, HDDScsi1);
     var HDDSize = HDDN.data('item').custom_fields['HDD'];
     var HDDScsi = HDDN.data('item').custom_fields['SCSI ID'];
     $('#current_size' + numberDisk).val(HDDSize);
@@ -136,6 +174,31 @@ function HDD(HDDN, numberDisk) {
     $('#scsi_id' + numberDisk).val(null);
   };
 }
+
+function showDiskFields(diskNum) {
+  toggleRowVisibility('#disk' + diskNum,true);
+  $('#vm_disk_operation' + diskNum).toggleClass('required', true);
+  $('#vm_disk' + diskNum).toggleClass('required', true);  
+}
+
+function hideDiskFields(diskNum) {
+  toggleRowVisibility('#disk' + diskNum,false);
+  toggleRowVisibility('#row_vm_disk'+ diskNum,true);
+  toggleRowVisibility('#row_scsi_id' + diskNum,false);
+  toggleRowVisibility('#row_current_size'+ diskNum,false);
+  toggleRowVisibility('#row_hdd_cap'+ diskNum,false);
+
+  $('#hdd_cap' + diskNum).toggleClass('required', false);
+  $('#vm_disk_operation' + diskNum).toggleClass('required', false);
+  $('#vm_disk' + diskNum).toggleClass('required', false);
+
+  $('#vm_disk' + diskNum).val(null);
+  $('#current_size' + diskNum).val(null);
+  $('#scsi_id' + diskNum).val(null);
+  $('#hdd_cap' + diskNum).val(null);
+  $('#vm_disk_operation' + diskNum).val(null);
+}
+
 
 //});
 
