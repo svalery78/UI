@@ -164,7 +164,8 @@ $(document).ready(function() {
         const hddCap = $('#hdd_cap' + i).val();
   
         if (!operation) valid = false;
-        if ((operation === 'add' || operation === 'resize_up' || operation === 'resize_down') && (!hddCap || hddCap <= 0)) valid = false;
+        if ((operation === 'add' || operation === 'resize_up' || operation === 'resize_down') && 
+        (!hddCap || hddCap <= 0)) valid = false;
       }
       return valid;
     }
