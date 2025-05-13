@@ -1,23 +1,27 @@
 var $ = ITRP.$;            // jQuery
 var $extension = $(this);  // The UI Extension container with custom HTML
-
-//$(document).ready(function () {
-//  alert('document ready');
 var currentDisk = 1;
 var maxDisks = 5;
 var vmCounter = 0;
 var maxVM = 10;
-var vmID;
+var vmName;
 var inputJson = [];
+var vmHostDelete;
+var createVM;
+
+$("#input_form").readonly(true);
+
 // Helper function to show/hide rows
 function toggleRowVisibility(selector, show) {
   $(selector).toggle(show);
 }
 
-// Helper function to clear values in a row
-function clearRowValues(rowSelector) {
-  $(rowSelector).find('input[type="text"], input[type="number"], select').val('');
-}
+function removedClass(selector, className) {
+  if (selector.hasClass(className)) {
+    selector.removeClass(className);
+  };
+};
+
 
 // 1. "Экстренное изменение" Checkbox
 $('#is_ex_change').on('change', function () {
@@ -49,9 +53,14 @@ $('#justification').on('change', function () {
   $('#inc_desc').toggleClass('required', isShow);
 });
 
-var vmHostName = $extension.find('vm_hostname');
+$('#name_is').on('change', function(){
+  removedClass($('#name_is'), 'empty');
+});
+
+var vmHostName = $extension.find('#vm_hostname');
 vmHostName.on('change', function () {
-  //vmID =
+  removedClass(vmHostName, "empty");
+  vmName = vmHostName.data('item').label;
 });
 
 // 2. Жесткие диски
@@ -106,13 +115,43 @@ HDD5.on('change', function () {
   HDD(HDD5, 5);
 });
 
+var hddCap1 = $extension.find("#hdd_cap1");
+var hddCapRequired1 = $extension.find("#hdd_cap_required1");
+hddCap1.on('change', function () {
+  removedClass(hddCapRequired1, "empty");
+});
+
+var hddCap2 = $extension.find("#hdd_cap2");
+var hddCapRequired2 = $extension.find("#hdd_cap_required2");
+hddCap2.on('change', function () {
+  removedClass(hddCapRequired2, "empty");
+});
+
+var hddCap3 = $extension.find("#hdd_cap3");
+var hddCapRequired3 = $extension.find("#hdd_cap_required3");
+hddCap3.on('change', function () {
+  removedClass(hddCapRequired3, "empty");
+});
+
+var hddCap4 = $extension.find("#hdd_cap4");
+var hddCapRequired4 = $extension.find("#hdd_cap_required4");
+hddCap4.on('change', function () {
+  removedClass(hddCapRequired4, "empty");
+});
+
+var hddCap5 = $extension.find("#hdd_cap5");
+var hddCapRequired5 = $extension.find("#hdd_cap_required5");
+hddCap5.on('change', function () {
+  removedClass(hddCapRequired5, "empty");
+});
+
 
 $("#add_disk").on("click", function () {
   if (!$(this).hasClass("disabled")) {
     //alert("not disabled");
     $("#delete_disk").show();
     //if($("#delete_disk").class("disabled")){
-    $("#delete_disk").removeClass("disabled");
+    removedClass($("#delete_disk"), "disabled");
     if (currentDisk < maxDisks) {
       currentDisk++;
       showDiskFields(currentDisk);
@@ -126,7 +165,7 @@ $("#add_disk").on("click", function () {
 $("#delete_disk").on("click", function () {
   if (!$(this).hasClass("disabled")) {
     $('#add_disk').show();
-    $('#add_disk').removeClass("disabled");
+    removedClass($('#add_disk'), "disabled");
     if (currentDisk > 1) {
       hideDiskFields(currentDisk);
       currentDisk--;
@@ -140,28 +179,29 @@ $("#delete_disk").on("click", function () {
 $('#add_vm').click(function () {
   if (!$(this).hasClass("disabled")) {
 
-    if (!validateFields()) {
+    if (validateFields()) {
       alert('Заполните корректно обязательные поля');
       return;
     }
 
     const operations = collectDiskOperations();
+
     var nodes = {
-      hostname: vmHostName,
+      hostname: vmName,
       vhd: operations
-    }
+    };
+
     inputJson.push(nodes);
-    updateJSON(vmHostName, vmID, operations);
+    updateJSON(vmName, vmHostName.val(), operations);
     addInputFormRecord(inputJson);
 
     vmCounter++;
     $('#delete_vm').show();
-    $("#delete_vm").removeClass("disabled");
+    removedClass($("#delete_vm"), "disabled");
 
     clearDiskFields();
 
     if (vmCounter >= maxVM) {
-      //alert('Достигнут лимит добавления ВМ.');
       $(this).addClass("disabled");
       $(this).hide();
       return;
@@ -169,9 +209,67 @@ $('#add_vm').click(function () {
   };
 });
 
+$("#delete_vm").on("click", function () {
+  if (!$(this).hasClass("disabled")) {
+
+    $("#add_vm").show();
+    $("#add_vm").removeClass("disabled");
+
+    if (inputJson.length > 0) {
+      var lastVM = inputJson.pop();
+      if (inputJson.length == 0) {
+        $('#input_form').val(null);
+        $('#json_update').val(null);
+        $('#json_create').val(null);
+        $('#json_delete').val(null);
+      } else {
+        addInputFormRecord(inputJson);
+        vmHostDelete = lastVM.hostname;
+        deleteJson(vmHostDelete,  $('#json_update').val(), '#json_update');
+        deleteJson(vmHostDelete,  $('#json_create').val(), '#json_create');
+        deleteJson(vmHostDelete,  $('#json_delete').val(), '#json_delete');
+        vmHostDelete = null;
+      };
+
+    }
+    else {
+      alert("newArray - else");
+    }
+    vmCounter--;
+    if (vmCounter == 0) {
+      $(this).addClass("disabled");
+      $(this).hide();
+    }
+
+  };
+});
+
+$("#finish").on("change", function () {
+  if (createVM || createVM == false) {
+      if ($(this).is(":checked")) {
+          if (inputJson && inputJson != null &&
+           inputJson != "" && $("#name_is").val()) {
+              finishChecked();
+          } else {
+              alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
+              $(this).prop("checked", false);
+              if (!$("#name_is").val()) {
+                  $("#name_is").addClass("empty");
+              };
+              $("#finish").addClass("required");
+          };
+
+      } else {
+          finishUnChecked();
+      }
+  } else {
+      finishChecked();
+  }
+});
+
 
 function vmdiskOperation(vmDiskOperationN, numberDisk) {
-  if (vmDiskOperationN.hasClass('empty')) vmDiskOperationN.removeClass('empty');
+  removedClass($('#vm_disk_operation_required' + numberDisk), 'empty');
   if (vmDiskOperationN.val() == 'delete' || vmDiskOperationN.val() == 'resize_up'
     || vmDiskOperationN.val() == 'resize_down') {
     toggleRowVisibility('#row_current_size' + numberDisk, true);
@@ -202,6 +300,7 @@ function vmdiskOperation(vmDiskOperationN, numberDisk) {
 };
 
 function HDD(HDDN, numberDisk) {
+  removedClass(HDDN, 'empty');
   if (HDDN.data('item').id) {
     var HDDSize = HDDN.data('item').custom_fields['HDD'];
     var HDDScsi = HDDN.data('item').custom_fields['SCSI ID'];
@@ -230,7 +329,7 @@ function hideDiskFields(diskNum) {
   $('#hdd_cap' + diskNum).toggleClass('invalid', false);
   $('#vm_disk_operation' + diskNum).toggleClass('required', false);
   $('#vm_disk' + diskNum).toggleClass('required', false);
-  
+
   $('#vm_disk' + diskNum).val(null);
   $('#current_size' + diskNum).val(null);
   $('#scsi_id' + diskNum).val(null);
@@ -246,19 +345,17 @@ function validateFields() {
     return isError;
   };
   isError = validateFieldsDisk(vmDiskOperation1, HDD1, 1);
-
-  alert($('#disk2').css('display'));
-  if ($('#disk2').css('display') != 'none') {
+  if (currentDisk > 1) {
     isError = validateFieldsDisk(vmDiskOperation2, HDD2, 2);
   };
-  if ($('#disk3').css('display') != 'none') {
+  if (currentDisk > 2) {
     isError = validateFieldsDisk(vmDiskOperation3, HDD3, 3);
   };
-  if ($('#disk4').css('display') != 'none') {
+  if (currentDisk > 3) {
     isError = validateFieldsDisk(vmDiskOperation4, HDD4, 4);
   };
-  if ($('#disk5').css('display') != 'none') {
-    isError = validateFieldsDisk(vmDiskOperation5, HDD5, 2);
+  if (currentDisk > 4) {
+    isError = validateFieldsDisk(vmDiskOperation5, HDD5, 5);
   };
   return isError;
 
@@ -267,7 +364,7 @@ function validateFields() {
 function validateFieldsDisk(vmDiskOperationN, HDDN, numberDisk) {
   var isError = false;
   if (!vmDiskOperationN.val()) {
-    vmDiskOperationN.addClass('empty');
+    $('#vm_disk_operation_required' + numberDisk).addClass('empty');
     isError = true;
     return isError;
   } else {
@@ -280,7 +377,7 @@ function validateFieldsDisk(vmDiskOperationN, HDDN, numberDisk) {
     };
     if (vmDiskOperationN.val() != 'delete') {
       if (!$('#hdd_cap' + numberDisk).val() || $('#hdd_cap' + numberDisk).hasClass('invalid')) {
-        $('#hdd_cap' + numberDisk).addClass('empty');
+        $('#hdd_cap_required' + numberDisk).addClass('empty');
         isError = true;
         return isError;
       };
@@ -296,24 +393,24 @@ function collectDiskOperations() {
     if (!operation) continue;
 
     const disk = {
-      operation,
+      operation: operation,
       vm_disk: $('#vm_disk' + i).val(),
       current_size: $('#current_size' + i).val(),
       scsi_id: $('#scsi_id' + i).val(),
       hdd_cap: $('#hdd_cap' + i).val()
     };
     ops.push(disk);
-  }  
+  }
   return ops;
 };
 
 function updateJSON(vmName, vmID, operations) {
-  var jsonUpdate = $('json_update').val();
-  var jsonCreate = $('json_create').val();
-  var jsonDelete = $('json_delete').val();
-  jsonUpdate = jsonUpdate.replace(/\n+$/m, '');
-  jsonCreate = jsonCreate.replace(/\n+$/m, '');
-  jsonDelete = jsonDelete.replace(/\n+$/m, '');
+  var jsonUpdate = $('#json_update').val();
+  var jsonCreate = $('#json_create').val();
+  var jsonDelete = $('#json_delete').val();
+  jsonUpdate = jsonUpdate && jsonUpdate != '' ? jsonUpdate.replace(/\n+$/m, '') : '';
+  jsonCreate = jsonCreate && jsonCreate != '' ? jsonCreate.replace(/\n+$/m, '') : '';
+  jsonDelete = jsonDelete && jsonDelete != '' ? jsonDelete.replace(/\n+$/m, '') : '';
   var newArrayUpdate = jsonUpdate && jsonUpdate != '' ? JSON.parse(jsonUpdate).nodes : [];
   var newArrayCreate = jsonCreate && jsonCreate != '' ? JSON.parse(jsonCreate).nodes : [];
   var newArrayDelete = jsonDelete && jsonDelete != '' ? JSON.parse(jsonDelete).nodes : [];
@@ -326,14 +423,16 @@ function updateJSON(vmName, vmID, operations) {
     "hostname": vmName,
     "vm_id": vmID,
     "vhd": []
-  }
+  };
 
-  for (var op of operations) {
+  for (var i = 0; i < operations.length; i++) {
+
     var vhdObj = {};
+    var op = operations[i];
 
     if (op.vm_disk) vhdObj.vhd_id = op.vm_disk;
     if (op.hdd_cap) vhdObj.hdd_cap = op.hdd_cap;
-    if (op.scsi_id) vhdObj.scsi_id = op.scsi_id;    
+    if (op.scsi_id) vhdObj.scsi_id = op.scsi_id;
 
     if (op.operation === 'add' || op.operation === 'resize_down') {
       newVMCreate.push(vhdObj);
@@ -341,74 +440,82 @@ function updateJSON(vmName, vmID, operations) {
     if (op.operation === 'resize_up') {
       newVMUpdate.push(vhdObj);
     };
-    if (op.operation === 'delete') {
+    if (op.operation === 'delete' || op.operation === 'resize_down') {
       newVMDelete.push(vhdObj);
     };
 
   };
 
-  if(newVMUpdate.length > 1){
+  if (newVMUpdate.length > 0) {
     newVM.vhd = newVMUpdate;
     newArrayUpdate.push(newVM);
     var nodes = {
       "nodes": newArrayUpdate
     };
-    $('json_update').val(JSON.stringify(nodes)).change();    
+    $('#json_update').val(JSON.stringify(nodes)).change();
+
   };
 
-  if(newVMCreate.length > 1){
+  if (newVMCreate.length > 0) {
     newVM.vhd = newVMCreate;
     newArrayCreate.push(newVM);
     var nodes = {
       "nodes": newArrayCreate
     };
-    $('json_create').val(JSON.stringify(nodes)).change();
+    $('#json_create').val(JSON.stringify(nodes)).change();
   };
 
-  if(newVMDelete.length > 1){
+  if (newVMDelete.length > 0) {
     newVM.vhd = newVMDelete;
     newArrayDelete.push(newVM);
     var nodes = {
       "nodes": newArrayDelete
     };
-    $('json_delete').val(JSON.stringify(nodes)).change();
+    $('#json_delete').val(JSON.stringify(nodes)).change();
   };
 
 };
 
 function addInputFormRecord(inputJson) {
-  //var $VMs = $("#input_json").val();
-  //alert($("#input_json").val());
-  //$VMs = $VMs.replace(/\n+$/m, '');
   var VMsData = inputJson;
-  //alert("addVMToTable");
   if (VMsData.length == 0) {
-      $('#input_form').val(null);
+    $('#input_form').val(null);
   };
   var table = ' <table id="vm_table" border="1"><tr><th>';
   table += '№';
   table += '</th><th>';
   table += 'hostname';
-  table += '</th><th>';  
+  table += '</th><th>';
   table += 'дополнительные диски';
-  table += '</th><th>';  
+  table += '</th>';
 
   for (var index = 0; index < VMsData.length; index++) {
     var vmData = VMsData[index];
     var operationType = [];
     var scsi = [];
     var hddCap = [];
-    for (var op of vmData.vhd) {
-      switch(op.operation){
-        case "resize_up": operationType.push("Увеличение диска");
-        case "add": operationType.push("Подключение нового диска");
-        case "delete": operationType.push("Удаление диска");
-        case "resize_down": operationType.push("Уменьшение диска");
+    var lenVhd = vmData.vhd.length;
+
+    for (var i = 0; i < lenVhd; i++) {
+      var op = vmData.vhd[i];
+      switch (op.operation) {
+        case "resize_up":
+          operationType.push("Увеличение диска");
+          break;
+        case "add":
+          operationType.push("Подключение нового диска");
+          break
+        case "delete":
+          operationType.push("Удаление диска");
+          break;
+        case "resize_down":
+          operationType.push("Уменьшение диска");
+          break;
       };
       scsi.push(op.scsi_id);
       hddCap.push(op.hdd_cap);
     };
-    
+
     table += '<tr><td>';
     table += index + 1;
     table += '</td><td>';
@@ -417,42 +524,86 @@ function addInputFormRecord(inputJson) {
     table += (operationType[0] || '');
     table += ' ';
     table += (scsi[0] || '');
-    table += ' итоговый размер';
-    table += (hddCap[0] || '');
-    table += ' Гб; <br>';
-    table += (operationType[1] || '');
-    table += ' ';
-    table += (scsi[1] || '');
-    table += ' итоговый размер';
-    table += (hddCap[1] || '');
-    table += ' Гб; <br>';
-    table += (operationType[2] || '');
-    table += ' ';
-    table += (scsi[2] || '');
-    table += ' итоговый размер';
-    table += (hddCap[2] || '');
-    table += ' Гб; <br>';
-    table += (operationType[3] || '');
-    table += ' ';
-    table += (scsi[3] || '');
-    table += ' итоговый размер';
-    table += (hddCap[3] || '');
-    table += ' Гб; <br>';
-    table += (operationType[4] || '');
-    table += ' ';
-    table += (scsi[4] || '');
-    table += ' итоговый размер';
-    table += (hddCap[4] || '');
-    table += ' Гб; <br>';
-
+    if (hddCap[0]) {
+      table += ' итоговый размер ';
+      table += (hddCap[0] || '');
+      table += ' Гб';
+    };
+    table += ';';
+    if (lenVhd > 1) {
+      table += '<br>';
+      table += (operationType[1] || '');
+      table += ' ';
+      table += (scsi[1] || '');
+      if (hddCap[1]) {
+        table += ' итоговый размер ';
+        table += (hddCap[1] || '');
+        table += ' Гб';
+      };
+      table += ';';
+    };
+    if (lenVhd > 2) {
+      table += '<br>';
+      table += (operationType[2] || '');
+      table += ' ';
+      table += (scsi[2] || '');
+      if (hddCap[2]) {
+        table += ' итоговый размер ';
+        table += (hddCap[2] || '');
+        table += ' Гб';
+      };
+      table += ';';
+    };
+    if (lenVhd > 3) {
+      table += '<br>';
+      table += (operationType[3] || '');
+      table += ' ';
+      table += (scsi[3] || '');
+      if (hddCap[3]) {
+        table += ' итоговый размер ';
+        table += (hddCap[3] || '');
+        table += ' Гб';
+      };
+      table += ';';
+    };
+    if (lenVhd > 4) {
+      table += '<br>';
+      table += (operationType[4] || '');
+      table += ' ';
+      table += (scsi[4] || '');
+      if (hddCap[4]) {
+        table += ' итоговый размер ';
+        table += (hddCap[4] || '');
+        table += ' Гб';
+      };
+      table += ';';
+    }
+    table += '</td>';
 
   }
-  
+
   table += '</table>';
   $('#input_form').val({ html: table });
 };
 
-function clearDiskFields(){
+function deleteJson(deleteHostName, jsonAction, jsonActionName) {
+  jsonAction = jsonAction && jsonAction != '' ? jsonAction.replace(/\n+$/m, '') : '';
+  var newArray = jsonAction && jsonAction != '' ? JSON.parse(jsonAction).nodes : [];
+  if (newArray.length > 0) {
+    var lastVM = newArray.pop();
+    if (newArray.length == 0) {
+      $(jsonActionName).val(null);
+    } else {
+      if (lastVM.hostname == deleteHostName) {
+        var nodes = { "nodes": newArray };
+        $(jsonActionName).val(JSON.stringify(nodes)).change();
+      };
+
+    };
+  };
+};
+
+function clearDiskFields() {
   vmHostName.val(null);
   vmHostName.addClass('required');
 
@@ -469,9 +620,29 @@ function clearDiskFields(){
 
 };
 
+function finishChecked() {
+  $("#change").hide();
+  $("#name_is").readonly(true);
+  clearDiskFields();
+};
+
+function finishUnChecked() {
+  $("#change").show();
+  if (vmCounter < maxVM) {
+      $("#add_vm").show();
+  }
+  if (vmCounter > 1) {
+      $("#delete_vm").show();
+  }
+  $("#name_is").readonly(false);
+};
+
+if ($("#json_update").val() || $('#json_create').val() ||  $('#json_delete').val()) {
+  createVM = false;
+} else {
+  createVM = true;
+};
 
 
-
-//});
 
 

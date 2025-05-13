@@ -50,7 +50,7 @@
 
       <div class="row vertical" data-searchable>
         <label for="vm_hostname" title="Имя Виртуальной машины">Имя Виртуальной машины</label>
-        <div id="vm_hostname" class="required" data-custom-view="ке_виртуа льные_сервера"
+        <div id="vm_hostname" class="required" data-custom-view="ке_виртуальные_сервера"
           data-filter-name="#Информационная система" data-filter-value="name_is"></div>
       </div>
 
@@ -58,13 +58,15 @@
         <span class="section-header">Диск1</span>
         <div class="row vertical">
           <label for="vm_disk_operation1" title="Укажите тип операции">Укажите тип операции</label>
-          <select id="vm_disk_operation1" class="required">
-            <option value=""></option>
-            <option value="add">Подключение нового диска</option>
-            <option value="delete">Удаление диска</option>
-            <option value="resize_up">Увеличение диска</option>
-            <option value="resize_down">Уменьшение диска</option>
-          </select>
+          <div id="vm_disk_operation_required1">
+            <select id="vm_disk_operation1" class="required">
+              <option value=""></option>
+              <option value="add">Подключение нового диска</option>
+              <option value="delete">Удаление диска</option>
+              <option value="resize_up">Увеличение диска</option>
+              <option value="resize_down">Уменьшение диска</option>
+            </select>
+          </div>
         </div>
 
         <div id="row_vm_disk1" class="row vertical">
@@ -85,7 +87,9 @@
 
         <div id="row_hdd_cap1" class="row vertical" style="display:none">
           <label for="hdd_cap1" title="Укажите размер диска">Укажите размер диска</label>
-          <input id="hdd_cap1" type="number" autocomplete="off" min="1" class="required">
+          <div id="hdd_cap_required1">
+            <input id="hdd_cap1" type="number" autocomplete="off" min="1" class="required">
+          </div>
         </div>
       </div>
 
@@ -93,13 +97,15 @@
         <span class="section-header">Диск2</span>
         <div class="row vertical">
           <label for="vm_disk_operation2" title="Укажите тип операции">Укажите тип операции</label>
-          <select id="vm_disk_operation2" class="required">
-            <option value=""></option>
-            <option value="add">Подключение нового диска</option>
-            <option value="delete">Удаление диска</option>
-            <option value="resize_up">Увеличение диска</option>
-            <option value="resize_down">Уменьшение диска</option>
-          </select>
+          <div id="vm_disk_operation_required2">
+            <select id="vm_disk_operation2" class="required">
+              <option value=""></option>
+              <option value="add">Подключение нового диска</option>
+              <option value="delete">Удаление диска</option>
+              <option value="resize_up">Увеличение диска</option>
+              <option value="resize_down">Уменьшение диска</option>
+            </select>
+          </div>
         </div>
 
         <div id="row_vm_disk2" class="row vertical">
@@ -120,7 +126,9 @@
 
         <div id="row_hdd_cap2" class="row vertical" style="display:none">
           <label for="hdd_cap2" title="Укажите размер диска">Укажите размер диска</label>
-          <input id="hdd_cap2" type="number" autocomplete="off" min="1" class="required">
+          <div id="hdd_cap_required2">
+            <input id="hdd_cap2" type="number" autocomplete="off" min="1" class="required">
+          </div>
         </div>
       </div>
 
@@ -128,13 +136,15 @@
         <span class="section-header">Диск3</span>
         <div class="row vertical">
           <label for="vm_disk_operation3" title="Укажите тип операции">Укажите тип операции</label>
-          <select id="vm_disk_operation3" class="required">
-            <option value=""></option>
-            <option value="add">Подключение нового диска</option>
-            <option value="delete">Удаление диска</option>
-            <option value="resize_up">Увеличение диска</option>
-            <option value="resize_down">Уменьшение диска</option>
-          </select>
+          <div id="vm_disk_operation_required3">
+            <select id="vm_disk_operation3" class="required">
+              <option value=""></option>
+              <option value="add">Подключение нового диска</option>
+              <option value="delete">Удаление диска</option>
+              <option value="resize_up">Увеличение диска</option>
+              <option value="resize_down">Уменьшение диска</option>
+            </select>
+          </div>
         </div>
 
         <div id="row_vm_disk3" class="row vertical">
@@ -155,7 +165,9 @@
 
         <div id="row_hdd_cap3" class="row vertical" style="display:none">
           <label for="hdd_cap3" title="Укажите размер диска">Укажите размер диска</label>
-          <input id="hdd_cap3" type="number" autocomplete="off" min="1" class="required">
+          <div id="hdd_cap_required3">
+            <input id="hdd_cap3" type="number" autocomplete="off" min="1" class="required">
+          </div>
         </div>
       </div>
 
@@ -163,13 +175,15 @@
         <span class="section-header">Диск4</span>
         <div class="row vertical">
           <label for="vm_disk_operation4" title="Укажите тип операции">Укажите тип операции</label>
-          <select id="vm_disk_operation4" class="required">
-            <option value=""></option>
-            <option value="add">Подключение нового диска</option>
-            <option value="delete">Удаление диска</option>
-            <option value="resize_up">Увеличение диска</option>
-            <option value="resize_down">Уменьшение диска</option>
-          </select>
+          <div id="vm_disk_operation_required4">
+            <select id="vm_disk_operation4" class="required">
+              <option value=""></option>
+              <option value="add">Подключение нового диска</option>
+              <option value="delete">Удаление диска</option>
+              <option value="resize_up">Увеличение диска</option>
+              <option value="resize_down">Уменьшение диска</option>
+            </select>
+          </div>
         </div>
 
         <div id="row_vm_disk4" class="row vertical">
@@ -190,7 +204,9 @@
 
         <div id="row_hdd_cap4" class="row vertical" style="display:none">
           <label for="hdd_cap4" title="Укажите размер диска">Укажите размер диска</label>
-          <input id="hdd_cap4" type="number" autocomplete="off" min="1" class="required">
+          <div id="hdd_cap_required4">
+            <input id="hdd_cap4" type="number" autocomplete="off" min="1" class="required">
+          </div>
         </div>
       </div>
 
@@ -198,13 +214,15 @@
         <span class="section-header">Диск5</span>
         <div class="row vertical">
           <label for="vm_disk_operation5" title="Укажите тип операции">Укажите тип операции</label>
-          <select id="vm_disk_operation5" class="required">
-            <option value=""></option>
-            <option value="add">Подключение нового диска</option>
-            <option value="delete">Удаление диска</option>
-            <option value="resize_up">Увеличение диска</option>
-            <option value="resize_down">Уменьшение диска</option>
-          </select>
+          <div id="vm_disk_operation_required5">
+            <select id="vm_disk_operation5" class="required">
+              <option value=""></option>
+              <option value="add">Подключение нового диска</option>
+              <option value="delete">Удаление диска</option>
+              <option value="resize_up">Увеличение диска</option>
+              <option value="resize_down">Уменьшение диска</option>
+            </select>
+          </div>
         </div>
 
         <div id="row_vm_disk5" class="row vertical">
@@ -225,7 +243,9 @@
 
         <div id="row_hdd_cap5" class="row vertical" style="display:none">
           <label for="hdd_cap5" title="Укажите размер диска">Укажите размер диска</label>
-          <input id="hdd_cap5" type="number" autocomplete="off" min="1" class="required">
+          <div id="hdd_cap_required5">
+            <input id="hdd_cap5" type="number" autocomplete="off" min="1" class="required">
+          </div>
         </div>
       </div>
 
@@ -239,15 +259,14 @@
         </div>
       </div>
 
-    </div>
-
-    <div class="section" id="addDeleteVM"><span class="section"></span>
-      <div class="row vertical stock">
-        <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
-        <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
-            ВМ</span></span>
-        <br>
-        <br>
+      <div class="section" id="addDeleteVM"><span class="section"></span>
+        <div class="row vertical stock">
+          <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
+          <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
+              ВМ</span></span>
+          <br>
+          <br>
+        </div>
       </div>
     </div>
 
@@ -288,20 +307,6 @@
       </div>
 
     </div>
-
-    <!--div class="row vertical">
-    <button type="button" id="add_disk">Добавить диск</button>
-    <button type="button" id="delete_disk" style="display:none;">Удалить диск</button>
-  </div>
-
-  <div class="row vertical">
-    <button type="button" id="add_vm">Добавить ВМ</button>
-    <button type="button" id="delete_vm" style="display:none;">Удалить последнюю ВМ</button>
-  </div>
-
-  <div class="row vertical">
-    <button type="button" id="save">Сохранить</button>
-  </div-->
 
   </div>
 
