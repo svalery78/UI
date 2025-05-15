@@ -53,7 +53,7 @@ $('#justification').on('change', function () {
   $('#inc_desc').toggleClass('required', isShow);
 });
 
-$('#name_is').on('change', function(){
+$('#name_is').on('change', function () {
   removedClass($('#name_is'), 'empty');
 });
 
@@ -225,9 +225,9 @@ $("#delete_vm").on("click", function () {
       } else {
         addInputFormRecord(inputJson);
         vmHostDelete = lastVM.hostname;
-        deleteJson(vmHostDelete,  $('#json_update').val(), '#json_update');
-        deleteJson(vmHostDelete,  $('#json_create').val(), '#json_create');
-        deleteJson(vmHostDelete,  $('#json_delete').val(), '#json_delete');
+        deleteJson(vmHostDelete, $('#json_update').val(), '#json_update');
+        deleteJson(vmHostDelete, $('#json_create').val(), '#json_create');
+        deleteJson(vmHostDelete, $('#json_delete').val(), '#json_delete');
         vmHostDelete = null;
       };
 
@@ -246,24 +246,25 @@ $("#delete_vm").on("click", function () {
 
 $("#finish").on("change", function () {
   if (createVM || createVM == false) {
-      if ($(this).is(":checked")) {
-          if (inputJson && inputJson != null &&
-           inputJson != "" && $("#name_is").val()) {
-              finishChecked();
-          } else {
-              alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
-              $(this).prop("checked", false);
-              if (!$("#name_is").val()) {
-                  $("#name_is").addClass("empty");
-              };
-              $("#finish").addClass("required");
-          };
-
+    //alert("finish");
+    if ($(this).is(":checked")) {
+      if (inputJson && inputJson != null &&
+        inputJson != "" && $("#name_is").val()) {
+        finishChecked();
       } else {
-          finishUnChecked();
-      }
+        alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
+        $(this).prop("checked", false);
+        if (!$("#name_is").val()) {
+          $("#name_is").addClass("empty");
+        };
+        $("#finish").addClass("required");
+      };
+
+    } else {
+      finishUnChecked();
+    }
   } else {
-      finishChecked();
+    finishChecked();
   }
 });
 
@@ -339,6 +340,11 @@ function hideDiskFields(diskNum) {
 
 function validateFields() {
   var isError = false;
+  if (!$('#name_is').val()) {
+    $('#name_is').addClass('empty');
+    isError = true;
+    return isError;
+  };
   if (!$('#vm_hostname').val()) {
     $('#vm_hostname').addClass('empty');
     isError = true;
@@ -591,10 +597,10 @@ function deleteJson(deleteHostName, jsonAction, jsonActionName) {
   var newArray = jsonAction && jsonAction != '' ? JSON.parse(jsonAction).nodes : [];
   if (newArray.length > 0) {
     var lastVM = newArray.pop();
-    if (newArray.length == 0) {
-      $(jsonActionName).val(null);
-    } else {
-      if (lastVM.hostname == deleteHostName) {
+    if (lastVM.hostname == deleteHostName) {
+      if (newArray.length == 0) {
+        $(jsonActionName).val(null);
+      } else {
         var nodes = { "nodes": newArray };
         $(jsonActionName).val(JSON.stringify(nodes)).change();
       };
@@ -629,19 +635,31 @@ function finishChecked() {
 function finishUnChecked() {
   $("#change").show();
   if (vmCounter < maxVM) {
-      $("#add_vm").show();
+    $("#add_vm").show();
   }
   if (vmCounter > 1) {
-      $("#delete_vm").show();
+    $("#delete_vm").show();
   }
   $("#name_is").readonly(false);
 };
 
-if ($("#json_update").val() || $('#json_create').val() ||  $('#json_delete').val()) {
-  createVM = false;
-} else {
-  createVM = true;
-};
+$(document).ready(function () {
+  if ($("#json_update").val() || $('#json_create').val() || $('#json_delete').val()) {
+    //alert("createVM - false");    
+    createVM = false;
+    const operations = collectDiskOperations();
+
+    var nodes = {
+      hostname: vmName,
+      vhd: operations
+    };
+
+    inputJson.push(nodes);
+  } else {
+    //alert("createVM - true");
+    createVM = true;
+  };
+});
 
 
 
