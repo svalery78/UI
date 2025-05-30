@@ -60,59 +60,59 @@ $('#name_is').on('change', function () {
 var vmHostName = $extension.find('#vm_hostname');
 vmHostName.on('change', function () {
   removedClass(vmHostName, "empty");
-  vmName = vmHostName.data('item').label;
+  vmName = vmHostName.data('item').name;
 });
 
 // 2. Жесткие диски
 
 var vmDiskOperation1 = $extension.find("#vm_disk_operation1");
 vmDiskOperation1.on('change', function () {
-  vmdiskOperation(vmDiskOperation1, 1);
+  vmdiskOperation(vmDiskOperation1, 1, HDD1);
 });
 
 var HDD1 = $extension.find("#vm_disk1");
 HDD1.on('change', function () {
-  HDD(HDD1, 1);
+  if (HDD1.val()) HDD(HDD1, 1);
 });
 
 var vmDiskOperation2 = $extension.find("#vm_disk_operation2");
 vmDiskOperation2.on('change', function () {
-  vmdiskOperation(vmDiskOperation2, 2);
+  vmdiskOperation(vmDiskOperation2, 2, HDD2);
 });
 
 var HDD2 = $extension.find("#vm_disk2");
 HDD2.on('change', function () {
-  HDD(HDD2, 2);
+  if (HDD2.val()) HDD(HDD2, 2);
 });
 
 var vmDiskOperation3 = $extension.find("#vm_disk_operation3");
 vmDiskOperation3.on('change', function () {
-  vmdiskOperation(vmDiskOperation3, 3);
+  vmdiskOperation(vmDiskOperation3, 3, HDD3);
 });
 
 var HDD3 = $extension.find("#vm_disk3");
 HDD3.on('change', function () {
-  HDD(HDD3, 3);
+  if (HDD3.val()) HDD(HDD3, 3);
 });
 
 var vmDiskOperation4 = $extension.find("#vm_disk_operation4");
 vmDiskOperation4.on('change', function () {
-  vmdiskOperation(vmDiskOperation4, 4);
+  vmdiskOperation(vmDiskOperation4, 4, HDD4);
 });
 
 var HDD4 = $extension.find("#vm_disk4");
 HDD4.on('change', function () {
-  HDD(HDD4, 4);
+  if (HDD4.val()) HDD(HDD4, 4);
 });
 
 var vmDiskOperation5 = $extension.find("#vm_disk_operation5");
 vmDiskOperation5.on('change', function () {
-  vmdiskOperation(vmDiskOperation5, 5);
+  vmdiskOperation(vmDiskOperation5, 5, HDD5);
 });
-
+ 
 var HDD5 = $extension.find("#vm_disk5");
 HDD5.on('change', function () {
-  HDD(HDD5, 5);
+  if(HDD5.val()) HDD(HDD5, 5);
 });
 
 var hddCap1 = $extension.find("#hdd_cap1");
@@ -269,15 +269,19 @@ $("#finish").on("change", function () {
 });
 
 
-function vmdiskOperation(vmDiskOperationN, numberDisk) {
+function vmdiskOperation(vmDiskOperationN, numberDisk, HDDN) {
   removedClass($('#vm_disk_operation_required' + numberDisk), 'empty');
   if (vmDiskOperationN.val() == 'delete' || vmDiskOperationN.val() == 'resize_up'
-    || vmDiskOperationN.val() == 'resize_down') {
+    || vmDiskOperationN.val() == 'resize_down') {    
+    if(HDDN.val()) HDD(HDDN, numberDisk);  
     toggleRowVisibility('#row_current_size' + numberDisk, true);
     toggleRowVisibility('#row_scsi_id' + numberDisk, true);
+
   } else {
     toggleRowVisibility('#row_current_size' + numberDisk, false);
     toggleRowVisibility('#row_scsi_id' + numberDisk, false);
+    $('#current_size' + numberDisk).val(null);
+    $('#scsi_id' + numberDisk).val(null);
   };
 
   if (vmDiskOperationN.val() == 'add' || vmDiskOperationN.val() == 'resize_up'
@@ -294,6 +298,7 @@ function vmdiskOperation(vmDiskOperationN, numberDisk) {
   if (vmDiskOperationN.val() == 'add') {
     toggleRowVisibility('#row_vm_disk' + numberDisk, false);
     $('#vm_disk' + numberDisk).toggleClass('required', false);
+    $('#vm_disk' + numberDisk).val(null);
   } else {
     toggleRowVisibility('#row_vm_disk' + numberDisk, true);
     $('#vm_disk' + numberDisk).toggleClass('required', true);
@@ -303,8 +308,8 @@ function vmdiskOperation(vmDiskOperationN, numberDisk) {
 function HDD(HDDN, numberDisk) {
   removedClass(HDDN, 'empty');
   if (HDDN.data('item').id) {
-    var HDDSize = HDDN.data('item').custom_fields['HDD'];
-    var HDDScsi = HDDN.data('item').custom_fields['SCSI ID'];
+    var HDDSize = HDDN ? HDDN.data('item').custom_fields['HDD'] : "";
+    var HDDScsi = HDDN ? HDDN.data('item').custom_fields['SCSI ID'] : "";
     $('#current_size' + numberDisk).val(HDDSize);
     $('#scsi_id' + numberDisk).val(HDDScsi);
   } else {
@@ -433,20 +438,23 @@ function updateJSON(vmName, vmID, operations) {
 
   for (var i = 0; i < operations.length; i++) {
 
-    var vhdObj = {};
+    //var vhdObj = {};
     var op = operations[i];
 
-    if (op.vm_disk) vhdObj.vhd_id = op.vm_disk;
-    if (op.hdd_cap) vhdObj.hdd_cap = op.hdd_cap;
-    if (op.scsi_id) vhdObj.scsi_id = op.scsi_id;
+    // if (op.vm_disk) vhdObj.vhd_id = op.vm_disk;
+    // if (op.hdd_cap) vhdObj.hdd_cap = op.hdd_cap;
+    // if (op.scsi_id) vhdObj.scsi_id = op.scsi_id;
 
     if (op.operation === 'add' || op.operation === 'resize_down') {
+      const vhdObj = createVHDObj(op, "create");
       newVMCreate.push(vhdObj);
     };
     if (op.operation === 'resize_up') {
+      const vhdObj = createVHDObj(op, "update");
       newVMUpdate.push(vhdObj);
     };
     if (op.operation === 'delete' || op.operation === 'resize_down') {
+      const vhdObj = createVHDObj(op, "delete");
       newVMDelete.push(vhdObj);
     };
 
@@ -641,6 +649,16 @@ function finishUnChecked() {
     $("#delete_vm").show();
   }
   $("#name_is").readonly(false);
+};
+
+function createVHDObj(op,action){
+  var vhdObj = {};
+  
+  if (op.vm_disk && (action == "update" || action == "delete")) vhdObj.vhd_id = op.vm_disk;
+  if (op.hdd_cap && (action == "update" || action == "create")) vhdObj.hdd_cap = op.hdd_cap;
+  if (op.scsi_id && (action == "update" || action == "delete")) vhdObj.scsi_id = op.scsi_id;
+
+  return vhdObj;
 };
 
 $(document).ready(function () {
