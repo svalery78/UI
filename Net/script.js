@@ -1,5 +1,7 @@
 var $ = ITRP.$;            // jQuery
 var $extension = $(this);  // The UI Extension container with custom HTML
+var currentNetwork = 1;
+var maxNetworks = 10;
 var vmCounter = 0;
 var maxVM = 10;
 var isShowDell = false;
@@ -135,6 +137,35 @@ $('#input_json').on('change', function () {
     inputJson = inputJson && inputJson != '' ? JSON.parse(inputJson) : null;
 });
 
+$("#add_delete_network").on("click", function () {
+    if (!$(this).hasClass("disabled")) {
+        //alert("not disabled");
+        $("#delete_delete_network").show();
+        //if($("#delete_disk").class("disabled")){
+        removedClass($("#delete_delete_network"), "disabled");
+        if (currentNetwork < maxNetworks) {
+            currentNetwork++;
+            showDeleteNetworkFields(currentNetwork);
+            if (currentNetwork === maxNetworks) {
+                $('#add_delete_network').hide();
+            };
+        };
+    };
+});
+
+$("#delete_delete_network").on("click", function () {
+    if (!$(this).hasClass("disabled")) {
+        $('#add_delete_network').show();
+        removedClass($('#add_delete_network'), "disabled");
+        if (currentNetwork > 1) {
+            hideDeleteNetworkFields(currentNetwork);
+            currentNetwork--;
+            if (currentNetwork === 1) {
+                $('#delete_delete_network').hide();
+            };
+        };
+    };
+});
 
 $('#add_vm').click(function () {
     if (!$(this).hasClass("disabled")) {
@@ -179,30 +210,30 @@ $("#delete_vm").on("click", function () {
 
 $("#finish").on("change", function () {
     if (createVM || createVM == false) {
-      if ($(this).is(":checked")) {
-        if (inputJson && inputJson != null &&
-          inputJson != "" && $("#name_is").val()) {
-          finishChecked();
+        if ($(this).is(":checked")) {
+            if (inputJson && inputJson != null &&
+                inputJson != "" && $("#name_is").val()) {
+                finishChecked();
+            } else {
+                alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
+                $(this).prop("checked", false);
+                if (!$("#name_is").val()) {
+                    $("#name_is").addClass("empty");
+                };
+                $("#finish").addClass("required");
+            };
+
         } else {
-          alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
-          $(this).prop("checked", false);
-          if (!$("#name_is").val()) {
-            $("#name_is").addClass("empty");
-          };
-          $("#finish").addClass("required");
-        };
-  
-      } else {
-        finishUnChecked();
-      }
+            finishUnChecked();
+        }
     } else {
-      finishChecked();
+        finishChecked();
     }
-  });
+});
 
 
 function validateFields() {
-   
+
     var isError = false;
 
     if (!$('#name_is').val()) {
@@ -234,13 +265,20 @@ function validateFields() {
 };
 
 function visiabileRemoveNetwork(isShow) {
-    for (var i = 1; i < 11; i++) {
-        toggleRowVisibility('#network' + i, isShow);
-        if (!isShow) {
-            clearFields('#vm_hostname' + i, false);
-            clearFields('#vm_ni' + i, false);
-        }
+    toggleRowVisibility('#delete_network', isShow);
+    $('#vm_hostname1').toggleClass('required', isShow);
+    $('#vm_ni1').toggleClass('required', isShow);
+    $('#add_delete_network').show();
+    $('#delete_delete_network').hide();
+
+    if (!isShow) {
+        $('#vm_hostname1').val(null);
+        $('#vm_ni1').val(null);
+        for (var i = 2; i <= currentNetwork;  i++){
+            hideDeleteNetworkFields(i);
+        }; 
     };
+    currentNetwork = 1;
 };
 
 function visiabileAddNetwork(isShow) {
@@ -251,6 +289,21 @@ function visiabileAddNetwork(isShow) {
     if (!isShow) {
         clearAddNetwork();
     };
+};
+
+function showDeleteNetworkFields(networkNum) {
+    toggleRowVisibility('#network' + networkNum, true);
+    $('#vm_hostname' + networkNum).toggleClass('required', true);
+    $('#vm_ni' + networkNum).toggleClass('required', true);
+};
+
+function hideDeleteNetworkFields(networkNum) {
+    toggleRowVisibility('#network' + networkNum, false);
+    $('#vm_hostname' + networkNum).toggleClass('required', false);
+    $('#vm_ni' + networkNum).toggleClass('required', false);
+
+    $('#vm_hostname' + networkNum).val(null);
+    $('#vm_ni' + networkNum).val(null);
 };
 
 function clearNetwork() {
