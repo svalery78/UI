@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="scipt.js"></script>
+  <link rel="stylesheet" href="1.css">
+</head>
+
+<body>
+  <div>
+
+    <div class="section" id="common">
+      <span class="section-header">Общая информация</span>
+      <div class="row vertical checkbox">
+        <input id="is_ex_change" type="checkbox">
+        <label for="is_ex_change" title="Экстренное изменение">Экстренное изменение</label>
+      </div>
+      <div id="row_justification" class="row vertical" style="display:none">
+        <label for="justification" title="Обоснование">Обоснование</label>
+        <select id="justification" class="required">
+          <option value=""></option>
+          <option value="для_устранения/предотвращения_кр">Для устранения/предотвращения критического инцидента</option>
+          <option value="для_устранения/предотвращения_ин">Для устранения/предотвращения инцидента ИБ</option>
+          <option value="для_выполнения_поручения_руковод">Для выполнения поручения высшего руководства</option>
+        </select>
+      </div>
+      <div class="row vertical" style="display:none">
+        <label for="inc_desc" title="Краткое описание инцидента">Краткое описание инцидента</label>
+        <input id="inc_desc" type="text" autocomplete="off" class="required">
+      </div>
+      <div class="row vertical checkbox">
+        <input id="dr_cluster" type="checkbox">
+        <label for="dr_cluster" title="DR-кластер">DR-кластер</label>
+      </div>
+
+      <div id="dr_cluster_warning" class="hide">
+        <span class="section-header">❗️ В настоящий момент перевод новых ИС в DR-кластер, а также создание новых ВМ
+          сразу
+          в DR-кластере приостановлено по техническим причинам. О возобновлении процессов будет сообщено
+          дополнительно.</span>
+      </div>
+      <div class="row vertical">
+        <label for="name_is" title="Наименование ИС">Наименование ИС</label>
+        <div id="name_is" data-custom-view="ис" data-filter-name="user" data-filter-value="requestor" class="required">
+        </div>
+      </div>
+      <div class="row vertical">
+        <label for="cur_administration" title="Текущая услуга">Текущая услуга</label>
+        <div id="cur_administration_required">
+          <select id="cur_administration" class="required">
+            <option value=""></option>
+            <option value="virt_environment">Среда виртуализации</option>
+            <option value="os_administration">Администрирование ОС</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row vertical">
+        <label for="new_administration" title="Услуга после пересоздания">Услуга после пересоздания</label>
+        <div id="new_administration_required">
+          <select id="new_administration" class="required">
+            <option value=""></option>
+            <option value="virt_environment">Среда виртуализации</option>
+            <option value="os_administration">Администрирование ОС</option>
+          </select>
+        </div>
+      </div>
+      <div class="row vertical" data-searchable>
+        <label for="vm_os_family" title="Семейство ОС">Семейство ОС</label>
+        <div id="vm_os_family" class="required" data-custom-view="семейство_ос"></div>
+      </div>
+      <div class="row vertical hide" data-internal data-hidden>
+        <div id="requestor" class="hide person-suggest"></div>
+      </div>
+      <div class="row vertical checkbox">
+        <input id="admin_privileges" type="checkbox">
+        <label for="admin_privileges" title="Выдача прав администратора ВМ">Выдача прав администратора ВМ</label>
+      </div>
+      <div id="for_admin" style="display:none">
+        <div class="row vertical">
+          <label for="admin_list" title="Список администраторов">Список администраторов</label>
+          <div id="admin_list" class="required" data-custom-view="глобальные_учетные_записи" data-multiple></div>
+        </div>
+      </div>
+
+      <div class="row vertical hide" data-hidden>
+        <select id="vm_authorization" class="hide">
+          <option value="interactive" selected>interactive</option>
+        </select>
+      </div>
+
+      <div class="row vertical hide" data-hidden>
+        <select id="vm_action_type" class="hide">
+          <option value="add" selected>add</option>
+        </select>
+      </div>
+    </div>
+
+
+    <div class="section" id="vm_1">
+      <span class="section-header">Виртуальная машина</span>
+      <div class="row vertical" data-searchable>
+        <label for="vm_hostname" title="Имя Виртуальной машины">Имя Виртуальной машины</label>
+        <div id="vm_hostname" class="required" data-custom-view="ке_виртуальные_сервера"
+          data-filter-name="#Информационная система" data-filter-value="name_is"></div>
+      </div>
+
+      <div class="row vertical">
+        <label for="hostname" title="Hostname">Hostname</label>
+        <input id="hostname" type="text" autocomplete="off" readonly>
+      </div>
+
+      <div class="row vertical">
+        <label for="vm_role" title="Укажите роль сервера">Укажите роль сервера</label>
+        <input id="vm_role" type="text" autocomplete="off" readonly>
+        <!--div id="vm_role" class="required" data-custom-view="роли_вм" aria-readonly="true"></div-->
+      </div>
+
+
+      <div class="row vertical">
+        <label for="vm_networkcidr_action" title="Какая требуется подсеть (NetworkCIDR)">Какая требуется подсеть
+          (NetworkCIDR)</label>
+        <div id="vm_networkcidr_action_required">
+          <select id="vm_networkcidr_action" class="required">
+            <option value=""></option>
+            <option value="новая">Новая</option>
+            <option value="существующая">Существующая</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div id="vm_networkcidr_display" style="display:none">
+        <div class="row vertical">
+          <label for="vm_networkcidr" title="Укажите подсеть (NetworkCIDR)">Укажите подсеть (NetworkCIDR)</label>
+          <div id="vm_networkcidr" class="required" data-custom-view="подсети" data-filter-name="#подсеть для ИС"
+            data-filter-value="name_is"></div>
+        </div>
+      </div>
+
+      <div class="row vertical">
+        <label for="vm_vcpu" title="vCPU">vCPU</label>
+        <div id="vm_cpu_required">
+          <input id="vm_vcpu" type="number" autocomplete="off" min="1" max="26" class="required">
+        </div>
+      </div>
+
+      <div class="row vertical">
+        <label for="vm_ram" title="RAM GB">RAM GB</label>
+        <div id="vm_ram_required">
+          <input id="vm_ram" type="number" autocomplete="off" min="1" max="128" class="required">
+        </div>
+      </div>
+
+      <div class="row vertical">
+        <label for="vm_vmdk" title="VMDK GB">Системный диск GB</label>
+        <div id="vm_vmdk_required">
+          <input id="vm_vmdk" type="number" autocomplete="off" min="25" max="500" class="required">
+        </div>
+      </div>
+
+      <div class="row vertical">
+        <label for="vm_instance" title="Среда">Среда</label>
+        <input id="vm_instance" type="text" autocomplete="off" readonly>
+        <!--div id="vm_instance" class="required" data-custom-view="зоны">
+        </div-->
+      </div>
+
+
+
+
+
+
+      <div class="row vertical">
+        <label for="vm_os" title="Требуемый образ ОС">Требуемый образ ОС</label>
+        <div id="vm_os" class="required" data-custom-view="образы_вм_для_св" data-filter-name="#Семейство ОС"
+          data-filter-value="vm_os_family"></div>
+      </div>
+
+
+
+      <div class="row vertical">
+        <label for="add_groups" title="Сколько требуется групп доступа">Сколько требуется групп доступа</label>
+        <select id="add_groups">
+          <option value=""></option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <div id="add_groups_1_disp" style="display:none">
+
+        <div class="row vertical">
+          <label for="vm_action_g02" title="Действие для первой группы">Действие для первой группы</label>
+          <div id="vm_action_g02_disp">
+            <select id="vm_action_g02" class="required">
+              <option value=""></option>
+              <option value="create">Создать</option>
+              <option value="add">Добавить</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row vertical">
+          <label for="vm_g02_name" title="Имя группы">Имя группы</label>
+          <div id="vm_g02_name_required">
+            <input id="vm_g02_name" type="text" autocomplete="off" maxlength="20" class="required"
+              pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+          </div>
+        </div>
+
+        <div class="row vertical">
+          <label for="vm_g02_skdpu_ports" title="Порты управления через СКДПУ">Порты управления через СКДПУ</label>
+          <div id="vm_g02_skdpu_ports_disp">
+            <select id="vm_g02_skdpu_ports" class="required">
+              <option value=""></option>
+              <option value="rdp">RDP</option>
+              <option value="ssh">SSH</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row vertical">
+          <label for="vm_g02_skdpu_ports_number" title="Номер порта">Номер порта</label>
+          <div id="vm_g02_skdpu_ports_number_required">
+            <input id="vm_g02_skdpu_ports_number" type="number" autocomplete="off" min="1">
+          </div>
+        </div>
+
+        <div id="vm_g02_skdpu_protocol_disp" style="display:none">
+          <div class="row vertical">
+            <label for="vm_g02_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+            <div id="vm_g02_skdpu_protocol_required">
+              <input id="vm_g02_skdpu_protocol" type="text" autocomplete="off" class="required">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="add_groups_2_disp" style="display:none">
+        <br>
+        <div class="row vertical">
+          <label for="vm_action_g03" title="Действие для второй группы">Действие для второй группы</label>
+          <div id="vm_action_g03_disp">
+            <select id="vm_action_g03" class="required">
+              <option value=""></option>
+              <option value="create">Создать</option>
+              <option value="add">Добавить</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row vertical">
+          <label for="vm_g03_name" title="Имя группы">Имя группы</label>
+          <div id="vm_g03_name_required">
+            <input id="vm_g03_name" type="text" autocomplete="off" maxlength="20" class="required"
+              pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+          </div>
+        </div>
+
+        <div class="row vertical">
+          <label for="vm_g03_skdpu_ports" title="Порты управления через СКДПУ">Порты управления через СКДПУ</label>
+          <div id="vm_g03_skdpu_ports_disp">
+            <select id="vm_g03_skdpu_ports" class="required">
+              <option value=""></option>
+              <option value="rdp">RDP</option>
+              <option value="ssh">SSH</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row vertical">
+          <label for="vm_g03_skdpu_ports_number" title="Номер порта">Номер порта</label>
+          <div id="vm_g03_skdpu_ports_number_required">
+            <input id="vm_g03_skdpu_ports_number" type="number" autocomplete="off" min="1">
+          </div>
+        </div>
+
+        <div id="vm_g03_skdpu_protocol_disp" style="display:none">
+          <div class="row vertical">
+            <label for="vm_g03_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+            <div id="vm_g03_skdpu_protocol_required">
+              <input id="vm_g03_skdpu_protocol" type="text" autocomplete="off" class="required">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="add_groups_3_disp" style="display:none">
+        <br>
+        <div class="row vertical">
+          <label for="vm_action_g04" title="Действие для третьей группы">Действие для третьей группы</label>
+          <div id="vm_action_g04_disp">
+            <select id="vm_action_g04" class="required">
+              <option value=""></option>
+              <option value="create">Создать</option>
+              <option value="add">Добавить</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row vertical">
+          <label for="vm_g04_name" title="Имя группы">Имя группы</label>
+          <div id="vm_g04_name_required">
+            <input id="vm_g04_name" type="text" autocomplete="off" maxlength="20" class="required"
+              pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+          </div>
+        </div>
+
+        <div class="row vertical">
+          <label for="vm_g04_skdpu_ports" title="Порты управления через СКДПУ">Порты управления через СКДПУ</label>
+          <div id="vm_g04_skdpu_ports_disp">
+            <select id="vm_g04_skdpu_ports" class="required">
+              <option value=""></option>
+              <option value="rdp">RDP</option>
+              <option value="ssh">SSH</option>
+            </select>
+          </div>
+        </div>
+        <div class="row vertical">
+          <label for="vm_g04_skdpu_ports_number" title="Номер порта">Номер порта</label>
+          <div id="vm_g04_skdpu_ports_number_required">
+            <input id="vm_g04_skdpu_ports_number" type="number" autocomplete="off" min="1">
+          </div>
+        </div>
+
+        <div id="vm_g04_skdpu_protocol_disp" style="display:none">
+          <div class="row vertical">
+            <label for="vm_g04_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+            <div id="vm_g04_skdpu_protocol_required">
+              <input id="vm_g04_skdpu_protocol" type="text" autocomplete="off" class="required">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row vertical checkbox">
+        <input id="vm_add_disk" type="checkbox">
+        <label for="vm_add_disk" title="Требуются доп. диски">Требуются доп. диски</label>
+      </div>
+
+      <div id="additional_disks" style="display: none">
+
+        <div id="disk1">
+          <div class="row vertical">
+            <label for="vm_disk1" title="Диск 1 GB">Диск 1 GB</label>
+            <div id="vm_disk1_required">
+              <input id="vm_disk1" type="number" min="1" autocomplete="off" class="required">
+            </div>
+          </div>
+        </div>
+
+        <div id="disk2" style="display:none">
+          <div class="row vertical">
+            <label for="vm_disk2" title="Диск 2 GB">Диск 2 GB</label>
+            <div id="vm_disk2_required">
+              <input id="vm_disk2" type="number" min="1" autocomplete="off" class="required">
+            </div>
+          </div>
+        </div>
+
+        <div id="disk3" style="display:none">
+          <div class="row vertical">
+            <label for="vm_disk3" title="Диск 3 GB">Диск 3 GB</label>
+            <div id="vm_disk3_required">
+              <input id="vm_disk3" type="number" min="1" autocomplete="off" class="required">
+            </div>
+          </div>
+        </div>
+
+        <div id="disk4" style="display:none">
+          <div class="row vertical">
+            <label for="vm_disk4" title="Диск 4 GB">Диск 4 GB</label>
+            <div id="vm_disk4_required">
+              <input id="vm_disk4" type="number" min="1" autocomplete="off" class="required">
+            </div>
+          </div>
+        </div>
+
+        <div id="disk5" style="display:none">
+          <div class="row vertical">
+            <label for="vm_disk5" title="Диск 5 GB">Диск 5 GB</label>
+            <div id="vm_disk5_required">
+              <input id="vm_disk5" type="number" min="1" autocomplete="off" class="required">
+            </div>
+          </div>
+        </div>
+
+        <div class="section" id="addDeleteDisk"><span class="section"></span>
+          <div class="row vertical stock">
+            <span class="btn check" id="add_disk"><span class="button">Добавить диск</span></span>
+            <span class="btn check" id="delete_disk" style="display:none"><span class="button">Удалить
+                диск</span></span>
+            <br>
+            <br>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+    <div class="section" id="addDeleteVM"><span class="section"></span>
+      <div class="row vertical stock">
+        <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
+        <span class="btn check" id="copy_vm"><span class="button">Копировать ВМ</span></span>
+        <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
+            ВМ</span></span>
+        <br>
+        <br>
+      </div>
+    </div>
+
+    <div class="row vertical" id="number_vm_display" style="display: none">
+      <label for="number" title="Укажите номер выгружаемой ВМ">Укажите номер выгружаемой ВМ</label>
+      <input id="number" type="number" autocomplete="off" min="1" max="20">
+      <span class="btn check" id="unload_vm"><span class="button">Выгрузить ВМ</span></span>
+    </div>
+
+    <div class="section" id="tip">
+      <span class="section-header">После окончания добавления списка создаваемых ВМ нажмите чек-бокс ниже</span>
+
+      <div class="row vertical checkbox">
+        <input id="finish" type="checkbox" class="required">
+        <label for="finish" title="Заполнение формы завершено.">Заполнение формы завершено</label>
+      </div>
+
+    </div>
+
+
+    <div class="section" id="tech_details">
+      <span class="section-header">Техническая информация</span>
+
+
+      <div class="row vertical">
+        <label for="input_form" title="input_form">Таблица ВМ</label>
+        <div id="input_form" class="rich-text"></div>
+      </div>
+
+      <div class="row vertical">
+        <label for="input_json" title="Создаваемые ВМ">Создаваемые ВМ</label>
+        <textarea id="input_json" readonly></textarea>
+      </div>
+
+    </div>
+  </div>
+
+
+</body>
+
+</html>
