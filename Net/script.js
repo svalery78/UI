@@ -27,9 +27,12 @@ function removedClass(selector, className) {
 
 function clearFields(selector, isRequired) {
     $(selector).val(null);
-    if (isRequired) {
-        $(selector).addClass('required');
-    };
+    $(selector).toggleClass('required', isRequired);
+  //alert('clearFields - ' + isRequired);
+  //  if (isRequired) {
+  //    alert('true');
+  //      $(selector).addClass('required');
+  //  };
 };
 
 
@@ -143,6 +146,7 @@ vmNetworkCidr.on('change', function () {
 
 var vmHostName1 = $extension.find('#vm_hostname1');
 vmHostName1.on('change', function () {
+    //alert('vmHostName1');
     clearFields("#vm_ni1", true);
 });
 
@@ -483,4 +487,3 @@ $(document).ready(function () {
         createVM = true;
     };
 });
-
