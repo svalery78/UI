@@ -110,7 +110,7 @@ vmHostName.on('change', function () {
         };
         if (vmHostName.data('item').custom_fields['Виртуальный сервер - Зона']) {
             vmInstance.val(vmHostName.data('item').custom_fields['Виртуальный сервер - Зона'].display_name);
-            $instance = vmHostName.data('item').custom_fields['Виртуальный сервер - Зона'].id;
+            $instance = vmHostName.data('item').custom_fields['Виртуальный сервер - Зона'].reference ;
         } else {
             vmInstance.val("");
             $instance = "";
