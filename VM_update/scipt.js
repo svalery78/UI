@@ -108,10 +108,10 @@ vmHostName.on('change', function () {
             vmRole.val("");
             $role = "";
         };
-        if (vmHostName.data('item').custom_fields['Виртуальный сервер - Зона']){
+        if (vmHostName.data('item').custom_fields['Виртуальный сервер - Зона']) {
             vmInstance.val(vmHostName.data('item').custom_fields['Виртуальный сервер - Зона'].display_name);
             $instance = vmHostName.data('item').custom_fields['Виртуальный сервер - Зона'].id;
-        } else{
+        } else {
             vmInstance.val("");
             $instance = "";
         };
@@ -720,7 +720,6 @@ $("#add_disk").on("click", function () {
                 }
             }
         }
-        //alert("add_disk");
     }
 
 
@@ -728,37 +727,19 @@ $("#add_disk").on("click", function () {
 
 $("#delete_disk").on("click", function () {
     if (!$(this).hasClass("disabled")) {
-        //alert($("#disk5").css("display")=="none");
         if (!($("#disk5").css("display") == "none")) {
-            //alert($("#disk5").css("display")=="none");
-            // $("#vm_disk5").val(null);
-            // $("#vm_disk5_letter").val(null);
-            // $("#disk5").hide();
             $("#add_disk").removeClass("disabled");
             $('#add_disk').show();
             additonalDisksRemoveClass(5);
         } else {
             //alert("else 5");
-            if (!($("#disk4").css("display") == "none")) {
-                //alert($("#disk3").css("display")=="none");
-                // $("#vm_disk4").val(null);
-                // $("#vm_disk4_letter").val(null);
-                // $("#disk4").hide();
+            if (!($("#disk4").css("display") == "none")) { 
                 additonalDisksRemoveClass(4);
             } else {
-                //alert("else 4");
-                if (!($("#disk3").css("display") == "none")) {
-                    //alert($("#disk3").css("display")=="none");
-                    // $("#vm_disk3").val(null);
-                    // $("#vm_disk3_letter").val(null);
-                    // $("#disk3").hide();
+                if (!($("#disk3").css("display") == "none")) {   
                     additonalDisksRemoveClass(3);
                 } else {
-                    //alert("else 3");
-                    //alert(!($("#disk2").css("display")=="none"));
-                    if (!($("#disk2").css("display") == "none")) {
-                        //alert("disk2 - hide");
-                        //alert($("#vm_disk2").val());
+                      if (!($("#disk2").css("display") == "none")) {
                         additonalDisksRemoveClass(2);
                         $(this).addClass("disabled");
                         $(this).hide();
@@ -768,54 +749,11 @@ $("#delete_disk").on("click", function () {
             }
         }
     }
-    //alert("delete_disk");
 
-    //$(this).addClass("disabled");
 });
 
 $("#add_vm").on("click", function () {
     if (!$(this).hasClass("disabled")) {
-        //alert($(this).readonly());
-        //$(this).prop("checked", false);
-        if (!checkingEnteredValue()) {
-            $("#delete_vm").show();
-            $("#delete_vm").removeClass("disabled");
-            $("#number_vm_display").show();
-            curAdministration.readonly(true);
-            newAdministration.readonly(true);
-            vmOSFamily.readonly(true);
-            if ($count_vm < 21) {                
-                addVM();
-                resetValueVM();
-                $count_vm++;
-            } else {
-                $(this).addClass("disabled");
-                $("#copy_vm").addClass("disabled");
-                $(this).hide();
-                $("#copy_vm").hide();
-            }
-            if ($count_vm === 21) {
-                $(this).addClass("disabled");
-                $(this).hide();
-                $("#copy_vm").addClass("disabled");
-                $("#copy_vm").hide();
-
-            }
-            alert($count_vm);
-        } else {
-            alert("Заполните корректно обязательные поля");
-        }
-        //
-        //$(this).readonly(true);
-    } else {
-        //$(this).addClass("disabled");
-    }
-});
-
-$("#copy_vm").on("click", function () {
-    if (!$(this).hasClass("disabled")) {
-        //alert($(this).readonly());
-        //$(this).prop("checked", false);
         if (!checkingEnteredValue()) {
             $("#delete_vm").show();
             $("#delete_vm").removeClass("disabled");
@@ -824,9 +762,39 @@ $("#copy_vm").on("click", function () {
             newAdministration.readonly(true);
             vmOSFamily.readonly(true);
             if ($count_vm < 21) {
-                //alert($count_vm);
                 addVM();
-                //resetValueVM();
+                resetValueVM();
+                $count_vm++;
+            } else {
+                $(this).addClass("disabled");
+                //$("#copy_vm").addClass("disabled");
+                $(this).hide();
+                //$("#copy_vm").hide();
+            }
+            if ($count_vm === 21) {
+                $(this).addClass("disabled");
+                $(this).hide();
+                //$("#copy_vm").addClass("disabled");
+                //$("#copy_vm").hide();
+
+            }
+        } else {
+            alert("Заполните корректно обязательные поля");
+        }
+    } 
+});
+
+$("#copy_vm").on("click", function () {
+    if (!$(this).hasClass("disabled")) {
+        if (!checkingEnteredValue()) {
+            $("#delete_vm").show();
+            $("#delete_vm").removeClass("disabled");
+            $("#number_vm_display").show();
+            curAdministration.readonly(true);
+            newAdministration.readonly(true);
+            vmOSFamily.readonly(true);
+            if ($count_vm < 21) {
+                addVM();
                 $count_vm++;
             } else {
                 $(this).addClass("disabled");
@@ -840,33 +808,22 @@ $("#copy_vm").on("click", function () {
             }
         } else {
             alert("Заполните корректно обязательные поля");
-        }
-        //
-        //$(this).readonly(true);
-    } else {
-        //$(this).addClass("disabled");
-    }
+        }       
+    } 
 });
 
 $("#delete_vm").on("click", function () {
     if (!$(this).hasClass("disabled")) {
-        //alert("delete_vm");
-        //$(this).prop("checked", false);
         $("#add_vm").show();
         $("#add_vm").removeClass("disabled");
-        $("#copy_vm").show();
-        $("#copy_vm").removeClass("disabled");
+        //$("#copy_vm").show();
+        //$("#copy_vm").removeClass("disabled");
         var $package = $("#input_json").val();
-        //alert($("#input_json").val());
         $package = $package.replace(/\n+$/m, '');
         var packageData = $package && $package != '' ? JSON.parse($package) : null;
-        //var packageData = $package && $package != '' ? $package : null;
         var newArray = packageData ? packageData.nodes : [];
-        //alert(newArray.length);
         if (newArray.length) {
-            //alert("newArray - if");
             var lastVM = newArray.pop();
-            //alert(newArray.length);
             if (newArray.length == 0) {
                 $("#input_json").val(null);
             } else {
@@ -884,21 +841,15 @@ $("#delete_vm").on("click", function () {
             $(this).hide();
             $("#number_vm_display").hide();
         }
-        //
-        //$(this).readonly(true);
-    } else {
-        //$(this).addClass("disabled");
-    }
+    } 
     addVMToTable();
 });
 
 $("#unload_vm").on("click", function () {
-    //alert("unload_vm");
 
     var vmNumber = parseInt($("#number").val(), 10);
     var packageData = JSON.parse($("#input_json").val() || '{"nodes":[]}');
     var vms = packageData.nodes;
-    //$NFS = "";
 
     if (isNaN(vmNumber) || vmNumber < 1 || vmNumber > vms.length) {
         alert("Некорректный номер ВМ! Допустимый диапазон: 1-" + vms.length);
@@ -908,7 +859,6 @@ $("#unload_vm").on("click", function () {
     // Удаляем элемент массива
     var deletedVM = vms.splice(vmNumber - 1, 1)[0];
     var deletevmAdditioanal = $VM_additional.splice(vmNumber - 1, 1)[0];
-    //alert(deletedVM);
 
     // Переприсваиваем номера
     vms.forEach(function (vm, index) {
@@ -922,20 +872,16 @@ $("#unload_vm").on("click", function () {
     addVMToTable();
 
     // Заполняем форму данными удаленной ВМ
-    //fillFormWithVMData(deletedVM);
     fillFormWithVMData(deletedVM, deletevmAdditioanal);
-
-    //alert("stop -  fillFormWithVMData");
 
     // Сбрасываем поле ввода
     $("#number").val(null).change();
 
-    //resetValueVM();
     $count_vm--;
     $("#add_vm").show();
     $("#add_vm").removeClass("disabled");
-    $("#copy_vm").show();
-    $("#copy_vm").removeClass("disabled");
+    //$("#copy_vm").show();
+    //$("#copy_vm").removeClass("disabled");
     if ($count_vm == 1) {
         $("#delete_vm").addClass("disabled");
         $("#delete_vm").hide();
@@ -969,11 +915,7 @@ function addVM() {
         "vm_ram": $("#vm_ram").val(),
         "vm_vmdk": $("#vm_vmdk").val(),
         "vm_instance": $instance,
-        //"vm_linux_description": $("#vm_linux_description").val(),
-        //"vm_zone": $zone,
-        //"vm_os_family": vmOSFamily.val(),
         "vm_os": $OS, //$("#vm_os").val(),  //
-        //"vm_nfs": $NFS, //$("#vm_nfs").val(), //
         "vm_action_g02": $("#vm_action_g02").val(),
         "vm_g02_name": $("#vm_g02_name").val(),
         "vm_g02_skdpu_protocol": $g02SkpduProtocol, //$("#vm_g02_skdpu_protocol").val(),  //
@@ -986,8 +928,6 @@ function addVM() {
         "vm_g04_name": $("#vm_g04_name").val(),
         "vm_g04_skdpu_protocol": $g04SkpduProtocol, //$("vm_g04_skdpu_protocol").val(),  //
         "vm_g04_skdpu_ports_number": $g04SkpduPortsNumber, //$("#vm_g04_skdpu_ports_number").val(),  //
-        //"vm_authorization": $("#vm_authorization").val(),  //
-        //"vm_action_type": $("#vm_action_type").val(),  //
         "vm_disk1": $("#vm_disk1").val(),
         "vm_disk2": $("#vm_disk2").val(),
         "vm_disk3": $("#vm_disk3").val(),
@@ -997,12 +937,11 @@ function addVM() {
     newArray.push(newVM);
     var newVMAdditional = {
         vm: $count_vm,
+        vmHostName: vmHostName.val(),
         vmRole: vmRole.val(),
         vmOS: vmOS.val(),
         vmOSFamily: vmOSFamily.val(),
         vmInstance: vmInstance.val(),
-        //vmZone: vmZone.val(),
-        //vmNFS: vmNFS.val(),
         vmAddGroups: vmAddGroups.val(),
         vmg02SkpduPorts: vmg02SkpduPorts.val(),
         vmg02SkpduPortsNumber: vmg02SkpduPortsNumber.val(),
@@ -1015,26 +954,19 @@ function addVM() {
         vmg04SkpduProtocol: vmg04SkpduProtocol.val()
     };
     $VM_additional.push(newVMAdditional);
-    //var nodes =  newArray;
     var nodes = {
-        //  "is_id": packageData.is_id,
-        //  "is_dc_id": packageData.is_dc_id,
-        //  "admin_list": packageData.admin_list,
         "nodes": newArray
     };
     $("#input_json").val(JSON.stringify(nodes)).change();
 
     addVMToTable();
-    //alert($("#input_json"));
-    //var VM1 = "test"
-    //return VM1;
 }
 
-function resetValueVM() {    
+function resetValueVM() {
     vmHostName.val(null);
     vmHostName.addClass("required");
+    hostname.val(null);
     vmRole.val(null);
-    //vmRole.addClass("required");
     vmNetworkCIDrAction.val(null);
     vmNetworkCIDrAction.addClass("required");
     vmNetworkCIDr.val(null);
@@ -1048,19 +980,8 @@ function resetValueVM() {
     vmVMDK.val(null);
     vmVMDK.addClass("required");
     vmVMDK.removeClass("invalid");
-    //vmZone.val(null);
-    //vmZone.addClass("required");
     vmInstance.val(null);
-    //vmInstance.addClass("required");
-    vmOSFamily.val(null);
     vmOS.val(null);
-    //vmLinuxDescription.val(null);
-    //vmLinuxDescription.removeClass("invalid");
-    //$("#vm_linux_description_display").hide();
-    // $("#add_nfs").prop("checked", false);
-    // vmNFS.val(null);
-    // vmNFS.addClass("required");
-    // $("#vm_nfs-multitrack").addClass("required");
     $("#add_groups").val(null);
     resetValueVMg02();
     resetValueVMg03();
@@ -1069,19 +990,13 @@ function resetValueVM() {
     $("#vm_networkcidr_display").hide();
     $("#additional_disks").hide();
     $("#vm_add_disk").prop("checked", false);
-    //$("#vm_nfs_display").hide();
     $("#add_groups_1_disp").hide();
     $("#add_groups_2_disp").hide();
     $("#add_groups_3_disp").hide();
     $role = "";
     $networkCIDr = "";
     $OS = "";
-    //$NFS = "";
-    //$addNFS = "";
     $addGroups = "";
-    //$g02Action = "";
-    //$g03Action = "";
-    //$g04Action = "";
 
 }
 
@@ -1143,15 +1058,15 @@ function resetValueVMg02() {
 
 function addVMToTable() {
     var $VMs = $("#input_json").val();
-    //alert($("#input_json").val());
     $VMs = $VMs.replace(/\n+$/m, '');
     var VMsData = $VMs && $VMs != '' ? JSON.parse($VMs).nodes : null;
-    //alert("addVMToTable");
     if (!VMsData) {
         $('#input_form').val(null);
     };
     var table = ' <table id="vm_table" border="1"><tr><th>';
     table += '№';
+    table += '</th><th>';
+    table += 'hostname';
     table += '</th><th>';
     table += 'Роль VM';
     table += '</th><th>';
@@ -1163,26 +1078,19 @@ function addVMToTable() {
     table += '</th><th>';
     table += 'Системный диск, ГБ';
     table += '</th><th>';
-    table += 'Зона';
-    table += '</th><th>';
     table += 'Образ';
-    table += '</th><th>';
-    table += 'Постфикс имени ВМ на ОС linux';
-    table += '</th><th>';
-    table += 'Общие диски';
     table += '</th><th>';
     table += 'Группа удаленного доступа';
     table += '</th><th>';
     table += 'Дополнительные диски';
     table += '</th></tr>';
 
-    //  alert(VMsData.length);
     for (var index = 0; index < VMsData.length; index++) {
         var vmData = VMsData[index];
-        //alert(JSON.stringify(vmData));
-
         table += '<tr><td>';
         table += vmData.vm;
+        table += '</td><td>';
+        table += vmData.hostname;
         table += '</td><td>';
         table += (vmData.vm_role || '');
         table += '</td><td>';
@@ -1194,14 +1102,8 @@ function addVMToTable() {
         table += '</td><td>';
         table += (vmData.vm_vmdk || '');
         table += '</td><td>';
-        //table += (vmData.vm_zone || '');
-        //table += '</td><td>';
         table += (vmData.vm_os || '');
         table += '</td><td>';
-        //table += (vmData.vm_linux_description || '');
-        //table += '</td><td>';
-        //table += (vmData.vm_nfs || '');
-        //table += '</td><td>';
         table += (vmData.vm_action_g02 || '');
         table += ' ';
         table += (vmData.vm_g02_name || '');
@@ -1247,22 +1149,14 @@ function addVMToTable() {
 
 function updateInputJson() {
     var $package = $("#input_json").val();
-    //alert($("#input_json").val());
-    //alert($("#name_is").val());
     $package = $package.replace(/\n+$/m, '');
     var packageData = $package && $package != '' ? JSON.parse($package) : null;
     var newArray = packageData ? packageData.nodes : [];
-    //if (!packageData){
-
-    //alert($nameIS);
-    //alert('ISName');
-    //alert(ISName); 
     packageData = {
         "is_id": $nameIS,
         "is_dc_id": $isDCID,
         "admin_list": $adminListNodes ? $adminListNodes : ""
     };
-    //}
     var nodes = {
         "is_id": packageData.is_id,
         "is_dc_id": packageData.is_dc_id,
@@ -1286,10 +1180,7 @@ function checkingEnteredValue() {
         $("#new_administration_required").addClass("empty");
         isError = true;
     };
-    // if (!$("#vm_role").val()) {
-    //     $("#vm_role").addClass("empty");
-    //     isError = true;
-    // };
+    
     if ($("#for_admin").css("display") === "block") {
         if ($adminListNodes == null || $adminListNodes == "") {
             $("#admin_list").addClass("empty");
@@ -1322,14 +1213,7 @@ function checkingEnteredValue() {
         $("#vm_vmdk_required").addClass("empty");
         isError = true;
     };
-    // if (!$("#vm_zone").val()) {
-    //     $("#vm_zone").addClass("empty");
-    //     isError = true;
-    // };
-    // if (!vmInstance.val()) {
-    //     vmInstance.addClass("empty");
-    //     isError = true;
-    // }
+   
     if (!vmOSFamily.val()) {
         vmOSFamily.addClass("empty");
         isError = true;
@@ -1338,17 +1222,7 @@ function checkingEnteredValue() {
         $("#vm_os").addClass("empty");
         isError = true;
     };
-    // if (vmLinuxDescription.hasClass("invalid")) {
-    //     //vmLinuxDescription.addClass("empty");
-    //     $("#vm_linux_description_required").addClass("empty");
-    //     isError = true;
-    // };
-    // if ($addNFS) {
-    //     if ($NFS == null || $NFS == "") {
-    //         $("#vm_nfs").addClass("empty");
-    //         isError = true;
-    //     };
-    // };
+    
     if ($addGroups === "1" || $addGroups === "2" || $addGroups === "3") {
         if (!$("#vm_action_g02").val()) {
             $("#vm_action_g02_disp").addClass("empty");
@@ -1431,32 +1305,20 @@ function checkingEnteredValue() {
         if (!vmDisk1.val() || vmDisk1.hasClass("invalid")) {
             vmDisk1Required.addClass("empty");
             isError = true;
-        };
-        // if (!vmDisk1Letter.val()) {
-        //   vmDisk1LetterRequired.addClass("empty");
-        //   isError = true;
-        // };
+        };        
 
         if ($("#disk2").css("display") === "block") {
             if (!vmDisk2.val() || vmDisk2.hasClass("invalid")) {
                 vmDisk2Required.addClass("empty");
                 isError = true;
-            };
-            // if (!vmDisk2Letter.val()) {
-            //   vmDisk2LetterRequired.addClass("empty");
-            //   isError = true;
-            // };
+            };            
         };
 
         if ($("#disk3").css("display") === "block") {
             if (!vmDisk3.val() || vmDisk3.hasClass("invalid")) {
                 vmDisk3Required.addClass("empty");
                 isError = true;
-            };
-            // if (!vmDisk3Letter.val()) {
-            //   vmDisk3LetterRequired.addClass("empty");
-            //   isError = true;
-            // };
+            };         
         };
 
 
@@ -1464,11 +1326,7 @@ function checkingEnteredValue() {
             if (!vmDisk4.val() || vmDisk4.hasClass("invalid")) {
                 vmDisk4Required.addClass("empty");
                 isError = true;
-            };
-            // if (!vmDisk4Letter.val()) {
-            //   vmDisk4LetterRequired.addClass("empty");
-            //   isError = true;
-            // };
+            };           
         };
 
 
@@ -1476,11 +1334,7 @@ function checkingEnteredValue() {
             if (!vmDisk5.val() || vmDisk5.hasClass("invalid")) {
                 vmDisk5Required.addClass("empty");
                 isError = true;
-            };
-            // if (!vmDisk5Letter.val()) {
-            //   vmDisk5LetterRequired.addClass("empty");
-            //   isError = true;
-            // };
+            };            
         };
 
     };
@@ -1488,94 +1342,52 @@ function checkingEnteredValue() {
 }
 
 function additonalDisksRemoveClass(diskNumber) {
-    if (diskNumber === 1 || diskNumber === 0) {
-        //var vmDisk1 = $extension.find("#vm_disk1");
+    if (diskNumber === 1 || diskNumber === 0) {       
         if (vmDisk1Required.hasClass("empty")) {
             vmDisk1Required.removeClass("empty");
-        };
-        //var vmDisk1Letter = $extension.find("#vm_disk1_letter");
-        // if (vmDisk1LetterRequired.hasClass("empty")) {
-        //     vmDisk1LetterRequired.removeClass("empty");
-        // };
+        };       
         vmDisk1.addClass("required");
-        vmDisk1.removeClass("invalid");
-        //vmDisk1Letter.addClass("required");
-        vmDisk1.val(null);
-        //vmDisk1Letter.val(null);
-        //$("#disk1").hide();
+        vmDisk1.removeClass("invalid");        
+        vmDisk1.val(null);        
     };
 
-    if (diskNumber === 2 || diskNumber === 0) {
-        //var vmDisk2 = $extension.find("#vm_disk2");
+    if (diskNumber === 2 || diskNumber === 0) {        
         if (vmDisk2Required.hasClass("empty")) {
             vmDisk2Required.removeClass("empty");
-        };
-        //var vmDisk2Letter = $extension.find("#vm_disk2_letter");
-        // if (vmDisk2LetterRequired.hasClass("empty")) {
-        //     vmDisk2LetterRequired.removeClass("empty");
-        // };
+        };        
         vmDisk2.addClass("required");
-        vmDisk2.removeClass("invalid");
-        //vmDisk2Letter.addClass("required");
-        vmDisk2.val(null);
-        //mDisk2Letter.val(null);
+        vmDisk2.removeClass("invalid");       
+        vmDisk2.val(null);       
         $("#disk2").hide();
     };
 
-    if (diskNumber === 3 || diskNumber === 0) {
-        //var vmDisk3 = $extension.find("#vm_disk3");
+    if (diskNumber === 3 || diskNumber === 0) {       
         if (vmDisk3Required.hasClass("empty")) {
             vmDisk3Required.removeClass("empty");
-        };
-        //var vmDisk3Letter = $extension.find("#vm_disk3_letter");
-        // if (vmDisk3LetterRequired.hasClass("empty")) {
-        //   vmDisk3LetterRequired.removeClass("empty");
-        // };
+        };     
         vmDisk3.addClass("required");
-        vmDisk3.removeClass("invalid");
-        //mDisk3Letter.addClass("required");
-        vmDisk3.val(null);
-        //vmDisk3Letter.val(null);
+        vmDisk3.removeClass("invalid");        
+        vmDisk3.val(null);      
         $("#disk3").hide();
     };
 
-    if (diskNumber === 4 || diskNumber === 0) {
-        //var vmDisk4 = $extension.find("#vm_disk4");
+    if (diskNumber === 4 || diskNumber === 0) {       
         if (vmDisk4Required.hasClass("empty")) {
             vmDisk4Required.removeClass("empty");
-        };
-        //var vmDisk4Letter = $extension.find("#vm_disk4_letter");
-        // if (vmDisk4LetterRequired.hasClass("empty")) {
-        //   vmDisk4LetterRequired.removeClass("empty");
-        // };
+        };        
         vmDisk4.addClass("required");
-        vmDisk4.removeClass("invalid");
-        //vmDisk4Letter.addClass("required");
-        vmDisk4.val(null);
-        //vmDisk4Letter.val(null);
+        vmDisk4.removeClass("invalid");        
+        vmDisk4.val(null);       
         $("#disk4").hide();
     };
 
-    if (diskNumber === 5 || diskNumber === 0) {
-        //var vmDisk5 = $extension.find("#vm_disk5");
+    if (diskNumber === 5 || diskNumber === 0) {        
         if (vmDisk5Required.hasClass("empty")) {
-            // if (vmOSFamily.data('item').name === 'linux' || vmOSFamily.data('item').name === 'mosos') {
-            //     $("#vm_linux_description_display").show();
-            // } else {
-            //     $("#vm_linux_description_display").hide();
-            //     vmLinuxDescription.val(null);
-            // };
             vmDisk5Required.removeClass("empty");
         };
-        //var vmDisk5Letter = $extension.find("#vm_disk5_letter");
-        // if (vmDisk5LetterRequired.hasClass("empty")) {
-        //   vmDisk5LetterRequired.removeClass("empty");
-        // };
         vmDisk5.addClass("required");
         vmDisk5.removeClass("invalid");
-        //vmDisk5Letter.addClass("required");
-        vmDisk5.val(null);
-        //vmDisk5Letter.val(null);
+        vmDisk5.val(null);       
         $("#disk5").hide();
     };
 };
@@ -1595,8 +1407,6 @@ function updateProtocolVisibility(vmSkpduPorts, vmSkpduProtocol, vmSkpduProtocol
             }
         };
         vmSkpduProtocolDisp.show();
-        //vmSkpduProtocol.addClass("required");
-
     };
 }
 
@@ -1604,12 +1414,13 @@ function updateProtocolVisibility(vmSkpduPorts, vmSkpduProtocol, vmSkpduProtocol
 //function fillFormWithVMData(vmData) {
 function fillFormWithVMData(vmData, vmDataAdditional) {
     // Основные поля
-    $("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;
-    $role = $("#vm_role").val();
+    $("#vm_hostname").val(vmDataAdditional.vmHostName);
+    $("#hostname").val(vmData.hostname);
+    $("#vm_role").val(vmDataAdditional.vmRole); //.change();  //   vmRole.data('item').reference;
+    $role = vmData.vmRole;
     $("#vm_networkcidr_action").val(vmData.vm_networkcidr === "new" ? "новая" : "существующая").change();
     $("#vm_networkcidr").val(vmData.vm_networkcidr === "new" ? "new" :
-        { reference: vmData.vm_networkcidr }).change();
-    //alert( $("#vm_networkcidr").val());
+        { reference: vmData.vm_networkcidr }).change();    ;
     $networkCIDr = vmData.vm_networkcidr === "new" ? "new" : $("#vm_networkcidr").val();
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
@@ -1627,26 +1438,15 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
         $("#vm_vmdk_required").removeClass("empty");
     };
     // Устанавливаем значение "Среды" и триггерим событие изменения
-    $("#vm_instance").val(vmDataAdditional.vmInstance).trigger('change');
-    // Ждем обновления списка зон (если требуется асинхронная загрузка)
-    // setTimeout(function () {
-    //     // Устанавливаем зону после обновления данных
-    //     $("#vm_zone").val(vmDataAdditional.vmZone).trigger('change');
-    //     $zone = vmData.vm_Zone;
-    // }, 500); // Задержка для обработки изменений
+    $("#vm_instance").val(vmDataAdditional.vmInstance).trigger('change');    
     $instance = vmData.vm_instance;
     $("#vm_os_family").val(vmDataAdditional.vmOSFamily).trigger('change');
     setTimeout(function () {
         $("#vm_os").val(vmDataAdditional.vmOS).trigger('change');
         $OS = vmData.vm_os;
-    }, 500);
-    //$("#vm_linux_description").val(vmData.vm_linux_description);
-    //$("#add_nfs").prop("checked", vmDataAdditional.vmNFS.length > 0).change();
-    //$("#vm_nfs").val(vmDataAdditional.vmNFS);
-    //$NFS = vmData.vm_nfs;
+    }, 500);    
     $("#add_groups").val(vmDataAdditional.vmAddGroups).change();
-    //alert("add_groups=" + $("#add_groups").val());
-
+   
     if ($("#add_groups").val() >= 1) {
         fillFormWithG02(vmData, vmDataAdditional);
     }
@@ -1689,13 +1489,7 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
             }
 
         }
-    }
-    // if (!$("#vm_zone").val()){
-    //     alert('vm_azome_null');
-    //     $("#vm_zone").val(vmDataAdditional.vmZone);
-    // } 
-
-
+    };
 }
 
 function fillFormWithG02(vmData, vmDataAdditional) {
@@ -1770,8 +1564,9 @@ function fillFormWithG04(vmData, vmDataAdditional) {
 function finishChecked() {
     $("#vm_1").hide();
     $("#add_vm").hide();
-    $("#copy_vm").hide();
+    //$("#copy_vm").hide();
     $("#delete_vm").hide();
+    $("#number_vm_display").hide();
     $("#is_ex_change").addClass("disabled");
     $("#justification").readonly(true);
     $("#inc_desc").readonly(true);
@@ -1787,10 +1582,11 @@ function finishUnChecked() {
     $("#vm_1").show();
     if ($count_vm < 21) {
         $("#add_vm").show();
-        $("#copy_vm").show();
+        //$("#copy_vm").show();
     }
     if ($count_vm > 1) {
         $("#delete_vm").show();
+        $("#number_vm_display").show();
     }
     $("#is_ex_change").removeClass("disabled");
     $("#justification").readonly(false);
