@@ -103,7 +103,7 @@ vmHostName.on('change', function () {
         };
         if (vmHostName.data('item').custom_fields['Роль ВМ']) {
             vmRole.val(vmHostName.data('item').custom_fields['Роль ВМ'].display_name);
-            $role = vmHostName.data('item').custom_fields['Роль ВМ'].id;
+            $role = vmHostName.data('item').custom_fields['Роль ВМ'].reference;
         } else {
             vmRole.val("");
             $role = "";
@@ -939,6 +939,7 @@ function addVM() {
         vm: $count_vm,
         vmHostName: vmHostName.val(),
         vmRole: vmRole.val(),
+        vmNetworkCIDr: vmNetworkCIDr.val(),
         vmOS: vmOS.val(),
         vmOSFamily: vmOSFamily.val(),
         vmInstance: vmInstance.val(),
@@ -1419,9 +1420,8 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     $("#vm_role").val(vmDataAdditional.vmRole); //.change();  //   vmRole.data('item').reference;
     $role = vmData.vmRole;
     $("#vm_networkcidr_action").val(vmData.vm_networkcidr === "new" ? "новая" : "существующая").change();
-    $("#vm_networkcidr").val(vmData.vm_networkcidr === "new" ? "new" :
-        { reference: vmData.vm_networkcidr }).change();    ;
-    $networkCIDr = vmData.vm_networkcidr === "new" ? "new" : $("#vm_networkcidr").val();
+    $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);    ;
+    $networkCIDr = vmData.vmNetworkCIDr;
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");
