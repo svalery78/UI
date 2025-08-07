@@ -1420,8 +1420,9 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     $("#vm_role").val(vmDataAdditional.vmRole); //.change();  //   vmRole.data('item').reference;
     $role = vmData.vmRole;
     $("#vm_networkcidr_action").val(vmData.vm_networkcidr === "new" ? "новая" : "существующая").change();
+    
     $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);    ;
-    $networkCIDr = vmData.vmNetworkCIDr;
+    $networkCIDr = vmData.vm_networkcidr;
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");

@@ -1255,7 +1255,7 @@ function checkingEnteredValue() {
     if ($addNFS) {
         if ($NFS == null || $NFS == "") {
             $("#vm_nfs").addClass("empty");
-            isError = true;
+            isError = true; 
         };
     };
     if ($addGroups === "1" || $addGroups === "2" || $addGroups === "3") {
