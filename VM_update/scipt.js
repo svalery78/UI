@@ -207,53 +207,6 @@ vmOS.on('change', function () {
 });
 
 var vmInstance = $extension.find("#vm_instance");
-// vmInstance.on('change', function () {
-//     if (vmInstance.hasClass("empty")) {
-//         vmInstance.removeClass("empty");
-//     }
-//     $instance = vmInstance.data('item').reference;
-// });
-
-// var vmZone = $extension.find("#vm_zone");
-// vmZone.on('change', function () {
-//     if ($("#vm_zone").hasClass("empty")) {
-//         $("#vm_zone").removeClass("empty");
-//     }
-//     $zone = vmZone.data('item').reference;
-// });
-
-//var vmLinuxDescription = $extension.find("#vm_linux_description");
-// vmLinuxDescription.on('change', function () {
-//     if ($("#vm_linux_description_required").hasClass("empty")) {
-//         $("#vm_linux_description_required").removeClass("empty");
-//     }
-// });
-
-//var vmNFS = $extension.find("#vm_nfs");
-// vmNFS.on('change', function () {
-//     $NFS = vmNFS.data('items').map(function (item) {
-//         return item.label;
-//     });
-//     if (vmNFS.hasClass("empty")) {
-//         vmNFS.removeClass("empty");
-//     }
-// });
-
-// var vmAddNFS = $extension.find("#add_nfs");
-// vmAddNFS.on("change", function () {
-//     if ($(this).is(":checked")) {
-//         $addNFS = true;
-//         $("#vm_nfs_display").show();
-//     } else {
-//         $addNFS = false;
-//         $("#vm_nfs_display").hide();
-//         if (vmNFS.hasClass("empty")) {
-//             vmNFS.removeClass("empty");
-//         }
-//         vmNFS.val(null);
-//         $NFS = "";
-//     }
-// });
 
 var vmActionG02 = $extension.find("#vm_action_g02");
 var vmG02Name = $extension.find("#vm_g02_name");
@@ -824,6 +777,7 @@ $("#delete_vm").on("click", function () {
         var newArray = packageData ? packageData.nodes : [];
         if (newArray.length) {
             var lastVM = newArray.pop();
+            var lastVMAdditional = $VM_additional.pop();
             if (newArray.length == 0) {
                 $("#input_json").val(null);
             } else {
@@ -886,6 +840,7 @@ $("#unload_vm").on("click", function () {
         $("#delete_vm").addClass("disabled");
         $("#delete_vm").hide();
         $("#number_vm_display").hide();
+        $("#input_json").val(null).change();
     }
 
 });
@@ -998,6 +953,7 @@ function resetValueVM() {
     $networkCIDr = "";
     $OS = "";
     $addGroups = "";
+    $instance = "";
 
 }
 
