@@ -26,7 +26,7 @@ function removedClass(selector, className) {
 };
 
 function clearFields(selector, isRequired) {
-    $(selector).val(null);
+    $(selector).val(null).change();
     $(selector).toggleClass('required', isRequired);
   //alert('clearFields - ' + isRequired);
   //  if (isRequired) {
@@ -115,6 +115,8 @@ vmN1Operation.on('change', function () {
 
 });
 
+
+
 var vmNetworkcidirAction = $extension.find('#vm_networkcidr_action');
 vmNetworkcidirAction.on('change', function () {
     var isShow = false;
@@ -148,7 +150,14 @@ var vmHostName1 = $extension.find('#vm_hostname1');
 vmHostName1.on('change', function () {
     //alert('vmHostName1');
     clearFields("#vm_ni1", true);
+    //$('#vm_ni1').vall('').change();
 });
+
+// $("#vm_ni1").on('change', function(){
+//     alert('vm_ni1');
+//     //$(this).toggleClass('required', isRequired);
+//     $("#vm_ni1").required(true);
+// });
 
 var vmHostName2 = $extension.find('#vm_hostname2');
 vmHostName2.on('change', function () {
