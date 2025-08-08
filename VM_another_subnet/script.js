@@ -106,7 +106,7 @@ vmNetworkCIDr.on('change', function () {
 var vmHostName = $extension.find("#vm_hostname");
 vmHostName.on('change', function () {
     $vmHostName = vmHostName.data('items').map(function (item) {
-        return item.label;
+        return item.name;
     });
     $vmID = vmHostName.data('items').map(function (item) {
         return item.id;
