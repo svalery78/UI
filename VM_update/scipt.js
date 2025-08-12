@@ -1420,13 +1420,13 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     $("#vm_add_disk").prop("checked", !!vmData.vm_disk1).change();
     if (vmData.vm_disk1) {
         $("#vm_disk1").val(vmData.vm_disk1);
-        $("#vm_disk1").removeClass("required");
-        $("#delete_disk").show();
-        $("#delete_disk").removeClass("disabled");
+        $("#vm_disk1").removeClass("required");        
         if (vmData.vm_disk2) {
             $("#vm_disk2").val(vmData.vm_disk2);
             $("#vm_disk2").removeClass("required");
             $("#disk2").show();
+            $("#delete_disk").show();
+            $("#delete_disk").removeClass("disabled");
             if (vmData.vm_disk3) {
                 $("#vm_disk3").val(vmData.vm_disk3);
                 $("#vm_disk3").removeClass("required");
