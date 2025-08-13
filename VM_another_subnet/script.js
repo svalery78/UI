@@ -152,18 +152,20 @@ $("#add_vm").on("click", function () {
             $("#number_vm_display").show();
             ISName.readonly(true);
             vmNetworkCIDrCurrent.readonly(true);
-            if ($count_vm < 11) {
+            vmNetworkCIDrAction.readonly(true);
+            vmHostName.readonly(true);
+           // if ($count_vm < 11) {
                 addVM();
                 resetValueVM();
                 $count_vm++;
-            } else {
+            //} else {
                 $(this).addClass("disabled");
                 $(this).hide();
-            }
-            if ($count_vm === 11) {
-                $(this).addClass("disabled");
-                $(this).hide();
-            }
+            //}
+            // if ($count_vm === 11) {
+            //     $(this).addClass("disabled");
+            //     $(this).hide();
+            // }
         } else {
             alert("Заполните корректно обязательные поля");
         }
@@ -198,6 +200,8 @@ $("#delete_vm").on("click", function () {
             $("#number_vm_display").hide();
             ISName.readonly(false);
             vmNetworkCIDrCurrent.readonly(false);
+            vmNetworkCIDrAction.readonly(false);
+            vmHostName.readonly(false);
         }
     }
     addVMToTable();
