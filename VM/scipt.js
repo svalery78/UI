@@ -32,7 +32,13 @@ $("#input_form").readonly(true);
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
     $nameIS = $("#name_is").val();
-    $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
+    if ($nameIS != "") {
+        $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
+        $("#product").val(ISName.data('item').custom_fields['Продукт-владелец ДИТ'].id);
+    } else {
+        $("#product").val("");
+        $isDCID = null;
+    }
     if ($("#name_is").hasClass("empty")) {
         $("#name_is").removeClass("empty");
     }
@@ -919,13 +925,14 @@ function addVM() {
     newArray.push(newVM);
     var newVMAdditional = {
         vm: $count_vm,
+        vmNetworkCIDr: vmNetworkCIDr.val(),
         vmRole: vmRole.val(),
         vmOS: vmOS.val(),
         vmOSFamily: vmOSFamily.val(),
         vmInstance: vmInstance.val(),
         vmZone: vmZone.val(),
         vmNFS: vmNFS.val(),
-        vmAddGroups: vmAddGroups.val(), 
+        vmAddGroups: vmAddGroups.val(),
         vmg02SkpduPorts: vmg02SkpduPorts.val(),
         vmg02SkpduPortsNumber: vmg02SkpduPortsNumber.val(),
         vmg02SkpduProtocol: vmg02SkpduProtocol.val(),
@@ -1255,7 +1262,7 @@ function checkingEnteredValue() {
     if ($addNFS) {
         if ($NFS == null || $NFS == "") {
             $("#vm_nfs").addClass("empty");
-            isError = true; 
+            isError = true;
         };
     };
     if ($addGroups === "1" || $addGroups === "2" || $addGroups === "3") {
@@ -1516,10 +1523,11 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     $("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;
     $role = $("#vm_role").val();
     $("#vm_networkcidr_action").val(vmData.vm_networkcidr === "new" ? "новая" : "существующая").change();
-    $("#vm_networkcidr").val( vmData.vm_networkcidr === "new" ? "new" : 
-        {reference: vmData.vm_networkcidr }).change();
+    //$("#vm_networkcidr").val( vmData.vm_networkcidr === "new" ? "new" : 
+    //    {reference: vmData.vm_networkcidr }).change();
     //alert( $("#vm_networkcidr").val());
-    $networkCIDr = vmData.vm_networkcidr === "new" ?  "new" : $("#vm_networkcidr").val();
+    $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);
+    $networkCIDr = vmData.vm_networkcidr; // === "new" ?  "new" : $("#vm_networkcidr").val();
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");
@@ -1801,3 +1809,14 @@ $(document).ready(function () {
 
 
 });
+
+// Достаем id запрашивающего из URL
+if (ITRP.record.new) {
+    if (ITRP.context === 'self_service') {
+        $("#requestor").val($("#requested_for_id").val());
+    }
+
+    if (ITRP.context != 'self_service') {
+        $("#requestor").val($("#req_requested_for_id").val());
+    }
+}

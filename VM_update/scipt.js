@@ -42,7 +42,14 @@ function removedClass(selector, className) {
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
     $nameIS = $("#name_is").val();
-    $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
+     if ($nameIS != "") {
+        $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
+        $("#product").val(ISName.data('item').custom_fields['Продукт-владелец ДИТ'].id);
+    } else {
+        $("#product").val("");
+        $isDCID = null;
+    }
+    //$isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
     // if ($("#name_is").hasClass("empty")) {
     //     //     $("#name_is").removeClass("empty");
     //     alert("nameIS");
@@ -1644,3 +1651,14 @@ $(document).ready(function () {
     };
 
 });
+
+// Достаем id запрашивающего из URL
+if (ITRP.record.new){
+  if (ITRP.context === 'self_service') { 
+    $("#requestor").val($("#requested_for_id").val());
+  }
+
+  if (ITRP.context != 'self_service') { 
+    $("#requestor").val($("#req_requested_for_id").val());
+  }
+}

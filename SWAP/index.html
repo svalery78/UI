@@ -1,0 +1,70 @@
+<div class="section" id="user_info" title="Пользовательская информация"> 
+  <div class="row vertical checkbox">
+    <input id="is_ex_change" type="checkbox">
+    <label for="is_ex_change" title="Необходимо для выполнения поручения высшего руководства ДИТ или для устранения/предотвращения критического инцидента/инцидента ИБ">Экстренное изменение <i class="ii icon-help"></i></label>
+  </div>
+  <div id="row_justification" class="row vertical" style="display:none">
+    <label for="justification" title="Обоснование">Обоснование</label>
+    <select id="justification" class="required">
+      <option value=""></option>
+      <option value="для_устранение/предотвращения_кр">Для устранения/предотвращения критического инцидента</option>
+      <option value="для_устранение/предотвращения_ин">Для устранения/предотвращения инцидента ИБ</option>
+      <option value="для_выполнения_поручения_руковод">Для выполнения поручения высшего руководства</option>
+    </select>
+  </div>
+  <div class="row vertical" style="display:none">
+    <label for="inc_desc" title="Краткое описание инцидента">Краткое описание инцидента</label>
+    <input id="inc_desc" type="text" autocomplete="off" class="required">
+  </div>
+  <div class="row vertical" data-filterable data-searchable>
+    <label for="name_is" title="Выберите из выпадающего списка краткое наименование информационной системы, к которой относится ваш запрос.">Наименование ИС<i class="ii icon-help"></i></label>
+    <div id="name_is" class="required" data-custom-view="ис_не_дэг" data-filterable-name="ИС в запросе" data-filter-name="user" data-filter-value="requestor"></div>
+  </div>
+  <div class="row vertical hide" data-hidden>
+    <div id="requestor" class="person-suggest hide"></div>
+  </div>
+  <div class="row vertical">
+    <label for="vm_hostname" title="Имя Виртуальной машины">Имя Виртуальной машины</label>
+    <div id="vm_hostname" class="required" data-custom-view="ке_виртуальные_сервера" data-filter-name="#Информационная система" data-filter-value="name_is"></div>
+  </div>
+  <div id="checkblock" style="display:none">
+  <div class="row vertical">  
+      <label for="swap_operation" title="Выберите нужную операцию">Операция <i class="ii icon-help"></i></label>
+        <select id="swap_operation" class="required">
+          <option value=""></option>
+          <option value="increase">Увеличить SWAP</option>
+          <option value="del_swap">Удалить SWAP</option>
+        </select>
+    </div>
+    <div id="row_swap_curr" class="row vertical" style="display:none">
+          <label for="swap_curr" title="Укажите текущий размер файла/раздела подкачки SWAP. От 2 до 127 ГБ.">Текущий размер (Gb) <i class="ii icon-help"></i></label>
+          <input id="swap_curr" type="number" autocomplete="off" min="2" max="127" class="required">
+      </div>
+    
+      <div id="row_swap_new" class="row vertical" style="display:none">
+          <label for="swap_new" title="Укажите требуемый итоговый размер файла/раздела подкачки SWAP. От 3 до 128 ГБ.">Требуемый размер (Gb) <i class="ii icon-help"></i></label>
+          <input id="swap_new" type="number" autocomplete="off" min="3" max="128" class="required">
+      </div>
+      <div class="section-help not_enough red" id="warning_not_enough" style="display:none">Запрошенный размер swap меньше/равен текущему. Укажете корректное значение<br></div>
+  </div>
+</div>
+
+<div class="row vertical checkbox hide" data-hidden>
+  <input id="is_reopen" type="checkbox" class="hide">
+</div>
+
+<div class="section" id="correctness_block" style="display:none" data-internal>
+  <span class="section-header">Легитимность возврата</span>
+  <div id="row_correctness_reopen" class="row vertical" data-filterable data-internal>
+    <label for="correctness_reopen" title="Причина возврата">Причина возврата</label>
+    <select id="correctness_reopen" data-filterable-name="Легитимность возврата">
+      <option value=""></option>
+      <option value="engineer">По вине инженера</option>
+      <option value="other">Другое</option>
+    </select>
+  </div>
+  <div class="row vertical" data-internal>
+      <label for="incorrect_desc" title="Описание">Описание</label>
+      <textarea id="incorrect_desc"></textarea>
+  </div>
+</div>

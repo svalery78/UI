@@ -9,6 +9,17 @@ var inputJson = [];
 var vmHostDelete;
 var createVM;
 
+// Достаем id запрашивающего из URL
+if (ITRP.record.new) {
+  if (ITRP.context === 'self_service') {
+    $("#requestor").val($("#requested_for_id").val());
+  }
+
+  if (ITRP.context != 'self_service') {
+    $("#requestor").val($("#req_requested_for_id").val());
+  }
+}
+
 $("#input_form").readonly(true);
 
 // Helper function to show/hide rows
@@ -109,10 +120,10 @@ var vmDiskOperation5 = $extension.find("#vm_disk_operation5");
 vmDiskOperation5.on('change', function () {
   vmdiskOperation(vmDiskOperation5, 5, HDD5);
 });
- 
+
 var HDD5 = $extension.find("#vm_disk5");
 HDD5.on('change', function () {
-  if(HDD5.val()) HDD(HDD5, 5);
+  if (HDD5.val()) HDD(HDD5, 5);
 });
 
 var hddCap1 = $extension.find("#hdd_cap1");
@@ -121,10 +132,23 @@ hddCap1.on('change', function () {
   removedClass(hddCapRequired1, "empty");
 });
 
+hddCap1.on('blur', function () {
+  if (hddCap1.val()) {
+    checkingDiskSize(vmDiskOperation1, hddCap1, $('#current_size1').val(), 1);
+  };
+});
+
+
 var hddCap2 = $extension.find("#hdd_cap2");
 var hddCapRequired2 = $extension.find("#hdd_cap_required2");
 hddCap2.on('change', function () {
-  removedClass(hddCapRequired2, "empty");
+  removedClass(hddCapRequired2, "empty");  
+});
+
+hddCap2.on('blur', function () {
+  if (hddCap2.val()) {
+    checkingDiskSize(vmDiskOperation2, hddCap2, $('#current_size2').val(), 2);
+  };
 });
 
 var hddCap3 = $extension.find("#hdd_cap3");
@@ -133,16 +157,34 @@ hddCap3.on('change', function () {
   removedClass(hddCapRequired3, "empty");
 });
 
+hddCap3.on('blur', function () {
+  if (hddCap3.val()) {
+    checkingDiskSize(vmDiskOperation3, hddCap3, $('#current_size3').val(), 3);
+  };
+});
+
 var hddCap4 = $extension.find("#hdd_cap4");
 var hddCapRequired4 = $extension.find("#hdd_cap_required4");
 hddCap4.on('change', function () {
   removedClass(hddCapRequired4, "empty");
 });
 
+hddCap4.on('blur', function () {
+  if (hddCap4.val()) {
+    checkingDiskSize(vmDiskOperation4, hddCap4, $('#current_size4').val(), 4);
+  };
+});
+
 var hddCap5 = $extension.find("#hdd_cap5");
 var hddCapRequired5 = $extension.find("#hdd_cap_required5");
 hddCap5.on('change', function () {
   removedClass(hddCapRequired5, "empty");
+});
+
+hddCap5.on('blur', function () {
+  if (hddCap5.val()) {
+    checkingDiskSize(vmDiskOperation5, hddCap5, $('#current_size5').val(), 5);
+  };
 });
 
 
@@ -271,9 +313,10 @@ $("#finish").on("change", function () {
 
 function vmdiskOperation(vmDiskOperationN, numberDisk, HDDN) {
   removedClass($('#vm_disk_operation_required' + numberDisk), 'empty');
+  removeHDDCup(numberDisk);  
   if (vmDiskOperationN.val() == 'delete' || vmDiskOperationN.val() == 'resize_up'
-    || vmDiskOperationN.val() == 'resize_down') {    
-    if(HDDN.val()) HDD(HDDN, numberDisk);  
+    || vmDiskOperationN.val() == 'resize_down') {
+    if (HDDN.val()) HDD(HDDN, numberDisk);
     toggleRowVisibility('#row_current_size' + numberDisk, true);
     toggleRowVisibility('#row_scsi_id' + numberDisk, true);
 
@@ -305,8 +348,15 @@ function vmdiskOperation(vmDiskOperationN, numberDisk, HDDN) {
   };
 };
 
+function removeHDDCup(numberDisk) {
+  toggleRowVisibility('#warning_hdd_up' + numberDisk, false);
+  toggleRowVisibility('#warning_hdd_down' + numberDisk, false);
+  $('#hdd_cap' + numberDisk).val(null);
+}
+
 function HDD(HDDN, numberDisk) {
   removedClass(HDDN, 'empty');
+  removeHDDCup(numberDisk);
   if (HDDN.data('item').id) {
     var HDDSize = HDDN ? HDDN.data('item').custom_fields['HDD'] : "";
     var HDDScsi = HDDN ? HDDN.data('item').custom_fields['SCSI ID'] : "";
@@ -315,6 +365,30 @@ function HDD(HDDN, numberDisk) {
   } else {
     $('#current_size' + numberDisk).val(null);
     $('#scsi_id' + numberDisk).val(null);
+  };
+};
+
+function checkingDiskSize(vmDiskOperationN, hddCapN, currentSize, numberDisk) {
+  var hddSizeCurr = parseFloat(currentSize);
+  var hddSizeNew  = parseFloat(hddCapN.val());
+  if (vmDiskOperationN.val() == 'resize_up') {
+    if (hddSizeNew > 0 && hddSizeNew > hddSizeCurr) {
+      toggleRowVisibility('#warning_hdd_up' + numberDisk, false);
+      $("#hdd_cap_required" + numberDisk).toggleClass("required", false);
+    } else {
+      toggleRowVisibility('#warning_hdd_up' + numberDisk, true);
+      $("#hdd_cap_required" + numberDisk).toggleClass("required", true);
+      hddCapN.val('').change();
+    };
+  } else  if (vmDiskOperationN.val() == 'resize_down') {
+    if (hddSizeNew > 0 && hddSizeNew < hddSizeCurr) {
+      toggleRowVisibility('#warning_hdd_down' + numberDisk, false);
+      $("#hdd_cap_required" + numberDisk).toggleClass("required", false);
+    } else {
+      hddCapN.val('').change();
+      toggleRowVisibility('#warning_hdd_down' + numberDisk, true);
+      $("#hdd_cap_required" + numberDisk).toggleClass("required", true);
+    };
   };
 };
 
@@ -356,16 +430,16 @@ function validateFields() {
     return isError;
   };
   isError = validateFieldsDisk(vmDiskOperation1, HDD1, 1);
-  if (currentDisk > 1) {
+  if (currentDisk > 1 && !isError) {
     isError = validateFieldsDisk(vmDiskOperation2, HDD2, 2);
   };
-  if (currentDisk > 2) {
+  if (currentDisk > 2 && !isError) {
     isError = validateFieldsDisk(vmDiskOperation3, HDD3, 3);
   };
-  if (currentDisk > 3) {
+  if (currentDisk > 3 && !isError) {
     isError = validateFieldsDisk(vmDiskOperation4, HDD4, 4);
   };
-  if (currentDisk > 4) {
+  if (currentDisk > 4 && !isError) {
     isError = validateFieldsDisk(vmDiskOperation5, HDD5, 5);
   };
   return isError;
@@ -651,9 +725,9 @@ function finishUnChecked() {
   $("#name_is").readonly(false);
 };
 
-function createVHDObj(op,action){
+function createVHDObj(op, action) {
   var vhdObj = {};
-  
+
   if (op.vm_disk && (action == "update" || action == "delete")) vhdObj.vhd_id = op.vm_disk;
   if (op.hdd_cap && (action == "update" || action == "create")) vhdObj.hdd_cap = op.hdd_cap;
   if (op.scsi_id && (action == "update" || action == "delete")) vhdObj.scsi_id = op.scsi_id;
@@ -678,7 +752,3 @@ $(document).ready(function () {
     createVM = true;
   };
 });
-
-
-
-
