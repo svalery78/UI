@@ -142,7 +142,7 @@ hddCap1.on('blur', function () {
 var hddCap2 = $extension.find("#hdd_cap2");
 var hddCapRequired2 = $extension.find("#hdd_cap_required2");
 hddCap2.on('change', function () {
-  removedClass(hddCapRequired2, "empty");  
+  removedClass(hddCapRequired2, "empty");
 });
 
 hddCap2.on('blur', function () {
@@ -253,12 +253,12 @@ $('#add_vm').click(function () {
 
 $("#delete_vm").on("click", function () {
   if (!$(this).hasClass("disabled")) {
-
     $("#add_vm").show();
     $("#add_vm").removeClass("disabled");
 
     if (inputJson.length > 0) {
       var lastVM = inputJson.pop();
+      var action = [];
       if (inputJson.length == 0) {
         $('#input_form').val(null);
         $('#json_update').val(null);
@@ -267,9 +267,23 @@ $("#delete_vm").on("click", function () {
       } else {
         addInputFormRecord(inputJson);
         vmHostDelete = lastVM.hostname;
-        deleteJson(vmHostDelete, $('#json_update').val(), '#json_update');
-        deleteJson(vmHostDelete, $('#json_create').val(), '#json_create');
-        deleteJson(vmHostDelete, $('#json_delete').val(), '#json_delete');
+        for (var i = lastVM.vhd.length - 1; i >= 0; i--) {
+          var lastAction = lastVM.vhd[i].operation;
+          if (!action.includes(lastAction)) action.push(lastAction);
+        };
+        if (action.includes('add') || action.includes('resize_down')) {
+          deleteJson(vmHostDelete, $('#json_create').val(), '#json_create');
+        };
+        if (action.includes('resize_up')) {
+          deleteJson(vmHostDelete, $('#json_update').val(), '#json_update');
+        };
+        if (action.includes('delete') || action.includes('resize_down')) {
+          deleteJson(vmHostDelete, $('#json_delete').val(), '#json_delete');
+        };
+
+        // deleteJson(vmHostDelete, $('#json_update').val(), '#json_update');
+        // deleteJson(vmHostDelete, $('#json_create').val(), '#json_create');
+        // deleteJson(vmHostDelete, $('#json_delete').val(), '#json_delete');
         vmHostDelete = null;
       };
 
@@ -313,7 +327,7 @@ $("#finish").on("change", function () {
 
 function vmdiskOperation(vmDiskOperationN, numberDisk, HDDN) {
   removedClass($('#vm_disk_operation_required' + numberDisk), 'empty');
-  removeHDDCup(numberDisk);  
+  removeHDDCup(numberDisk);
   if (vmDiskOperationN.val() == 'delete' || vmDiskOperationN.val() == 'resize_up'
     || vmDiskOperationN.val() == 'resize_down') {
     if (HDDN.val()) HDD(HDDN, numberDisk);
@@ -370,7 +384,7 @@ function HDD(HDDN, numberDisk) {
 
 function checkingDiskSize(vmDiskOperationN, hddCapN, currentSize, numberDisk) {
   var hddSizeCurr = parseFloat(currentSize);
-  var hddSizeNew  = parseFloat(hddCapN.val());
+  var hddSizeNew = parseFloat(hddCapN.val());
   if (vmDiskOperationN.val() == 'resize_up') {
     if (hddSizeNew > 0 && hddSizeNew > hddSizeCurr) {
       toggleRowVisibility('#warning_hdd_up' + numberDisk, false);
@@ -380,7 +394,7 @@ function checkingDiskSize(vmDiskOperationN, hddCapN, currentSize, numberDisk) {
       $("#hdd_cap_required" + numberDisk).toggleClass("required", true);
       hddCapN.val('').change();
     };
-  } else  if (vmDiskOperationN.val() == 'resize_down') {
+  } else if (vmDiskOperationN.val() == 'resize_down') {
     if (hddSizeNew > 0 && hddSizeNew < hddSizeCurr) {
       toggleRowVisibility('#warning_hdd_down' + numberDisk, false);
       $("#hdd_cap_required" + numberDisk).toggleClass("required", false);
@@ -677,6 +691,7 @@ function addInputFormRecord(inputJson) {
 function deleteJson(deleteHostName, jsonAction, jsonActionName) {
   jsonAction = jsonAction && jsonAction != '' ? jsonAction.replace(/\n+$/m, '') : '';
   var newArray = jsonAction && jsonAction != '' ? JSON.parse(jsonAction).nodes : [];
+
   if (newArray.length > 0) {
     var lastVM = newArray.pop();
     if (lastVM.hostname == deleteHostName) {
