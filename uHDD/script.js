@@ -271,6 +271,7 @@ $("#delete_vm").on("click", function () {
           var lastAction = lastVM.vhd[i].operation;
           if (!action.includes(lastAction)) action.push(lastAction);
         };
+        console.log(JSON.stringify(action));
         if (action.includes('add') || action.includes('resize_down')) {
           deleteJson(vmHostDelete, $('#json_create').val(), '#json_create');
         };

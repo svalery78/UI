@@ -1,5 +1,6 @@
 var $ = ITRP.$;            // jQuery
 var $extension = $(this);  // The UI Extension container with custom HTML
+var isInitializing = true;
 var $need_os = $extension.find('#need_os');
 var $need_os_row = $need_os.closest('.row');
 var $count_vm = 1;
@@ -29,6 +30,31 @@ var createVM;
 
 $("#input_form").readonly(true);
 
+// $(document).ready(function () {
+
+//     if ($("#finish").is(":checked")) {
+//         finishChecked();
+//     }
+
+//     if ($("#input_json").val()) {
+//         createVM = false;
+//     } else {
+//         createVM = true;
+//     };
+// });
+// $(document).ready(function () {
+//     setTimeout(function() {
+//         if ($("#finish").is(":checked")) {
+//             finishChecked();
+//         }
+//     }, 100);
+//     if ($("#input_json").val()) {
+//         createVM = false;
+//     } else {
+//         createVM = true;
+//     };
+// });
+
 function toggleRowVisibility(selector, show) {
     $(selector).toggle(show);
 };
@@ -41,7 +67,7 @@ function removedClass(selector, className) {
 
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
-    $nameIS = $("#name_is").val();
+    // $nameIS = $("#name_is").val();
      if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
         $("#product").val(ISName.data('item').custom_fields['Продукт-владелец ДИТ'].id);
@@ -1531,10 +1557,12 @@ function finishChecked() {
     //$("#copy_vm").hide();
     $("#delete_vm").hide();
     $("#number_vm_display").hide();
-    $("#is_ex_change").addClass("disabled");
+    $("#is_ex_change").prop('disabled', true).addClass("disabled");
+    // $("#is_ex_change").addClass("disabled");
     $("#justification").readonly(true);
     $("#inc_desc").readonly(true);
-    $("#dr_cluster").addClass("disabled");
+    $("#dr_cluster").prop('disabled', true).addClass("disabled");
+    // $("#dr_cluster").addClass("disabled");
     $("#name_is").readonly(true);
     $("#admin_privileges").addClass("disabled");
     $("#admin_list").readonly(true);
@@ -1552,10 +1580,12 @@ function finishUnChecked() {
         $("#delete_vm").show();
         $("#number_vm_display").show();
     }
-    $("#is_ex_change").removeClass("disabled");
+    $("#is_ex_change").prop('disabled', false).removeClass("disabled");
+    // $("#is_ex_change").removeClass("disabled");
     $("#justification").readonly(false);
     $("#inc_desc").readonly(false);
-    $("#dr_cluster").removeClass("disabled");
+    $("#dr_cluster").prop('disabled', false).removeClass("disabled");
+    // $("#dr_cluster").removeClass("disabled");
     $("#name_is").readonly(false);
     $("#admin_privileges").removeClass("disabled");
     $("#admin_list").readonly(false);
@@ -1575,25 +1605,111 @@ $("#admin_privileges").on("change", function () {
     }
 });
 
-$("#finish").on("change", function () {
-    if (createVM || createVM == false) {
-        if ($(this).is(":checked")) {
-            if ($("#input_json").val() && $("#input_json").val() != null && $("#input_json").val() != "" && $("#name_is").val()) {
-                finishChecked();
-            } else {
-                alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
-                $(this).prop("checked", false);
-                if (!$("#name_is").val()) {
-                    $("#name_is").addClass("empty");
-                };
-                $("#finish").addClass("required");
-            };
+// $("#finish").on("change", function () {
+//     if (createVM || createVM == false) {
+//         if ($(this).is(":checked")) {
+//             if ($("#input_json").val() && $("#input_json").val() != null && $("#input_json").val() != "" && $("#name_is").val()) {
+//                 finishChecked();
+//             } else {
+//                 alert("Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины");
+//                 $(this).prop("checked", false);
+//                 if (!$("#name_is").val()) {
+//                     $("#name_is").addClass("empty");
+//                 };
+//                 $("#finish").addClass("required");
+//             };
 
-        } else {
-            finishUnChecked();
+//         } else {
+//             finishUnChecked();
+//         }
+//     } else {
+//         finishChecked();
+//     }
+// });
+
+// $("#finish").on("change", function () {
+//     if ($(this).is(":checked")) {
+//         var hasError = false;
+//         var errorMessage = "";
+
+//         //Проверяем, что данные по ВМ и ИС заполнены
+//         if (!$("#input_json").val() || $("#input_json").val() === "" || !$("#name_is").val()) {
+//             hasError = true;
+//             errorMessage = "Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины";
+//             if (!$("#name_is").val()) {
+//                 //$("#name_is").addClass("empty");
+//             }
+//         }
+
+//         //Проверяем условие для экстренного изменения
+//         if (!hasError && $("#is_ex_change").is(":checked")) {
+//             if (!$("#justification").val() || $("#justification").val() === "") {
+//                 hasError = true;
+//                 errorMessage = "Выбрано 'Экстренное изменение', но не заполнено поле 'Обоснование'.";
+//                 //$("#justification").addClass("empty");
+//             }
+        
+//         // Проверяем 'Краткое описание инцидента'
+//             else if ($("#inc_desc").parent().is(":visible") && (!$("#inc_desc").val() || $("#inc_desc").val().trim() === '')) {
+//                 hasError = true;
+//                 errorMessage = "Для выбранного типа обоснования необходимо заполнить 'Краткое описание инцидента'.";
+//                 //$("#inc_desc").addClass("empty"); 
+//             }
+//         }
+
+//         // Финальное решение: блокируем форму или показываем ошибку
+//         if (hasError) {
+//             alert(errorMessage);
+//             $(this).prop("checked", false); // Снимаем галочку
+//             $("#finish").addClass("required");
+//         } else {
+//             // Если ошибок нет, вызываем функцию блокировки
+//             finishChecked();
+//         }
+
+//     } else {
+//         // Если галочку снимают, разблокируем форму
+//         finishUnChecked();
+//     }
+// });
+$("#finish").on("change", function () {
+    if (isInitializing) {
+        return;
+    }
+
+    if ($(this).is(":checked")) {
+        var hasError = false;
+        var errorMessage = "";
+        //alert($("#input_json").val());
+        // Проверяем, что данные по ВМ и ИС заполнены
+        if (!$("#input_json").val() || $("#input_json").val() === "" || !$("#name_is").val()) {
+            hasError = true;
+            errorMessage = "Не заполнены обязательные поля. Поставьте галочку для: Заполнение формы завершено или заполните данные для Виртуальной машины";
         }
+
+        // Проверяем условие для экстренного изменения
+        if (!hasError && $("#is_ex_change").is(":checked")) {
+            if (!$("#justification").val() || $("#justification").val() === "") {
+                hasError = true;
+                errorMessage = "Выбрано 'Экстренное изменение', но не заполнено поле 'Обоснование'.";
+            }
+            // Проверяем 'Краткое описание инцидента'
+            else if ($("#inc_desc").parent().is(":visible") && (!$("#inc_desc").val() || $("#inc_desc").val().trim() === '')) {
+                hasError = true;
+                errorMessage = "Для выбранного типа обоснования необходимо заполнить 'Краткое описание инцидента'.";
+            }
+        }
+
+        // Финальное решение: блокируем форму или показываем ошибку
+        if (hasError) {
+            alert(errorMessage);
+            $(this).prop("checked", false);
+        } else {
+            finishChecked();
+        }
+
     } else {
-        finishChecked();
+        finishUnChecked();
     }
 });
 
@@ -1642,23 +1758,55 @@ $("#is_dis").on("change", function () {
     }
 });
 
+// $(document).ready(function () {
+//     setTimeout(function() {
+//         if ($("#finish").is(":checked")) {
+
+//             finishChecked();
+//         }
+//     }, 200); 
+
+    
+//     if ($("#input_json").val()) {
+//         createVM = false;
+//     } else {
+//         createVM = true;
+//     }
+
+// });
+
+// Достаем id запрашивающего из URL
+// if (ITRP.record.new){
+//   if (ITRP.context === 'self_service') { 
+//     $("#requestor").val($("#requested_for_id").val());
+//   }
+
+//   if (ITRP.context != 'self_service') { 
+//     $("#requestor").val($("#req_requested_for_id").val());
+//   }
+// }
 $(document).ready(function () {
+    setTimeout(function() {
+        if ($("#finish").is(":checked")) {
+            finishChecked();
+        }
+
+        isInitializing = false;
+
+    }, 300); 
 
     if ($("#input_json").val()) {
         createVM = false;
     } else {
         createVM = true;
-    };
+    }
 
+    if (ITRP.record.new){
+      if (ITRP.context === 'self_service') {
+        $("#requestor").val($("#requested_for_id").val());
+      }
+      if (ITRP.context != 'self_service') {
+        $("#requestor").val($("#req_requested_for_id").val());
+      }
+    }
 });
-
-// Достаем id запрашивающего из URL
-if (ITRP.record.new){
-  if (ITRP.context === 'self_service') { 
-    $("#requestor").val($("#requested_for_id").val());
-  }
-
-  if (ITRP.context != 'self_service') { 
-    $("#requestor").val($("#req_requested_for_id").val());
-  }
-}
