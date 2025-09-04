@@ -35,7 +35,10 @@
   <div class="row vertical hide" data-internal data-hidden>
     <div id="requestor" class="hide person-suggest"></div>
   </div>
-
+<div class="row vertical" data-searchable data-filterable style="display:none">
+  <label for="product" title="Продукт-владелец ДИТ">Продукт-владелец ДИТ</label>
+  <div id="product" data-filterable-name="Продукт-владелец ДИТ" data-custom-view="продукт_каталог" data-custom-view-account="moscow"></div>
+</div>
   <div class="row vertical checkbox">
     <input id="admin_privileges" type="checkbox">
     <label for="admin_privileges" title="Выдача прав администратора ВМ">Выдача прав администратора ВМ</label>
@@ -90,6 +93,21 @@
     </div>
   </div>
 
+  <div id="vm_networkcidr_size_display" style="display:none">
+    <div class="row vertical">
+      <label for="vm_networkcidr_size" title="Укажите размерность подсети (NetworkCIDR)">Укажите размерность подсети (NetworkCIDR)</label>
+      <div id="vm_networkcidr_size_required">
+        <select id="vm_networkcidr_size"  class="required">
+          <option value=""></option>
+          <option value="26">26</option>
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <div class="row vertical">
     <label for="vm_vcpu" title="vCPU">vCPU</label>
     <div id="vm_cpu_required">
@@ -125,12 +143,12 @@
 
   <div class="row vertical" data-searchable>
 <label for="vm_os_family" title="Семейство ОС">Семейство ОС</label>
-<div id="vm_os_family" class="required" data-custom-view="семейство_ос"></div>
+<div id="vm_os_family" class="required" data-custom-view="ос_mosos"></div>
 </div>
 
   <div class="row vertical">
     <label for="vm_os" title="Требуемый образ ОС">Требуемый образ ОС</label>
-    <div id="vm_os" class="required" data-custom-view="образы_вм_для_си" data-filter-name="#Семейство ОС" data-filter-value="vm_os_family"></div>
+    <div id="vm_os" class="required" data-custom-view="образы_вм_для_си" data-filter-name="#Семейство ОС" data-filter-value="vm_os_family" data-filter-name2="#Продукт-потребитель ДИТ у образа" data-filter-value2="product"></div>
   </div>
 
   <div class="row vertical">
@@ -151,7 +169,7 @@
   <div class="row vertical">
     <div id="vm_nfs_display"  style="display:none">
       <label for="vm_nfs" title="Укажите NFS ресурсы">Укажите NFS ресурсы</label>
-      <div id="vm_nfs" class="required" data-multiple data-min="1" data-custom-view="nfs"></div>
+      <div id="vm_nfs" class="required" data-filter-name="#NFS-ресурс - Связанная ИС" data-filter-value="name_is" data-multiple data-min="1" data-custom-view="nfs"></div>
     </div>
   </div>
 
@@ -428,3 +446,10 @@
   </div>
 
 </div>
+
+<div id="row_service" class="row vertical" style="display:none">
+      <label for="vm_service" title="Дополнить услугой">Дополнить услугой "Администрирование ОС"?</label>
+      <select id="vm_service">
+          <option value="среда_исполнения">Да</option>
+      </select>
+  </div>

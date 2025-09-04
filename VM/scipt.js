@@ -9,6 +9,7 @@ var $isDCID;
 var $nameIS;
 var $role;
 var $networkCIDr;
+var $networkCIDrSize;
 var $OS;
 var $instance;
 var $zone;
@@ -67,20 +68,34 @@ vmRole.on('change', function () {
 var vmNetworkCIDrAction = $extension.find("#vm_networkcidr_action");
 var vmNetworkCIDrActionRequired = $extension.find("#vm_networkcidr_action_required");
 var vmNetworkCIDr = $extension.find("#vm_networkcidr");
+var vmNetworkCIDrSize = $extension.find("#vm_networkcidr_size");
 vmNetworkCIDrAction.on('change', function () {
     if (vmNetworkCIDrActionRequired.hasClass("empty")) {
         vmNetworkCIDrActionRequired.removeClass("empty");
     }
-    if (vmNetworkCIDrAction.val() !== "существующая") {
+    if (vmNetworkCIDrAction.val() == "новая") {
         $("#vm_networkcidr_display").hide();
+        $("#vm_networkcidr_size_display").show();
+        vmNetworkCIDrSize.addClass("required");
         if (vmNetworkCIDr.hasClass("empty")) {
             vmNetworkCIDr.removeClass("empty");
-        }
+        };
         vmNetworkCIDr.val(null);
         $networkCIDr = "new";
+        
+    }
+    else if (vmNetworkCIDrAction.val() == "существующая") {
+        $("#vm_networkcidr_display").show();
+        $("#vm_networkcidr_size_display").hide();
+        vmNetworkCIDrSize.val(null);  
+        $networkCIDrSize = "";      
     }
     else {
-        $("#vm_networkcidr_display").show();
+        $("#vm_networkcidr_display").hide();
+        $("#vm_networkcidr_size_display").hide();
+        vmNetworkCIDrSize.val(null);     
+        $networkCIDr = ""; 
+        $networkCIDrSize = "";
     }
 });
 
@@ -89,11 +104,24 @@ vmNetworkCIDr.on('change', function () {
         $networkCIDr = vmNetworkCIDr.data('item').label;
     } else {
         $networkCIDr = "new";
+        $networkCIDrSize = "";
     }
     if (vmNetworkCIDr.hasClass("empty")) {
         vmNetworkCIDr.removeClass("empty");
     }
 });
+
+vmNetworkCIDrSize.on('change', function() {
+    if($("#vm_networkcidr_size_required").hasClass("empty")){
+        $("#vm_networkcidr_size_required").removeClass('empty');
+    };
+    if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
+        $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
+    } else {
+        $networkCIDrSize = "";
+    };    
+});
+
 
 var vmVCPU = $extension.find("#vm_vcpu");
 var vmVCPURequired = $extension.find("#vm_cpu_required");
@@ -794,6 +822,7 @@ $("#delete_vm").on("click", function () {
         if (newArray.length) {
             //alert("newArray - if");
             var lastVM = newArray.pop();
+            var lastVMAdditional = $VM_additional.pop();
             //alert(newArray.length);
             if (newArray.length == 0) {
                 $("#input_json").val(null);
@@ -868,6 +897,8 @@ $("#unload_vm").on("click", function () {
         $("#delete_vm").addClass("disabled");
         $("#delete_vm").hide();
         $("#number_vm_display").hide();
+        $("#input_json").val(null);
+
     }
 
 });
@@ -893,6 +924,7 @@ function addVM() {
         "vm": $count_vm,
         "vm_role": $role, //$("#vm_role").val(),  //
         "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
+        "vm_networkcidr_size": $networkCIDrSize,
         "vm_vcpu": $("#vm_vcpu").val(),
         "vm_ram": $("#vm_ram").val(),
         "vm_vmdk": $("#vm_vmdk").val(),
@@ -925,7 +957,9 @@ function addVM() {
     newArray.push(newVM);
     var newVMAdditional = {
         vm: $count_vm,
+        vmNetworkCIDrAction: vmNetworkCIDrAction.val(),
         vmNetworkCIDr: vmNetworkCIDr.val(),
+        vmNetworkCIDrSize: vmNetworkCIDrSize.val(),
         vmRole: vmRole.val(),
         vmOS: vmOS.val(),
         vmOSFamily: vmOSFamily.val(),
@@ -966,6 +1000,8 @@ function resetValueVM() {
     vmNetworkCIDrAction.addClass("required");
     vmNetworkCIDr.val(null);
     vmNetworkCIDr.addClass("required");
+    vmNetworkCIDrSize.val(null);
+    vmNetworkCIDrSize.addClass("required");
     vmVCPU.val(null);
     vmVCPU.addClass("required");
     vmVCPU.removeClass("invalid");
@@ -994,6 +1030,7 @@ function resetValueVM() {
     resetValueVMg04();
     resetValueDisk();
     $("#vm_networkcidr_display").hide();
+    $("#vm_networkcidr_size_display").hide();
     $("#additional_disks").hide();
     $("#vm_add_disk").prop("checked", false);
     $("#vm_nfs_display").hide();
@@ -1002,6 +1039,7 @@ function resetValueVM() {
     $("#add_groups_3_disp").hide();
     $role = "";
     $networkCIDr = "";
+    $networkCIDrSize = "";
     $OS = "";
     $NFS = "";
     $addNFS = "";
@@ -1223,6 +1261,12 @@ function checkingEnteredValue() {
     if (vmNetworkCIDrAction.val() === "существующая") {
         if (!vmNetworkCIDr.val()) {
             vmNetworkCIDr.addClass("empty");
+            isError = true;
+        }
+    };
+    if (vmNetworkCIDrAction.val() === "новая") {
+        if (!vmNetworkCIDrSize.val()) {
+            $("#vm_networkcidr_size_required").addClass("empty");
             isError = true;
         }
     };
@@ -1522,12 +1566,14 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     // Основные поля
     $("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;
     $role = $("#vm_role").val();
-    $("#vm_networkcidr_action").val(vmData.vm_networkcidr === "new" ? "новая" : "существующая").change();
+    $("#vm_networkcidr_action").val(vmDataAdditional.vmNetworkCIDrAction).change();
     //$("#vm_networkcidr").val( vmData.vm_networkcidr === "new" ? "new" : 
     //    {reference: vmData.vm_networkcidr }).change();
     //alert( $("#vm_networkcidr").val());
     $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);
     $networkCIDr = vmData.vm_networkcidr; // === "new" ?  "new" : $("#vm_networkcidr").val();
+    $("#vm_networkcidr_size").val(vmDataAdditional.vmNetworkCIDrSize);
+    $networkCIDrSize = vmData.vm_networkcidr_size;
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");
@@ -1781,6 +1827,7 @@ $("#justification").on("change", function () {
         $("#inc_desc").parent().show();
     }
 });
+
 
 //block_ui
 if (ITRP.record.initialValues.custom_data["block_ui"] == true) { $(this).hide(); }
