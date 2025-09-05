@@ -119,7 +119,7 @@ vmNetworkCIDrSize.on('change', function() {
         $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
     } else {
         $networkCIDrSize = "";
-    };    
+    }; 
 });
 
 
@@ -910,7 +910,9 @@ function addVM() {
     var packageData = $package && $package != '' ? JSON.parse($package) : null;
     var newArray = packageData ? packageData.nodes : [];
 
-
+    if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
+        $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
+    }
 
     if (!packageData) {
         packageData = {

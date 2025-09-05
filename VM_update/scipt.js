@@ -864,6 +864,9 @@ function addVM() {
     var packageData = $package && $package != '' ? JSON.parse($package) : null;
     var newArray = packageData ? packageData.nodes : [];
 
+    if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
+        $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
+    }
 
     if (!packageData) {
         packageData = {
@@ -960,6 +963,7 @@ function resetValueVM() {
     resetValueVMg04();
     resetValueDisk();
     $("#vm_networkcidr_display").hide();
+    $("#vm_networkcidr_size_display").hide();
     $("#additional_disks").hide();
     $("#vm_add_disk").prop("checked", false);
     $("#add_groups_1_disp").hide();
