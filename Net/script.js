@@ -12,6 +12,7 @@ var vmNetworkCidrLabel;
 var inputJson;
 var createVM;
 
+
 $("#input_form").readonly(true);
 
 // Helper function to show/hide rows
@@ -28,11 +29,11 @@ function removedClass(selector, className) {
 function clearFields(selector, isRequired) {
     $(selector).val(null).change();
     $(selector).toggleClass('required', isRequired);
-  //alert('clearFields - ' + isRequired);
-  //  if (isRequired) {
-  //    alert('true');
-  //      $(selector).addClass('required');
-  //  };
+    //alert('clearFields - ' + isRequired);
+    //  if (isRequired) {
+    //    alert('true');
+    //      $(selector).addClass('required');
+    //  };
 };
 
 
@@ -89,9 +90,9 @@ $('#justification').on('change', function () {
 $('#name_is').on('change', function () {
     clearAddNetwork();
     clearDeleteNetwork();
-    if($('#name_is').val()){
+    if ($('#name_is').val()) {
         removedClass($('#name_is'), 'empty');
-    };    
+    };
 });
 
 
@@ -118,20 +119,28 @@ vmN1Operation.on('change', function () {
 
 
 var vmNetworkcidirAction = $extension.find('#vm_networkcidr_action');
+var vmNetworkCidr = $extension.find('#vm_networkcidr');
+var vmNetworkCIDrSize = $extension.find("#vm_networkcidr_size");
 vmNetworkcidirAction.on('change', function () {
     var isShow = false;
-    removedClass(vmNetworkcidirAction, "empty");
+    var isShowNew = false;
+    removedClass($('#vm_networkcidr_action'), "empty");
     if (vmNetworkcidirAction.val() == 'существующая') {
         isShow = true;
-    };
-
-    if (!isShow) {
+        clearFields("#vm_networkcidr_size", false);
+    }
+    else if (vmNetworkcidirAction.val() == "новая") {
+        isShowNew = true;
         clearFields('#vm_networkcidr', false);
+        vmNetworkCidrLabel = "new";
+    } else {
+        clearFields('#vm_networkcidr', false);
+        clearFields("#vm_networkcidr_size", false);
         vmNetworkCidrLabel = null;
     };
-
     $('#vm_networkcidr_required').toggleClass('required', isShow);
     toggleRowVisibility('#vm_networkcidr_display', isShow);
+    toggleRowVisibility('#vm_networkcidr_size_display', isShowNew);
 });
 
 var vmHostName = $extension.find('#vm_hostname');
@@ -140,24 +149,38 @@ vmHostName.on('change', function () {
     vmName = vmHostName.data('item').name;
 });
 
-var vmNetworkCidr = $extension.find('#vm_networkcidr');
 vmNetworkCidr.on('change', function () {
     removedClass(vmNetworkCidr, "empty");
-    vmNetworkCidrLabel = vmNetworkCidr.data('item').label;
+    if (vmNetworkcidirAction.val() === "существующая") {
+        vmNetworkCidrLabel = vmNetworkCidr.data('item').label;
+    } else {
+        vmNetworkCidrLabel = "new";
+    }
+});
+
+vmNetworkCIDrSize.on('change', function () {
+    removedClass($("#vm_networkcidr_size_required"), "empty");
+    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
+        vmNetworkCidrLabel = "new/" + vmNetworkCIDrSize.val();
+    } else {
+        vmNetworkCidrLabel = "new";
+    };
 });
 
 var vmHostName1 = $extension.find('#vm_hostname1');
 vmHostName1.on('change', function () {
+    $('#vm_ni1').val('').change();
+
     //alert('vmHostName1');
-    clearFields("#vm_ni1", true);
-    //$('#vm_ni1').vall('').change();
+    //clearFields("#vm_ni1", true);
+
 });
 
-// $("#vm_ni1").on('change', function(){
-//     alert('vm_ni1');
-//     //$(this).toggleClass('required', isRequired);
-//     $("#vm_ni1").required(true);
-// });
+$("#vm_ni1").on('change', function () {
+    //alert('vm_ni1');
+    //$(this).toggleClass('required', isRequired);
+    $("#vm_ni1").required(true);
+});
 
 var vmHostName2 = $extension.find('#vm_hostname2');
 vmHostName2.on('change', function () {
@@ -326,6 +349,13 @@ function validateFields() {
                 return isError;
             };
         };
+        if ($('#vm_networkcidr_action').val() == "новая") {
+            if (!vmNetworkCIDrSize.val()) {
+                $("#vm_networkcidr_size_required").addClass('empty');
+                isError = true;
+                return isError;
+            };
+        };
     };
     return isError;
 
@@ -381,9 +411,11 @@ function clearNetwork() {
 function clearAddNetwork() {
     $('#vm_networkcidr_required').toggleClass('required', false);
     toggleRowVisibility('#vm_networkcidr_display', false);
+    toggleRowVisibility('#vm_networkcidr_size_display', false);
     clearFields('#vm_hostname', false);
     clearFields('#vm_networkcidr_action', false);
     clearFields('#vm_networkcidr', false);
+    clearFields('#vm_networkcidr_size', false);
     vmNetworkCidrLabel = "";
 };
 
@@ -401,7 +433,7 @@ function updateJson(input_json) {
     var newVM = {
         hostname: vmName,
         vm_id: vmHostName.val(),
-        vm_networkcidr: vmNetworkCidrLabel ? vmNetworkCidrLabel : "new"
+        vm_networkcidr: vmNetworkCidrLabel
     };
     newArray.push(newVM);
     var nodes = {

@@ -9,7 +9,7 @@ var $isDCID;
 var $nameIS;
 var $role;
 var $networkCIDr;
-var $networkCIDrSize;
+//var $networkCIDrSize;
 var $OS;
 var $instance;
 var $zone;
@@ -88,14 +88,14 @@ vmNetworkCIDrAction.on('change', function () {
         $("#vm_networkcidr_display").show();
         $("#vm_networkcidr_size_display").hide();
         vmNetworkCIDrSize.val(null);
-        $networkCIDrSize = "";        
+        //$networkCIDrSize = "";        
     }
     else {
         $("#vm_networkcidr_display").hide();
         $("#vm_networkcidr_size_display").hide();
         vmNetworkCIDrSize.val(null);     
         $networkCIDr = ""; 
-        $networkCIDrSize = "";
+        //$networkCIDrSize = "";
     }
 });
 
@@ -104,7 +104,7 @@ vmNetworkCIDr.on('change', function () {
         $networkCIDr = vmNetworkCIDr.data('item').label;
     } else {
         $networkCIDr = "new";
-        $networkCIDrSize = "";
+        //$networkCIDrSize = "";
     }
     if (vmNetworkCIDr.hasClass("empty")) {
         vmNetworkCIDr.removeClass("empty");
@@ -116,9 +116,9 @@ vmNetworkCIDrSize.on('change', function() {
         $("#vm_networkcidr_size_required").removeClass('empty');
     };
     if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
-        $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
+        $networkCIDr = "new/" + vmNetworkCIDrSize.val();
     } else {
-        $networkCIDrSize = "";
+        $networkCIDr = "new";
     };    
 });
 
@@ -908,9 +908,9 @@ function addVM() {
     var packageData = $package && $package != '' ? JSON.parse($package) : null;
     var newArray = packageData ? packageData.nodes : [];
 
-    if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
-        $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
-    }
+    // if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
+    //     $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
+    // }
 
     if (!packageData) {
         packageData = {
@@ -924,7 +924,7 @@ function addVM() {
         "vm": $count_vm,
         "vm_role": $role, //$("#vm_role").val(),  //
         "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
-        "vm_networkcidr_size": $networkCIDrSize,
+        //"vm_networkcidr_size": $networkCIDrSize,
         "vm_vcpu": $("#vm_vcpu").val(),
         "vm_ram": $("#vm_ram").val(),
         "vm_vmdk": $("#vm_vmdk").val(),
@@ -1039,7 +1039,7 @@ function resetValueVM() {
     $("#add_groups_3_disp").hide();
     $role = "";
     $networkCIDr = "";
-    $networkCIDrSize = "";
+    //$networkCIDrSize = "";
     $OS = "";
     $NFS = "";
     $addNFS = "";
@@ -1573,7 +1573,7 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);
     $networkCIDr = vmData.vm_networkcidr; // === "new" ?  "new" : $("#vm_networkcidr").val();
     $("#vm_networkcidr_size").val(vmDataAdditional.vmNetworkCIDrSize);
-    $networkCIDrSize = vmData.vm_networkcidr_size;
+    //$networkCIDrSize = vmData.vm_networkcidr_size;
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");

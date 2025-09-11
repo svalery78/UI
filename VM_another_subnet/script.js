@@ -75,20 +75,34 @@ vmNetworkCIDrCurrent.on('change', function () {
 var vmNetworkCIDrAction = $extension.find("#vm_networkcidr_action");
 var vmNetworkCIDrActionRequired = $extension.find("#vm_networkcidr_action_required");
 var vmNetworkCIDr = $extension.find("#vm_networkcidr");
+var vmNetworkCIDrSize = $extension.find("#vm_networkcidr_size");
 vmNetworkCIDrAction.on('change', function () {
     if (vmNetworkCIDrActionRequired.hasClass("empty")) {
         vmNetworkCIDrActionRequired.removeClass("empty");
     }
-    if (vmNetworkCIDrAction.val() !== "существующая") {
+    if (vmNetworkCIDrAction.val() == "новая") {
         $("#vm_networkcidr_display").hide();
+        $("#vm_networkcidr_size_display").show();
+        vmNetworkCIDrSize.addClass("required");
         if (vmNetworkCIDr.hasClass("empty")) {
             vmNetworkCIDr.removeClass("empty");
-        }
+        };
         vmNetworkCIDr.val(null);
         $networkCIDr = "new";
+        
+    }
+    else if (vmNetworkCIDrAction.val() == "существующая") {
+        $("#vm_networkcidr_display").show();
+        $("#vm_networkcidr_size_display").hide();
+        vmNetworkCIDrSize.val(null);  
+        //$networkCIDrSize = "";      
     }
     else {
-        $("#vm_networkcidr_display").show();
+        $("#vm_networkcidr_display").hide();
+        $("#vm_networkcidr_size_display").hide();
+        vmNetworkCIDrSize.val(null);     
+        $networkCIDr = ""; 
+        //$networkCIDrSize = "";
     }
 });
 
@@ -103,6 +117,17 @@ vmNetworkCIDr.on('change', function () {
     }
 });
 
+vmNetworkCIDrSize.on('change', function() {
+    if($("#vm_networkcidr_size_required").hasClass("empty")){
+        $("#vm_networkcidr_size_required").removeClass('empty');
+    };
+    if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
+        $networkCIDr = "new/" + vmNetworkCIDrSize.val();
+    } else {
+        $networkCIDr = "new";
+    }; 
+});
+
 var vmHostName = $extension.find("#vm_hostname");
 vmHostName.on('change', function () {
     $vmHostName = vmHostName.data('items').map(function (item) {
@@ -113,10 +138,6 @@ vmHostName.on('change', function () {
     });
     removedClass(vmHostName, "empty");
 });
-
-
-
-
 
 
 //block_ui
@@ -249,6 +270,12 @@ function checkingEnteredValue() {
             isError = true;
         }
     };
+    if (vmNetworkCIDrAction.val() === "новая") {
+        if (!vmNetworkCIDrSize.val()) {
+            $("#vm_networkcidr_size_required").addClass("empty");
+            isError = true;
+        }
+    };
     if ($vmHostName == null || $vmHostName == "") {
         $("#vm_hostname").addClass("empty");
         isError = true;
@@ -321,9 +348,11 @@ function resetValueVM() {
     vmNetworkCIDrAction.val(null);
     vmNetworkCIDrAction.addClass("required");
     vmNetworkCIDr.val(null);
-    vmNetworkCIDr.addClass("required");   
+    vmNetworkCIDr.addClass("required");  
+    vmNetworkCIDrSize.val(null);
+    vmNetworkCIDrSize.addClass("required"); 
     $("#vm_networkcidr_display").hide(); 
-
+    $("#vm_networkcidr_size_display").hide();
     $networkCIDr = "";
     $vmHostName = "";
     $vmID  = "";
