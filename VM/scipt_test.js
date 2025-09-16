@@ -9,7 +9,6 @@ var $isDCID;
 var $nameIS;
 var $role;
 var $networkCIDr;
-//var $networkCIDrSize;
 var $OS;
 var $instance;
 var $zone;
@@ -32,6 +31,7 @@ $("#input_form").readonly(true);
 
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
+    console.log('ISName' + JSON.stringify(ISName.data('item')));
     $nameIS = $("#name_is").val();
     if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
@@ -87,15 +87,13 @@ vmNetworkCIDrAction.on('change', function () {
     else if (vmNetworkCIDrAction.val() == "существующая") {
         $("#vm_networkcidr_display").show();
         $("#vm_networkcidr_size_display").hide();
-        vmNetworkCIDrSize.val(null);
-        //$networkCIDrSize = "";        
+        vmNetworkCIDrSize.val(null);       
     }
     else {
         $("#vm_networkcidr_display").hide();
         $("#vm_networkcidr_size_display").hide();
         vmNetworkCIDrSize.val(null);     
         $networkCIDr = ""; 
-        //$networkCIDrSize = "";
     }
 });
 
@@ -104,7 +102,6 @@ vmNetworkCIDr.on('change', function () {
         $networkCIDr = vmNetworkCIDr.data('item').label;
     } else {
         $networkCIDr = "new";
-        //$networkCIDrSize = "";
     }
     if (vmNetworkCIDr.hasClass("empty")) {
         vmNetworkCIDr.removeClass("empty");
@@ -902,15 +899,10 @@ $("#unload_vm").on("click", function () {
 });
 
 function addVM() {
-
     var $package = $("#input_json").val();
     $package = $package.replace(/\n+$/m, '');
     var packageData = $package && $package != '' ? JSON.parse($package) : null;
     var newArray = packageData ? packageData.nodes : [];
-
-    // if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
-    //     $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
-    // }
 
     if (!packageData) {
         packageData = {
@@ -924,7 +916,6 @@ function addVM() {
         "vm": $count_vm,
         "vm_role": $role, //$("#vm_role").val(),  //
         "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
-        //"vm_networkcidr_size": $networkCIDrSize,
         "vm_vcpu": $("#vm_vcpu").val(),
         "vm_ram": $("#vm_ram").val(),
         "vm_vmdk": $("#vm_vmdk").val(),
@@ -1039,7 +1030,6 @@ function resetValueVM() {
     $("#add_groups_3_disp").hide();
     $role = "";
     $networkCIDr = "";
-    //$networkCIDrSize = "";
     $OS = "";
     $NFS = "";
     $addNFS = "";
@@ -1573,7 +1563,6 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);
     $networkCIDr = vmData.vm_networkcidr; // === "new" ?  "new" : $("#vm_networkcidr").val();
     $("#vm_networkcidr_size").val(vmDataAdditional.vmNetworkCIDrSize);
-    //$networkCIDrSize = vmData.vm_networkcidr_size;
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");
