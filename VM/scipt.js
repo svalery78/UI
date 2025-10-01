@@ -7,6 +7,7 @@ var $VM;
 var $adminListNodes;
 var $isDCID;
 var $nameIS;
+var $isCODIS;
 var $role;
 var $networkCIDr;
 //var $networkCIDrSize;
@@ -36,9 +37,11 @@ ISName.on('change', function () {
     if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
         $("#product").val(ISName.data('item').custom_fields['Продукт-владелец ДИТ'].id);
+        $isCODIS = ISName.data('item').custom_fields['ИС - Код ИС'];
     } else {
         $("#product").val("");
         $isDCID = null;
+        $isCODIS = null;
     }
     if ($("#name_is").hasClass("empty")) {
         $("#name_is").removeClass("empty");
@@ -977,7 +980,8 @@ function addVM() {
         vmg03SkpduProtocol: vmg03SkpduProtocol.val(),
         vmg04SkpduPorts: vmg04SkpduPorts.val(),
         vmg04SkpduPortsNumber: vmg04SkpduPortsNumber.val(),
-        vmg04SkpduProtocol: vmg04SkpduProtocol.val()
+        vmg04SkpduProtocol: vmg04SkpduProtocol.val(),
+        vmNameVM: $isCODIS + '-' + $role + '-***-' + $instance + '-' + $("#vm_linux_description").val()
     };
     $VM_additional.push(newVMAdditional);
     //var nodes =  newArray;
@@ -1046,6 +1050,7 @@ function resetValueVM() {
     $NFS = "";
     $addNFS = "";
     $addGroups = "";
+    $isCODIS = "";
     //$g02Action = "";
     //$g03Action = "";
     //$g04Action = "";
@@ -1113,12 +1118,15 @@ function addVMToTable() {
     //alert($("#input_json").val());
     $VMs = $VMs.replace(/\n+$/m, '');
     var VMsData = $VMs && $VMs != '' ? JSON.parse($VMs).nodes : null;
+    //var VMsDataAdditional = $VM_additional
     //alert("addVMToTable");
     if (!VMsData) {
         $('#input_form').val(null);
     };
     var table = ' <table id="vm_table" border="1"><tr><th>';
     table += '№';
+    table += '</th><th>';
+    table += 'Имя  ВМ';
     table += '</th><th>';
     table += 'Роль VM';
     table += '</th><th>';
@@ -1150,6 +1158,8 @@ function addVMToTable() {
 
         table += '<tr><td>';
         table += vmData.vm;
+        table += '</td><td>';
+        table += $VM_additional[index].vmNameVM; //$isCODIS + '-' + $role + '-***-' + $instance + '-' + $("#vm_linux_description").val();
         table += '</td><td>';
         table += (vmData.vm_role || '');
         table += '</td><td>';
@@ -1563,7 +1573,7 @@ function updateProtocolVisibility(vmSkpduPorts, vmSkpduProtocol, vmSkpduProtocol
 }
 
 // Функция заполнения формы данными ВМ
-//function fillFormWithVMData(vmData) {
+//function fillFormWithVMData(vmD$isCODIS + '-' + $role + '-***-' + $instance + $("#vm_linux_description").val()ata) {
 function fillFormWithVMData(vmData, vmDataAdditional) {
     // Основные поля
     $("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;

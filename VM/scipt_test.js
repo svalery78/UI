@@ -7,6 +7,7 @@ var $VM;
 var $adminListNodes;
 var $isDCID;
 var $nameIS;
+var $isCODIS;
 var $role;
 var $networkCIDr;
 var $OS;
@@ -31,14 +32,15 @@ $("#input_form").readonly(true);
 
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
-    console.log('ISName' + JSON.stringify(ISName.data('item')));
     $nameIS = $("#name_is").val();
     if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
         $("#product").val(ISName.data('item').custom_fields['Продукт-владелец ДИТ'].id);
+        $isCODIS = ISName.data('item').custom_fields['ИС - Код ИС'];
     } else {
         $("#product").val("");
         $isDCID = null;
+        $isCODIS = null;
     }
     if ($("#name_is").hasClass("empty")) {
         $("#name_is").removeClass("empty");
@@ -966,7 +968,8 @@ function addVM() {
         vmg03SkpduProtocol: vmg03SkpduProtocol.val(),
         vmg04SkpduPorts: vmg04SkpduPorts.val(),
         vmg04SkpduPortsNumber: vmg04SkpduPortsNumber.val(),
-        vmg04SkpduProtocol: vmg04SkpduProtocol.val()
+        vmg04SkpduProtocol: vmg04SkpduProtocol.val(),
+        vmNameVM: $isCODIS + '-' + $role + '-***-' + $instance + '-' + $("#vm_linux_description").val()
     };
     $VM_additional.push(newVMAdditional);
     //var nodes =  newArray;
@@ -1034,6 +1037,7 @@ function resetValueVM() {
     $NFS = "";
     $addNFS = "";
     $addGroups = "";
+    $isCODIS = "";
     //$g02Action = "";
     //$g03Action = "";
     //$g04Action = "";
@@ -1108,6 +1112,8 @@ function addVMToTable() {
     var table = ' <table id="vm_table" border="1"><tr><th>';
     table += '№';
     table += '</th><th>';
+    table += 'Имя  ВМ';
+    table += '</th><th>';
     table += 'Роль VM';
     table += '</th><th>';
     table += 'networkCidr';
@@ -1138,6 +1144,8 @@ function addVMToTable() {
 
         table += '<tr><td>';
         table += vmData.vm;
+        table += '</td><td>';
+        table += $VM_additional[index].vmNameVM;
         table += '</td><td>';
         table += (vmData.vm_role || '');
         table += '</td><td>';
