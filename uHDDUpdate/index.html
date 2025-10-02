@@ -1,0 +1,166 @@
+<div class="row vertical" style="display:none">
+  <input id="create" type="checkbox">
+  <label for="create" title="Подключение нового доп. диска">Подключение нового доп. диска</label>
+</div>
+<div class="row vertical checkbox">
+  <input id="is_ex_change" type="checkbox">
+  <label for="is_ex_change" title="Необходимо для выполнения поручения высшего руководства ДИТ или для устранения/предотвращения критического инцидента/инцидента ИБ">Экстренное изменение <i class="ii icon-help"></i></label>
+</div>
+<div id="row_justification" class="row vertical" style="display:none">
+  <label for="justification" title="Обоснование">Обоснование</label>
+  <select id="justification">
+    <option value=""></option>
+    <option value="для_устранение/предотвращения_кр">Для устранения/предотвращения критического инцидента</option>
+    <option value="для_устранение/предотвращения_ин">Для устранения/предотвращения инцидента ИБ</option>
+    <option value="для_выполнения_поручения_руковод">Для выполнения поручения высшего руководства</option>
+  </select>
+</div>
+
+<div class="row vertical" style="display:none">
+  <label for="inc_desc" title="Краткое описание инцидента">Краткое описание инцидента</label>
+  <input id="inc_desc" type="text" autocomplete="off">
+</div>
+
+<div class="row vertical" data-searchable>
+  <label for="name_is" title="Наименование ИС">Наименование ИС</label>
+  <div id="name_is" data-custom-view="ис"></div>
+</div>
+
+<div class="row vertical">
+  <label for="vm_hostname_windows" title="Виртуальные машины с ОС Windows">Виртуальные машины с ОС Windows</label>
+  <div id="vm_hostname_windows" data-multiple data-custom-view="ке_виртуальные_сервера"></div>
+</div>
+<div class="row vertical">
+  <label for="vm_hostname_unix" title="Виртуальные машины с ОС Unix">Виртуальные машины с ОС Unix</label>
+  <div id="vm_hostname_unix" data-multiple data-custom-view="ке_виртуальные_сервера"></div>
+</div>
+
+    <div class="row vertical">
+      <label for="input_form" title="input_form">Таблица из запроса</label>
+      <div id="input_form" class="rich-text"></div>
+    </div>
+
+<div class="section" id="for_new_disks">
+  <span class="section-header">Укажите созданные диски</span>
+
+  <div class="row vertical">
+    <label for="vm_hostname" title="Имя Виртуальной машины">Имя Виртуальной машины</label>
+    <div id="vm_hostname" class="table-add-required" data-custom-view="ке_виртуальные_сервера"></div>
+  </div>
+  <div class="section"> <!--Внешняя секция (ее наличие обязательно)-->
+    
+    <div class="section initial"> <!--Изначальные поля-->  
+      <div class="row vertical">
+        <label for="vm_disk0" title="Доп. диск">Доп. диск</label>
+        <div id="vm_disk0" class="table-add-required vm_disk" data-filter-name="#VM"
+          data-filter-value="vm_hostname" data-custom-view="виртуальные_диски_вм"></div>
+      </div>
+  
+      <div class="row vertical">
+        <label for="scsi_id0" title="SCSI ID">SCSI ID</label>
+        <input id="scsi_id0" class="table-add-required scsi_id"  type="text" autocomplete="off">
+      </div>
+    </div>  
+   
+    <div class="section extra hide"> <!--Доп. поля (необходимы классы hide - для сокрытия поля, и extra - для скрипта)-->
+      <div class="row vertical">
+        <label for="vm_disk1" title="Доп. диск 1">Доп. диск 1</label>
+        <div id="vm_disk1" class="table-add-required vm_disk" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM" data-filter-value="vm_hostname"></div>
+      </div>
+  
+      <div id="row_scsi_id1" class="row vertical">
+        <label for="scsi_id1" title="SCSI ID">SCSI ID</label>
+        <input id="scsi_id1" class="table-add-required scsi_id" type="text" autocomplete="off">
+      </div>
+    </div>
+    
+    <div class="section extra hide"> <!--Доп. поля (необходимы классы hide - для сокрытия поля, и extra - для скрипта)-->
+      <div class="row vertical">
+        <label for="vm_disk2" title="Доп. диск 2">Доп. диск 2</label>
+        <div id="vm_disk2" class="table-add-required vm_disk" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM" data-filter-value="vm_hostname"></div>
+      </div>
+  
+      <div id="row_scsi_id2" class="row vertical">
+        <label for="scsi_id2" title="SCSI ID">SCSI ID</label>
+        <input id="scsi_id2" class="table-add-required scsi_id" type="text" autocomplete="off">
+      </div>
+    </div>
+    <div class="section extra hide"> <!--Доп. поля (необходимы классы hide - для сокрытия поля, и extra - для скрипта)-->
+      <div class="row vertical">
+        <label for="vm_disk3" title="Доп. диск 3">Доп. диск 3</label>
+        <div id="vm_disk3" class="table-add-required vm_disk" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM" data-filter-value="vm_hostname"></div>
+      </div>
+  
+      <div id="row_scsi_id3" class="row vertical">
+        <label for="scsi_id3" title="SCSI ID">SCSI ID</label>
+        <input id="scsi_id3" class="table-add-required scsi_id" type="text" autocomplete="off">
+      </div>
+    </div>
+  
+    <div class="section extra hide"> <!--Доп. поля (необходимы классы hide - для сокрытия поля, и extra - для скрипта)-->
+      <div class="row vertical">
+        <label for="vm_disk4" title="Доп. диск 4">Доп. диск 4</label>
+        <div id="vm_disk4" class="table-add-required vm_disk" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM" data-filter-value="vm_hostname"></div>
+      </div>
+  
+      <div id="row_scsi_id4" class="row vertical">
+        <label for="scsi_id4" title="SCSI ID">SCSI ID</label>
+        <input id="scsi_id4" class="table-add-required scsi_id" type="text" autocomplete="off">
+      </div>
+    </div>
+  
+    <div class="section extra hide"> <!--Доп. поля (необходимы классы hide - для сокрытия поля, и extra - для скрипта)-->
+      <div class="row vertical">
+        <label for="vm_disk5" title="Доп. диск 5">Доп. диск 5</label>
+        <div id="vm_disk5" class="table-add-required vm_disk" data-custom-view="виртуальные_диски_вм" data-filter-name="#VM" data-filter-value="vm_hostname"></div>
+      </div>
+  
+      <div id="row_scsi_id5" class="row vertical">
+        <label for="scsi_id5" title="SCSI ID">SCSI ID</label>
+        <input id="scsi_id5" class="table-add-required scsi_id" type="text" autocomplete="off">
+      </div>
+    </div>
+  
+    
+    <div class="row vertical buttons">  <!--Кнопки добавить/удалить (текст на кнопке можно изменить)-->
+      <span class="btn add" style="display:none"><span class="button add">Добавить диск</span></span>
+      <span class="btn del" style="display:none"><span class="button del">Удалить диск</span></span>
+    </div>
+      <br>
+  </div>
+</div>
+
+<div class="section" id="edit_table">
+  <span class="section-header">Редактирование таблицы</span>
+  <div class="row vertical">
+    <span class="btn" id="add_vm"><span class="button">Добавить ВМ в таблицу</span></span>
+    <br>
+    <br>
+  </div>
+  <div class="row vertical">  
+    <label for="del_num_vm" title="Укажите hostname">Укажите hostname</label>
+    <input id="del_num_vm" type="text" autocomplete="off">
+    <span class="btn" id="del_vm"><span class="button">Удалить ВМ из таблицы</span></span>
+  </div>
+</div>
+
+<div class="section" id="tech_details">
+    <span class="section-header">Техническая информация</span>
+
+  <div class="row vertical checkbox">
+    <input id="finish_task" type="checkbox" class="required-on-completion">
+    <label for="finish_task" title="Заполнение формы завершено.">Заполнение формы завершено</label>
+  </div>
+
+  <div class="row vertical">
+  <label for="json5" title="Json5">Json5</label>
+  <textarea id="json5" readonly></textarea>
+  </div>
+  
+  <div class="row vertical">
+    <label for="vm_disks_form" title="Виртуальные машины">Виртуальные машины</label>
+    <div id="vm_disks_form" class="rich-text disabled"></div>
+  </div>
+  
+</div>
+
