@@ -948,6 +948,7 @@ function addVM() {
         "vm_disk5": $("#vm_disk5").val(),
     };
     newArray.push(newVM);
+    var vmLinuxDescriptionHTML = $("#vm_linux_description").val()? '-' + $("#vm_linux_description").val() : '';
     var newVMAdditional = {
         vm: $count_vm,
         vmNetworkCIDrAction: vmNetworkCIDrAction.val(),
@@ -969,7 +970,7 @@ function addVM() {
         vmg04SkpduPorts: vmg04SkpduPorts.val(),
         vmg04SkpduPortsNumber: vmg04SkpduPortsNumber.val(),
         vmg04SkpduProtocol: vmg04SkpduProtocol.val(),
-        vmNameVM: $isCODIS + '-' + $role + '-***-' + $instance + '-' + $("#vm_linux_description").val()
+        vmNameVM: $isCODIS + '-' + $role + '-***-' + $instance + vmLinuxDescriptionHTML
     };
     $VM_additional.push(newVMAdditional);
     //var nodes =  newArray;
