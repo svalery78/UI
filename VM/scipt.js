@@ -1051,7 +1051,7 @@ function resetValueVM() {
     $NFS = "";
     $addNFS = "";
     $addGroups = "";
-    $isCODIS = "";
+    //$isCODIS = "";
     //$g02Action = "";
     //$g03Action = "";
     //$g04Action = "";
