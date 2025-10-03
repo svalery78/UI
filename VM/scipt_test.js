@@ -84,18 +84,18 @@ vmNetworkCIDrAction.on('change', function () {
         };
         vmNetworkCIDr.val(null);
         $networkCIDr = "new";
-        
+
     }
     else if (vmNetworkCIDrAction.val() == "существующая") {
         $("#vm_networkcidr_display").show();
         $("#vm_networkcidr_size_display").hide();
-        vmNetworkCIDrSize.val(null);       
+        vmNetworkCIDrSize.val(null);
     }
     else {
         $("#vm_networkcidr_display").hide();
         $("#vm_networkcidr_size_display").hide();
-        vmNetworkCIDrSize.val(null);     
-        $networkCIDr = ""; 
+        vmNetworkCIDrSize.val(null);
+        $networkCIDr = "";
     }
 });
 
@@ -110,15 +110,15 @@ vmNetworkCIDr.on('change', function () {
     }
 });
 
-vmNetworkCIDrSize.on('change', function() {
-    if($("#vm_networkcidr_size_required").hasClass("empty")){
+vmNetworkCIDrSize.on('change', function () {
+    if ($("#vm_networkcidr_size_required").hasClass("empty")) {
         $("#vm_networkcidr_size_required").removeClass('empty');
     };
-    if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
+    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
         $networkCIDr = "new/" + vmNetworkCIDrSize.val();
     } else {
         $networkCIDr = "new";
-    };    
+    };
 });
 
 var vmVCPU = $extension.find("#vm_vcpu");
@@ -191,12 +191,14 @@ vmLinuxDescription.on('change', function () {
 
 var vmNFS = $extension.find("#vm_nfs");
 vmNFS.on('change', function () {
-    $NFS = vmNFS.data('items').map(function (item) {
-        return item.label;
-    });
-    if (vmNFS.hasClass("empty")) {
-        vmNFS.removeClass("empty");
-    }
+    setTimeout(function () {
+        $NFS = vmNFS.data('items').map(function (item) {
+            return item.label;
+        });
+        if (vmNFS.hasClass("empty")) {
+            vmNFS.removeClass("empty");
+        }
+    }, 500);
 });
 
 var vmAddNFS = $extension.find("#add_nfs");
@@ -948,7 +950,7 @@ function addVM() {
         "vm_disk5": $("#vm_disk5").val(),
     };
     newArray.push(newVM);
-    var vmLinuxDescriptionHTML = $("#vm_linux_description").val()? '-' + $("#vm_linux_description").val() : '';
+    var vmLinuxDescriptionHTML = $("#vm_linux_description").val() ? '-' + $("#vm_linux_description").val() : '';
     var newVMAdditional = {
         vm: $count_vm,
         vmNetworkCIDrAction: vmNetworkCIDrAction.val(),
@@ -960,7 +962,7 @@ function addVM() {
         vmInstance: vmInstance.val(),
         vmZone: vmZone.val(),
         vmNFS: vmNFS.val(),
-        vmAddGroups: vmAddGroups.val(), 
+        vmAddGroups: vmAddGroups.val(),
         vmg02SkpduPorts: vmg02SkpduPorts.val(),
         vmg02SkpduPortsNumber: vmg02SkpduPortsNumber.val(),
         vmg02SkpduProtocol: vmg02SkpduProtocol.val(),
@@ -1038,7 +1040,7 @@ function resetValueVM() {
     $NFS = "";
     $addNFS = "";
     $addGroups = "";
-   //$isCODIS = "";
+    //$isCODIS = "";
     //$g02Action = "";
     //$g03Action = "";
     //$g04Action = "";
@@ -1855,12 +1857,12 @@ $(document).ready(function () {
 });
 
 // Достаем id запрашивающего из URL
-if (ITRP.record.new){
-  if (ITRP.context === 'self_service') { 
-    $("#requestor").val($("#requested_for_id").val());
-  }
+if (ITRP.record.new) {
+    if (ITRP.context === 'self_service') {
+        $("#requestor").val($("#requested_for_id").val());
+    }
 
-  if (ITRP.context != 'self_service') { 
-    $("#requestor").val($("#req_requested_for_id").val());
-  }
+    if (ITRP.context != 'self_service') {
+        $("#requestor").val($("#req_requested_for_id").val());
+    }
 }

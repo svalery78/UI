@@ -85,19 +85,19 @@ vmNetworkCIDrAction.on('change', function () {
         };
         vmNetworkCIDr.val(null);
         $networkCIDr = "new";
-        
+
     }
     else if (vmNetworkCIDrAction.val() == "существующая") {
         $("#vm_networkcidr_display").show();
         $("#vm_networkcidr_size_display").hide();
-        vmNetworkCIDrSize.val(null);  
+        vmNetworkCIDrSize.val(null);
         //$networkCIDrSize = "";      
     }
     else {
         $("#vm_networkcidr_display").hide();
         $("#vm_networkcidr_size_display").hide();
-        vmNetworkCIDrSize.val(null);     
-        $networkCIDr = ""; 
+        vmNetworkCIDrSize.val(null);
+        $networkCIDr = "";
         //$networkCIDrSize = "";
     }
 });
@@ -114,15 +114,15 @@ vmNetworkCIDr.on('change', function () {
     }
 });
 
-vmNetworkCIDrSize.on('change', function() {
-    if($("#vm_networkcidr_size_required").hasClass("empty")){
+vmNetworkCIDrSize.on('change', function () {
+    if ($("#vm_networkcidr_size_required").hasClass("empty")) {
         $("#vm_networkcidr_size_required").removeClass('empty');
     };
-    if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
+    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
         $networkCIDr = "new/" + vmNetworkCIDrSize.val();
     } else {
         $networkCIDr = "new";
-    }; 
+    };
 });
 
 
@@ -196,16 +196,19 @@ vmLinuxDescription.on('change', function () {
 
 var vmNFS = $extension.find("#vm_nfs");
 vmNFS.on('change', function () {
-    $NFS = vmNFS.data('items').map(function (item) {
-        return item.label;
-    });
-    if (vmNFS.hasClass("empty")) {
-        vmNFS.removeClass("empty");
-    }
+    setTimeout(function () {
+        $NFS = vmNFS.data('items').map(function (item) {
+            return item.label;
+        });
+        if (vmNFS.hasClass("empty")) {
+            vmNFS.removeClass("empty");
+        }       
+    }, 500);
 });
 
 var vmAddNFS = $extension.find("#add_nfs");
 vmAddNFS.on("change", function () {
+
     if ($(this).is(":checked")) {
         $addNFS = true;
         $("#vm_nfs_display").show();
@@ -960,7 +963,7 @@ function addVM() {
         "vm_disk5": $("#vm_disk5").val(),
     };
     newArray.push(newVM);
-    var vmLinuxDescriptionHTML = $("#vm_linux_description").val()? '-' + $("#vm_linux_description").val() : '';
+    var vmLinuxDescriptionHTML = $("#vm_linux_description").val() ? '-' + $("#vm_linux_description").val() : '';
     var newVMAdditional = {
         vm: $count_vm,
         vmNetworkCIDrAction: vmNetworkCIDrAction.val(),
@@ -1586,7 +1589,7 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);
     $networkCIDr = vmData.vm_networkcidr; // === "new" ?  "new" : $("#vm_networkcidr").val();
     $("#vm_networkcidr_size").val(vmDataAdditional.vmNetworkCIDrSize);
-   //$networkCIDrSize = vmData.vm_networkcidr_size;
+    //$networkCIDrSize = vmData.vm_networkcidr_size;
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");
