@@ -50,15 +50,17 @@ ISName.on('change', function () {
 var adminList = $extension.find("#admin_list");
 adminList.on('change', function () {
 
-    $adminListNodes = adminList.data('items').map(function (item) {
-        return {
-            name: item.name,
-            email: item.primary_email
-        };
-    });
-    if (adminList.hasClass("empty")) {
-        adminList.removeClass("empty");
-    }
+    setTimeout(function () {
+        $adminListNodes = adminList.data('items').map(function (item) {
+            return {
+                name: item.name,
+                email: item.primary_email
+            };
+        });
+        if (adminList.hasClass("empty")) {
+            adminList.removeClass("empty");
+        }
+    }, 500);
 });
 
 var vmRole = $extension.find("#vm_role");
