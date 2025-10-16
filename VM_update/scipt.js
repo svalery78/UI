@@ -28,6 +28,7 @@ var $g04SkpduProtocol = "";
 var $g04SkpduPortsNumber = "";
 var $VM_additional = [];
 var createVM;
+var $isUnloadVM = false;
 
 $("#input_form").readonly(true);
 
@@ -89,7 +90,6 @@ var vmHostName = $extension.find("#vm_hostname");
 var hostname = $extension.find("#hostname");
 vmHostName.on('change', function () {
     if (vmHostName.val()) {
-
         removedClass(vmHostName, "empty");
         if (vmHostName.data('item').name) {
             hostname.val(vmHostName.data('item').name);
@@ -110,6 +110,24 @@ vmHostName.on('change', function () {
             vmInstance.val("");
             $instance = "";
         };
+        if (!$isUnloadVM) {
+            if (vmHostName.data('item').custom_fields['Виртуальный сервер - CPU']) {
+                vmVCPU.val(vmHostName.data('item').custom_fields['Виртуальный сервер - CPU']);
+            } else {
+                vmVCPU.val("");
+            };
+            if (vmHostName.data('item').custom_fields['Виртуальный сервер - RAM']) {
+                vmRAM.val(vmHostName.data('item').custom_fields['Виртуальный сервер - RAM']);
+            } else {
+                vmRAM.val("");
+            };
+            if (vmHostName.data('item').custom_fields['HDD']) {
+                vmVMDK.val(vmHostName.data('item').custom_fields['HDD']);
+            } else {
+                vmVMDK.val("");
+            };
+        } else $isUnloadVM = false;
+
     } else {
         hostname.val("");
         vmRole.val("");
@@ -816,6 +834,7 @@ $("#unload_vm").on("click", function () {
     var vmNumber = parseInt($("#number").val(), 10);
     var packageData = JSON.parse($("#input_json").val() || '{"nodes":[]}');
     var vms = packageData.nodes;
+    $isUnloadVM = true;
 
     if (isNaN(vmNumber) || vmNumber < 1 || vmNumber > vms.length) {
         alert("Некорректный номер ВМ! Допустимый диапазон: 1-" + vms.length);
@@ -1813,12 +1832,12 @@ $(document).ready(function () {
 });
 
 ///Если в Услуга после пересоздания выбрано "Администрирование ОС", Семейство ОС = mos os
-$('#new_administration').on("change",function(){
-  if ($(this).val() === "os_administration"){ //value селекта
-    $('#vm_os_family_row').addClass('disabled-look');
-    $('#vm_os_family').val({reference:"mosos"});
-  }else{
-    $('#vm_os_family_row').removeClass('disabled-look');
-    $('#vm_os_family').val('');
-  }
+$('#new_administration').on("change", function () {
+    if ($(this).val() === "os_administration") { //value селекта
+        $('#vm_os_family_row').addClass('disabled-look');
+        $('#vm_os_family').val({ reference: "mosos" });
+    } else {
+        $('#vm_os_family_row').removeClass('disabled-look');
+        $('#vm_os_family').val('');
+    }
 });
