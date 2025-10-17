@@ -77,13 +77,15 @@ newAdministration.on('change', function () {
 
 var adminList = $extension.find("#admin_list");
 adminList.on('change', function () {
-    $adminListNodes = adminList.data('items').map(function (item) {
-        return {
-            name: item.name,
-            email: item.primary_email
-        };
-    });
-    removedClass(adminList, "empty");
+    setTimeout(function () {
+        $adminListNodes = adminList.data('items').map(function (item) {
+            return {
+                name: item.name,
+                email: item.primary_email
+            };
+        });
+        removedClass(adminList, "empty");
+    }, 500);
 });
 
 var vmHostName = $extension.find("#vm_hostname");
