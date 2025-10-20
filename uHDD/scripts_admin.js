@@ -8,6 +8,7 @@ var vmName;
 var inputJson = [];
 var vmHostDelete;
 var createVM;
+var vmOSFamily;
 
 // Достаем id запрашивающего из URL
 if (ITRP.record.new) {
@@ -70,8 +71,24 @@ $('#name_is').on('change', function () {
 
 var vmHostName = $extension.find('#vm_hostname');
 vmHostName.on('change', function () {
-  removedClass(vmHostName, "empty");
-  vmName = vmHostName.data('item').name;
+  console.log(JSON.stringify(vmHostName.data('item')));
+  if (vmHostName.val()) {
+    removedClass(vmHostName, "empty");
+    if (vmHostName.data('item').name) {
+      vmName = vmHostName.data('item').name;
+    } else {
+      vmName = "";
+    };
+    if (vmHostName.data('item').custom_fields['Виртуальный сервер - Семейство ОС']) {
+      vmOSFamily = vmHostName.data('item').custom_fields['Виртуальный сервер - Семейство ОС'].display_name;
+    } else {
+      vmOSFamily = "";
+    };  
+    console.log('vmOSFamily - ', vmOSFamily);
+
+  }
+
+  //vm_os_family
 });
 
 // 2. Жесткие диски
@@ -498,7 +515,7 @@ function collectDiskOperations() {
       vm_disk: $('#vm_disk' + i).val(),
       current_size: $('#current_size' + i).val(),
       scsi_id: $('#scsi_id' + i).val(),
-      hdd_cap: operation == 'resize_up' ? String(Number($('#hdd_cap' + i).val()) - Number($('#current_size' + i).val())): $('#hdd_cap' + i).val()
+      hdd_cap: operation == 'resize_up' ? String(Number($('#hdd_cap' + i).val()) - Number($('#current_size' + i).val())) : $('#hdd_cap' + i).val()
     };
     ops.push(disk);
   }
@@ -536,7 +553,7 @@ function updateJSON(vmName, vmID, operations) {
     // if (op.scsi_id) vhdObj.scsi_id = op.scsi_id;
 
     if (op.operation === 'add' || op.operation === 'resize_down' ||
-      op.operation === 'resize_up' ) {
+      op.operation === 'resize_up') {
       const vhdObj = createVHDObj(op, "create");
       newVMCreate.push(vhdObj);
     };
@@ -749,7 +766,7 @@ function createVHDObj(op, action) {
   if (op.vm_disk && (action == "delete")) vhdObj.vhd_id = op.vm_disk;
   if (op.hdd_cap && (action == "create")) vhdObj.hdd_cap = op.hdd_cap;
   if (op.scsi_id && (action == "delete")) vhdObj.scsi_id = op.scsi_id;
- 
+
   return vhdObj;
 };
 
