@@ -71,7 +71,6 @@ $('#name_is').on('change', function () {
 
 var vmHostName = $extension.find('#vm_hostname');
 vmHostName.on('change', function () {
-  console.log(JSON.stringify(vmHostName.data('item')));
   if (vmHostName.val()) {
     removedClass(vmHostName, "empty");
     if (vmHostName.data('item').name) {
@@ -83,11 +82,8 @@ vmHostName.on('change', function () {
       vmOSFamily = vmHostName.data('item').custom_fields['Виртуальный сервер - Семейство ОС'].display_name;
     } else {
       vmOSFamily = "";
-    };  
-    console.log('vmOSFamily - ', vmOSFamily);
-
-  }
-
+    };    
+  }  
   //vm_os_family
 });
 
@@ -247,7 +243,8 @@ $('#add_vm').click(function () {
 
     var nodes = {
       hostname: vmName,
-      vhd: operations
+      vhd: operations,
+      vmOSFamily: vmOSFamily
     };
 
     inputJson.push(nodes);
@@ -278,24 +275,25 @@ $("#delete_vm").on("click", function () {
       var action = [];
       if (inputJson.length == 0) {
         $('#input_form').val(null);
-        //$('#json_update').val(null);
+        $('#json_update').val(null);
         $('#json_create').val(null);
         $('#json_delete').val(null);
       } else {
         addInputFormRecord(inputJson);
         vmHostDelete = lastVM.hostname;
+        vmOSFamily = lastVM.vmOSFamily;
         for (var i = lastVM.vhd.length - 1; i >= 0; i--) {
           var lastAction = lastVM.vhd[i].operation;
           if (!action.includes(lastAction)) action.push(lastAction);
         };
         //console.log(JSON.stringify(action));
         if (action.includes('add') || action.includes('resize_down')
-          || action.includes('resize_up')) {
+          || (action.includes('resize_up' && vmOSFamily != "windows"))) {
           deleteJson(vmHostDelete, $('#json_create').val(), '#json_create');
         };
-        // if (action.includes('resize_up')) {
-        //   deleteJson(vmHostDelete, $('#json_update').val(), '#json_update');
-        // };
+        if (action.includes('resize_up') && vmOSFamily === "windows") {
+          deleteJson(vmHostDelete, $('#json_update').val(), '#json_update');
+        };
         if (action.includes('delete') || action.includes('resize_down')) {
           deleteJson(vmHostDelete, $('#json_delete').val(), '#json_delete');
         };
@@ -515,7 +513,7 @@ function collectDiskOperations() {
       vm_disk: $('#vm_disk' + i).val(),
       current_size: $('#current_size' + i).val(),
       scsi_id: $('#scsi_id' + i).val(),
-      hdd_cap: operation == 'resize_up' ? String(Number($('#hdd_cap' + i).val()) - Number($('#current_size' + i).val())) : $('#hdd_cap' + i).val()
+      hdd_cap: (operation == 'resize_up' && vmOSFamily!="windows") ? String(Number($('#hdd_cap' + i).val()) - Number($('#current_size' + i).val())) : $('#hdd_cap' + i).val()
     };
     ops.push(disk);
   }
@@ -523,17 +521,17 @@ function collectDiskOperations() {
 };
 
 function updateJSON(vmName, vmID, operations) {
-  //var jsonUpdate = $('#json_update').val();
+  var jsonUpdate = $('#json_update').val();
   var jsonCreate = $('#json_create').val();
   var jsonDelete = $('#json_delete').val();
-  //jsonUpdate = jsonUpdate && jsonUpdate != '' ? jsonUpdate.replace(/\n+$/m, '') : '';
+  jsonUpdate = jsonUpdate && jsonUpdate != '' ? jsonUpdate.replace(/\n+$/m, '') : '';
   jsonCreate = jsonCreate && jsonCreate != '' ? jsonCreate.replace(/\n+$/m, '') : '';
   jsonDelete = jsonDelete && jsonDelete != '' ? jsonDelete.replace(/\n+$/m, '') : '';
-  //var newArrayUpdate = jsonUpdate && jsonUpdate != '' ? JSON.parse(jsonUpdate).nodes : [];
+  var newArrayUpdate = jsonUpdate && jsonUpdate != '' ? JSON.parse(jsonUpdate).nodes : [];
   var newArrayCreate = jsonCreate && jsonCreate != '' ? JSON.parse(jsonCreate).nodes : [];
   var newArrayDelete = jsonDelete && jsonDelete != '' ? JSON.parse(jsonDelete).nodes : [];
 
-  //var newVMUpdate = [];
+  var newVMUpdate = [];
   var newVMCreate = [];
   var newVMDelete = [];
 
@@ -553,14 +551,14 @@ function updateJSON(vmName, vmID, operations) {
     // if (op.scsi_id) vhdObj.scsi_id = op.scsi_id;
 
     if (op.operation === 'add' || op.operation === 'resize_down' ||
-      op.operation === 'resize_up') {
+      (op.operation === 'resize_up' && vmOSFamily != "windows") ) {
       const vhdObj = createVHDObj(op, "create");
       newVMCreate.push(vhdObj);
     };
-    // if (op.operation === 'resize_up') {
-    //   const vhdObj = createVHDObj(op, "update");
-    //   newVMUpdate.push(vhdObj);
-    // };
+    if (op.operation === 'resize_up' && vmOSFamily === 'windows') {
+      const vhdObj = createVHDObj(op, "update");
+      newVMUpdate.push(vhdObj);
+    };
     if (op.operation === 'delete' || op.operation === 'resize_down') {
       const vhdObj = createVHDObj(op, "delete");
       newVMDelete.push(vhdObj);
@@ -568,15 +566,15 @@ function updateJSON(vmName, vmID, operations) {
 
   };
 
-  // if (newVMUpdate.length > 0) {
-  //   newVM.vhd = newVMUpdate;
-  //   newArrayUpdate.push(newVM);
-  //   var nodes = {
-  //     "nodes": newArrayUpdate
-  //   };
-  //   $('#json_update').val(JSON.stringify(nodes)).change();
+  if (newVMUpdate.length > 0) {
+    newVM.vhd = newVMUpdate;
+    newArrayUpdate.push(newVM);
+    var nodes = {
+      "nodes": newArrayUpdate
+    };
+    $('#json_update').val(JSON.stringify(nodes)).change();
 
-  // };
+  };
 
   if (newVMCreate.length > 0) {
     newVM.vhd = newVMCreate;
@@ -729,6 +727,7 @@ function deleteJson(deleteHostName, jsonAction, jsonActionName) {
 function clearDiskFields() {
   vmHostName.val(null);
   vmHostName.addClass('required');
+  vmOSFamily = null;
 
   for (var index = 1; index <= currentDisk; index++) {
     hideDiskFields(index);
@@ -763,9 +762,9 @@ function finishUnChecked() {
 function createVHDObj(op, action) {
   var vhdObj = {};
 
-  if (op.vm_disk && (action == "delete")) vhdObj.vhd_id = op.vm_disk;
-  if (op.hdd_cap && (action == "create")) vhdObj.hdd_cap = op.hdd_cap;
-  if (op.scsi_id && (action == "delete")) vhdObj.scsi_id = op.scsi_id;
+  if (op.vm_disk && (action == "update" || action == "delete")) vhdObj.vhd_id = op.vm_disk;
+  if (op.hdd_cap && (action == "update" || action == "create")) vhdObj.hdd_cap = op.hdd_cap;
+  if (op.scsi_id && (action == "update" || action == "delete")) vhdObj.scsi_id = op.scsi_id;
 
   return vhdObj;
 };
