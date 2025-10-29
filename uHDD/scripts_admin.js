@@ -287,8 +287,9 @@ $("#delete_vm").on("click", function () {
           if (!action.includes(lastAction)) action.push(lastAction);
         };
         //console.log(JSON.stringify(action));
+        //console.log('vmOSFamily - ' + vmOSFamily);
         if (action.includes('add') || action.includes('resize_down')
-          || (action.includes('resize_up' && vmOSFamily != "windows"))) {
+          || (action.includes('resize_up') && vmOSFamily != "windows")) {
           deleteJson(vmHostDelete, $('#json_create').val(), '#json_create');
         };
         if (action.includes('resize_up') && vmOSFamily === "windows") {
@@ -343,7 +344,7 @@ $("#finish").on("change", function () {
 
 
 function vmdiskOperation(vmDiskOperationN, numberDisk, HDDN) {
-  removedClass($('#vm_disk_operation_required' + numberDisk), 'empty');
+  removeRequiredDisk(numberDisk);
   removeHDDCup(numberDisk);
   if (vmDiskOperationN.val() == 'delete' || vmDiskOperationN.val() == 'resize_up'
     || vmDiskOperationN.val() == 'resize_down') {
@@ -435,10 +436,11 @@ function hideDiskFields(diskNum) {
   toggleRowVisibility('#row_scsi_id' + diskNum, false);
   toggleRowVisibility('#row_current_size' + diskNum, false);
   toggleRowVisibility('#row_hdd_cap' + diskNum, false);
+  removeRequiredDisk(diskNum);
 
   $('#hdd_cap' + diskNum).toggleClass('required', false);
-  $('#hdd_cap' + diskNum).toggleClass('invalid', false);
-  $('#vm_disk_operation' + diskNum).toggleClass('required', false);
+  $('#hdd_cap' + diskNum).toggleClass('invalid', false);  
+  $('#vm_disk_operation' + diskNum).toggleClass('required', false);  
   $('#vm_disk' + diskNum).toggleClass('required', false);
 
   $('#vm_disk' + diskNum).val(null);
@@ -453,24 +455,24 @@ function validateFields() {
   if (!$('#name_is').val()) {
     $('#name_is').addClass('empty');
     isError = true;
-    return isError;
+    //return isError;
   };
   if (!$('#vm_hostname').val()) {
     $('#vm_hostname').addClass('empty');
     isError = true;
-    return isError;
+    //return isError;
   };
   isError = validateFieldsDisk(vmDiskOperation1, HDD1, 1);
-  if (currentDisk > 1 && !isError) {
+  if (currentDisk > 1) { //&& !isError) {
     isError = validateFieldsDisk(vmDiskOperation2, HDD2, 2);
   };
-  if (currentDisk > 2 && !isError) {
+  if (currentDisk > 2) { //&& !isError) {
     isError = validateFieldsDisk(vmDiskOperation3, HDD3, 3);
   };
-  if (currentDisk > 3 && !isError) {
+  if (currentDisk > 3) { // && !isError) {
     isError = validateFieldsDisk(vmDiskOperation4, HDD4, 4);
   };
-  if (currentDisk > 4 && !isError) {
+  if (currentDisk > 4) { //&& !isError) {
     isError = validateFieldsDisk(vmDiskOperation5, HDD5, 5);
   };
   return isError;
@@ -482,20 +484,20 @@ function validateFieldsDisk(vmDiskOperationN, HDDN, numberDisk) {
   if (!vmDiskOperationN.val()) {
     $('#vm_disk_operation_required' + numberDisk).addClass('empty');
     isError = true;
-    return isError;
+    //return isError;
   } else {
     if (vmDiskOperationN.val() != 'add') {
       if (!HDDN.val()) {
         HDDN.addClass('empty');
         isError = true;
-        return isError;
+        //return isError;
       };
     };
     if (vmDiskOperationN.val() != 'delete') {
       if (!$('#hdd_cap' + numberDisk).val() || $('#hdd_cap' + numberDisk).hasClass('invalid')) {
         $('#hdd_cap_required' + numberDisk).addClass('empty');
         isError = true;
-        return isError;
+        //return isError;
       };
     };
   };
@@ -740,6 +742,12 @@ function clearDiskFields() {
   $('#add_disk').show();
   $('#delete_disk').hide();
 
+};
+
+function removeRequiredDisk(diskNum){
+  removedClass($('#vm_disk_operation_required' + diskNum), 'empty');
+  removedClass($('#vm_disk' + diskNum), "empty");
+  removedClass($('#hdd_cap_required' + diskNum), "empty");
 };
 
 function finishChecked() {
