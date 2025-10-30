@@ -327,7 +327,7 @@ $("#finish").on("change", function () {
 
 
 function vmdiskOperation(vmDiskOperationN, numberDisk, HDDN) {
-  removedClass($('#vm_disk_operation_required' + numberDisk), 'empty');
+  removeRequiredDisk(numberDisk);
   removeHDDCup(numberDisk);
   if (vmDiskOperationN.val() == 'delete' || vmDiskOperationN.val() == 'resize_up'
     || vmDiskOperationN.val() == 'resize_down') {
@@ -353,7 +353,7 @@ function vmdiskOperation(vmDiskOperationN, numberDisk, HDDN) {
     $('#hdd_cap' + numberDisk).toggleClass('required', false);
   };
 
-  if (vmDiskOperationN.val() == 'add') {
+  if (vmDiskOperationN.val() == 'add' || vmDiskOperationN.val() == '') {
     toggleRowVisibility('#row_vm_disk' + numberDisk, false);
     $('#vm_disk' + numberDisk).toggleClass('required', false);
     $('#vm_disk' + numberDisk).val(null);
@@ -410,15 +410,16 @@ function checkingDiskSize(vmDiskOperationN, hddCapN, currentSize, numberDisk) {
 function showDiskFields(diskNum) {
   toggleRowVisibility('#disk' + diskNum, true);
   $('#vm_disk_operation' + diskNum).toggleClass('required', true);
-  $('#vm_disk' + diskNum).toggleClass('required', true);
+  //$('#vm_disk' + diskNum).toggleClass('required', true);
 };
 
 function hideDiskFields(diskNum) {
   toggleRowVisibility('#disk' + diskNum, false);
-  toggleRowVisibility('#row_vm_disk' + diskNum, true);
+  toggleRowVisibility('#row_vm_disk' + diskNum, false);
   toggleRowVisibility('#row_scsi_id' + diskNum, false);
   toggleRowVisibility('#row_current_size' + diskNum, false);
   toggleRowVisibility('#row_hdd_cap' + diskNum, false);
+  removeRequiredDisk(diskNum);
 
   $('#hdd_cap' + diskNum).toggleClass('required', false);
   $('#hdd_cap' + diskNum).toggleClass('invalid', false);
@@ -437,25 +438,30 @@ function validateFields() {
   if (!$('#name_is').val()) {
     $('#name_is').addClass('empty');
     isError = true;
-    return isError;
+    //return isError;
   };
   if (!$('#vm_hostname').val()) {
     $('#vm_hostname').addClass('empty');
     isError = true;
-    return isError;
+    //return isError;
   };
-  isError = validateFieldsDisk(vmDiskOperation1, HDD1, 1);
-  if (currentDisk > 1 && !isError) {
-    isError = validateFieldsDisk(vmDiskOperation2, HDD2, 2);
+  var isErrorDisk1 = validateFieldsDisk(vmDiskOperation1, HDD1, 1);
+  if(isErrorDisk1) isError = true;
+  if (currentDisk > 1) { //&& !isError) {
+    var isErrorDisk2 = validateFieldsDisk(vmDiskOperation2, HDD2, 2);
+    if(isErrorDisk2) isError = true;
   };
-  if (currentDisk > 2 && !isError) {
-    isError = validateFieldsDisk(vmDiskOperation3, HDD3, 3);
+  if (currentDisk > 2) { //&& !isError) {
+    var isErrorDisk3 = validateFieldsDisk(vmDiskOperation3, HDD3, 3);
+    if(isErrorDisk3) isError = true; 
   };
-  if (currentDisk > 3 && !isError) {
-    isError = validateFieldsDisk(vmDiskOperation4, HDD4, 4);
+  if (currentDisk > 3) { // && !isError) {
+    var isErrorDisk4 = validateFieldsDisk(vmDiskOperation4, HDD4, 4);
+    if(isErrorDisk4) isError = true;
   };
-  if (currentDisk > 4 && !isError) {
-    isError = validateFieldsDisk(vmDiskOperation5, HDD5, 5);
+  if (currentDisk > 4) { //&& !isError) {
+    var isErrorDisk5 = validateFieldsDisk(vmDiskOperation5, HDD5, 5);
+    if(isErrorDisk5) isError = true;
   };
   return isError;
 
@@ -466,20 +472,20 @@ function validateFieldsDisk(vmDiskOperationN, HDDN, numberDisk) {
   if (!vmDiskOperationN.val()) {
     $('#vm_disk_operation_required' + numberDisk).addClass('empty');
     isError = true;
-    return isError;
+    //return isError;
   } else {
     if (vmDiskOperationN.val() != 'add') {
       if (!HDDN.val()) {
         HDDN.addClass('empty');
         isError = true;
-        return isError;
+        //return isError;
       };
     };
     if (vmDiskOperationN.val() != 'delete') {
       if (!$('#hdd_cap' + numberDisk).val() || $('#hdd_cap' + numberDisk).hasClass('invalid')) {
         $('#hdd_cap_required' + numberDisk).addClass('empty');
         isError = true;
-        return isError;
+        //return isError;
       };
     };
   };
@@ -722,6 +728,12 @@ function clearDiskFields() {
   $('#add_disk').show();
   $('#delete_disk').hide();
 
+};
+
+function removeRequiredDisk(diskNum){
+  removedClass($('#vm_disk_operation_required' + diskNum), 'empty');
+  removedClass($('#vm_disk' + diskNum), "empty");
+  removedClass($('#hdd_cap_required' + diskNum), "empty");
 };
 
 function finishChecked() {
