@@ -519,6 +519,13 @@ $("#is_reopen").on("change", function () {
     }
 });
 
+$("#dc").on("change", function () {
+  var dc = $(this);
+  if(dc.val()) {
+    dc.readonly(true);
+  }
+});
+
 $(document).ready(function () {
     if ($("#input_json").val()) {
         //alert("createVM - false");    
