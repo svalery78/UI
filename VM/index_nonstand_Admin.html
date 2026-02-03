@@ -1,0 +1,561 @@
+<div class="section" id="common">
+  <span class="section-header">Общая информация</span>
+  <div class="row vertical checkbox">
+      <input id="is_ex_change" type="checkbox">
+      <label for="is_ex_change" title="Экстренное изменение">Экстренное изменение</label>
+  </div>
+  <div id="row_justification" class="row vertical" style="display:none">
+      <label for="justification" title="Обоснование">Обоснование</label>
+      <select id="justification" class="required">
+          <option value=""></option>
+          <option value="для_устранения/предотвращения_кр">Для устранения/предотвращения критического инцидента
+          </option>
+          <option value="для_устранения/предотвращения_ин">Для устранения/предотвращения инцидента ИБ</option>
+          <option value="для_выполнения_поручения_руковод">Для выполнения поручения высшего руководства</option>
+      </select>
+  </div>
+  <div class="row vertical" style="display:none">
+      <label for="inc_desc" title="Краткое описание инцидента">Краткое описание инцидента</label>
+      <input id="inc_desc" type="text" autocomplete="off" class="required">
+  </div>
+  <div class="row vertical checkbox">
+      <input id="dr_cluster" type="checkbox">
+      <label for="dr_cluster" title="DR-кластер">DR-кластер</label>
+  </div>
+  <div id="dr_cluster_warning" class="static-text text-var" style="display: none;">
+      В настоящий момент перевод новых ИС в DR-кластер, а также создание новых ВМ сразу в DR-кластере
+      приостановлено по техническим причинам. О возобновлении процессов будет сообщено дополнительно.
+  </div>
+
+  <div class="row vertical">
+      <label for="name_is" title="Наименование ИС">Наименование ИС</label>
+      <div id="name_is" data-custom-view="ис_с_кодом_ис" class="required" data-filter-name="user"
+          data-filter-value="requestor"></div>
+  </div>
+  <div class="static-text text-dis">
+      Выберите из выпадающего списка информационную системую, для которой создаются
+      виртуальные машины. Если требуемая вам ИС не доступна для выбора, значит:<br>
+      - вы не состоите в списке авторизованных лиц по данной ИС, для подачи запроса или добавления вас в качестве
+      авторизованного лица просьба обратиться к ответственному лицу за данную ИС;<br>
+      - у необходимой вам ИС
+      отсутствует код ИС, для установки кода воспользуейтесь запросом, доступным <a
+          href="https://io.itsm.mos.ru/xK8XGu">по ссылке</a>.
+  </div>
+
+<div class="row vertical">
+  <label for="dc" title="Площадка ЦОД">Площадка ЦОД</label>
+  <div id="dc" data-custom-view="цод" class="required"></div>
+</div>
+
+
+  <div class="row vertical hide" data-internal data-hidden>
+      <div id="requestor" class="hide person-suggest"></div>
+  </div>
+  <div class="row vertical" data-searchable data-filterable style="display:none">
+      <label for="product" title="Продукт-владелец ДИТ">Продукт-владелец ДИТ</label>
+      <div id="product" data-filterable-name="Продукт-владелец ДИТ" data-custom-view="продукт_каталог"
+          data-custom-view-account="moscow"></div>
+  </div>
+  <div class="row vertical checkbox">
+      <input id="admin_privileges" type="checkbox">
+      <label for="admin_privileges" title="Добавить новых пользователей в группу администраторов ИС">
+          Добавить новых пользователей в группу администраторов ИС</label>
+  </div>
+  <div id="for_admin" style="display:none">
+      <div class="row vertical">
+          <label for="admin_list" title="Список администраторов">Список администраторов</label>
+          <div id="admin_list" class="required" data-custom-view="лица_passport" data-multiple></div>
+      </div>
+
+      <div class="static-text text-dis">
+          Укажите пользователей с УЗ в домене Passport, которых необходимо добавить в текущую группу администраторов
+          ИС (G01)
+      </div>
+  </div>
+
+  <div class="row vertical hide" data-hidden>
+      <select id="vm_authorization" class="hide">
+          <option value="interactive" selected>interactive</option>
+      </select>
+  </div>
+
+  <div class="row vertical hide" data-hidden>
+      <select id="vm_action_type" class="hide">
+          <option value="add" selected>add</option>
+      </select>
+  </div>
+</div>
+
+<div class="section" id="vm_1">
+  <span class="section-header">Виртуальная машина</span>
+
+
+  <div class="row vertical">
+      <label for="vm_role" title="Укажите роль сервера">Укажите роль сервера</label>
+      <div id="vm_role" class="required" data-custom-view="роли_вм"></div>
+  </div>
+  <div class="static-text text-dis">
+      Выберите роль, с которой будет создаваться вирутальный сервер. Код роли будет указан в наименовании ВМ
+  </div>
+
+
+
+
+
+  <div class="row vertical">
+      <label for="vm_networkcidr_action" title="Какая требуется подсеть (NetworkCIDR)">Какая требуется подсеть
+          (NetworkCIDR)</label>
+      <div id="vm_networkcidr_action_required">
+          <select id="vm_networkcidr_action" class="required">
+              <option value=""></option>
+              <option value="новая">Новая</option>
+              <option value="существующая">Существующая</option>
+          </select>
+      </div>
+  </div>
+  <div class="static-text text-dis">
+      Укажите, требуется ли развернуть виртуальную машину в существующей подсети, или требуется создать новую подсеть.
+      Для одной ИС допустимо наличие не более 3-х подсетей
+  </div>
+
+
+  <div id="vm_networkcidr_display" style="display:none">
+      <div class="row vertical">
+          <label for="vm_networkcidr" title="Укажите подсеть (NetworkCIDR)">Укажите подсеть (NetworkCIDR)</label>
+          <div id="vm_networkcidr" class="required" data-custom-view="подсети" data-filter-name="#подсеть для ИС" data-filter-name2="#ЦОД"
+              data-filter-value="name_is" data-filter-value2="dc"></div>
+      </div>
+
+      <div class="static-text text-dis">
+          Выберите из списка подсеть, в которой требуется развернуть вирутальную машину. Список доступных подсетей
+          ограничен выбранной ИС
+      </div>
+  </div>
+
+  <div id="vm_networkcidr_size_display" style="display:none">
+      <div class="row vertical">
+          <label for="vm_networkcidr_size" title="Укажите размерность подсети (NetworkCIDR)">
+              Укажите размерность подсети (NetworkCIDR)</label>
+          <div id="vm_networkcidr_size_required">
+              <select id="vm_networkcidr_size" class="required">
+                  <option value=""></option>
+                  <option value="24">24</option>
+                  <option value="25">25</option>
+                  <option value="26">26</option>
+                  <option value="27">27</option>
+                  <option value="28">28</option>
+                  <option value="29">29</option>
+              </select>
+          </div>
+      </div>
+      <div class="static-text text-dis">
+          Укажите размерность для новой создаваемой подсети
+      </div>
+  </div>
+
+  <div class="row horisontal">
+      <div class="row vertical" style="width: 33%; margin-left: 0px;">
+          <label for="vm_vcpu" title="vCPU">vCPU</label>
+          <div id="vm_cpu_required">
+              <input id="vm_vcpu" type="number" autocomplete="off" min="2" max="52" class="required">
+          </div>
+      </div>
+
+      <div class="row vertical" style="width: 34%; margin-left: 0px;">
+          <label for="vm_ram" title="RAM, ГБ">RAM, ГБ</label>
+          <div id="vm_ram_required">
+              <input id="vm_ram" type="number" autocomplete="off" min="2" max="512" class="required">
+          </div>
+      </div>
+
+      <div class="row vertical" style="width: 33%; margin-left: 0px; padding-right:0px">
+          <label for="vm_vmdk" title="VMDK, ГБ">Системный диск, ГБ</label>
+          <div id="vm_vmdk_required">
+              <input id="vm_vmdk" type="number" autocomplete="off" min="25" class="required">
+          </div>
+      </div>
+  </div>
+  <div class="static-text text-dis">
+      Укажите параметры cоздаваемой виртуальной машины: количество процессных ядер, объем оперативной памяти и
+      системного диска. Значения параметров ограничены допустимыми значениями, указанными в
+      <a href="https://datacenter.itsm.mos.ru/knowledge_articles/1101">технических условиях</a>
+  </div>
+
+  <div class="row horisontal">
+      <div class="row vertical" style="width: 50%; margin-left: 0px;">
+          <label for="vm_instance" title="Среда">Среда</label>
+          <div id="vm_instance" class="required" data-custom-view="зоны">
+          </div>
+      </div>
+
+      <div class="row vertical" style="width: 50%; margin-left: 0px; padding-right:0px">
+          <label for="vm_zone" title="Зона размещения ВМ">Зона размещения ВМ</label>
+          <div id="vm_zone" class="required" data-custom-view="зоны_вм" data-filter-name="#среда"
+              data-filter-value="vm_instance"></div>
+      </div>
+  </div>
+  <div class="static-text text-dis">
+      Укажите среду и её индекс, в которой разворачивается виртуальный сервер. Каждая из сред имеет индекс в диапазоне
+      от 1 до 9. Указание сокращенного значения среды и её индекса обеспечивают логическое разделение виртуальных
+      серверов внутри её среды
+  </div>
+
+  <div class="row horisontal">
+      <div class="row vertical" style="width: 50%; margin-left: 0px;" data-searchable>
+          <label for="vm_os_family" title="Семейство ОС">Семейство ОС</label>
+          <div id="vm_os_family" class="required" data-custom-view="ос_mosos"></div>
+      </div>
+
+      <div class="row vertical" style="width: 50%; margin-left: 0px; padding-right:0px">
+          <label for="vm_os" title="Требуемый образ ОС">Требуемый образ ОС</label>
+          <div id="vm_os" class="required" data-custom-view="образы_вм_для_си" data-filter-name="#Семейство ОС"
+              data-filter-value="vm_os_family" data-filter-name2="#Продукт-потребитель ДИТ у образа"
+              data-filter-value2="product"></div>
+      </div>
+  </div>
+  <div class="static-text text-dis">
+      Выберите семейство ОС и нужный образ, из которого будет развернут виртуальный сервер. Для выбора доступен список
+      образов, предосталяемых продуктом ЦОД и добавленных вами образов ОС в хранилище образов ЦОД. Для добавления
+      нового образа воспользуйтесь запросом, доступным <a href="https://io.itsm.mos.ru/c38kGZ">по ссылке</a>
+  </div>
+
+
+
+
+  <div class="row vertical" id="vm_linux_description_display" style="display:none">
+      <div class="row vertical">
+          <label for="vm_linux_description" title="Постфикс имени ВМ">Постфикс имени</label>
+          <div id="vm_linux_description_required">
+              <input id="vm_linux_description" type="text" autocomplete="off" maxlength="11" pattern="^[a-z0-9\-]+$">
+          </div>
+      </div>
+
+      <div class="static-text text-dis" style="margin-left: 20px;">
+          При необходимости вы можете указать дополнительный постфикс, который будет отображаться в
+          <i>hostname</i> создаваемого вирутального сервера. Длина постфикса ограничена 11 символами
+      </div>
+  </div>
+
+
+  <div class="row vertical checkbox">
+      <input id="add_nfs" type="checkbox">
+      <label for="add_nfs" title="Предоставить доступ к существующим NFS ресурсам">Предоставить доступ к существующим
+          NFS ресурсам</label>
+  </div>
+
+  <div class="row vertical" id="vm_nfs_display" style="display:none">
+      <div class="row vertical">
+          <label for="vm_nfs" title="Укажите NFS ресурсы">Укажите NFS ресурсы</label>
+          <div id="vm_nfs" class="required" 
+              data-multiple data-min="1" data-custom-view="nfs" data-filter-name="#NFS-ресурс - Площадка ЦОД" data-filter-value="dc"></div>
+      </div>
+
+      <div class="static-text text-dis" style="margin-left: 20px;">
+          Выберите из списка NFS-ресурсы, к которым необходимо выдать доступ создаваемому виртуальному серверу.
+      </div>
+  </div>
+
+  <div class="row vertical">
+      <label for="add_groups" title="Сколько требуется групп доступа">Сколько требуется групп доступа</label>
+      <select id="add_groups">
+          <option value=""></option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+      </select>
+  </div>
+
+  <div id="add_groups_1_disp" style="display:none">
+      <div class="static-text text-span"> Параметры для первой группы</div>
+
+      <div class="row horisontal">
+          <div class="row vertical hor-2-col-1">
+              <label for="vm_action_g02" title="Действие для первой группы">Действие для первой группы</label>
+              <div id="vm_action_g02_disp">
+                  <select id="vm_action_g02" class="required">
+                      <option value=""></option>
+                      <option value="create">Создать</option>
+                      <option value="add">Добавить</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="row vertical hor-2-col-2">
+              <label for="vm_g02_name" title="Имя группы">Имя группы</label>
+              <div id="vm_g02_name_required">
+                  <input id="vm_g02_name" type="text" autocomplete="off" maxlength="20" class="required"
+                      pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+              </div>
+          </div>
+      </div>
+      <div class="static-text text-dis">
+          Укажите, требуется ли добавить виртуальный сервер в новую или существующую группу удаленного доступа
+      </div>
+
+      <div class="row horisontal">
+          <div class="row vertical hor-3-col-1">
+              <label for="vm_g02_skdpu_ports" title="Порты управления через СКДПУ">Порты управления через
+                  СКДПУ</label>
+              <div id="vm_g02_skdpu_ports_disp">
+                  <select id="vm_g02_skdpu_ports" class="required">
+                      <option value=""></option>
+                      <option value="rdp">RDP</option>
+                      <option value="ssh">SSH</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="row vertical hor-3-col-2">
+              <label for="vm_g02_skdpu_ports_number" title="Номер порта">Номер порта</label>
+              <div id="vm_g02_skdpu_ports_number_required">
+                  <input id="vm_g02_skdpu_ports_number" type="text" autocomplete="off">
+              </div>
+          </div>
+
+          <div class="row vertical hor-3-col-3" id="vm_g02_skdpu_protocol_disp" style="display:none">
+              <label for="vm_g02_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+              <div id="vm_g02_skdpu_protocol_required">
+                  <input id="vm_g02_skdpu_protocol" type="text" autocomplete="off" class="required">
+              </div>
+          </div>
+      </div>
+      <div class="static-text text-dis">
+          Выберите стандартный порт управления или укажите наименование протокола
+      </div>
+  </div>
+
+  <div id="add_groups_2_disp" style="display:none">
+      <div class="static-text text-span"> Параметры для второй группы</div>
+      <div class="row horisontal">
+          <div class="row vertical hor-2-col-1">
+              <label for="vm_action_g03" title="Действие для второй группы">Действие для второй группы</label>
+              <div id="vm_action_g03_disp">
+                  <select id="vm_action_g03" class="required">
+                      <option value=""></option>
+                      <option value="create">Создать</option>
+                      <option value="add">Добавить</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="row vertical hor-2-col-2">
+              <label for="vm_g03_name" title="Имя группы">Имя группы</label>
+              <div id="vm_g03_name_required">
+                  <input id="vm_g03_name" type="text" autocomplete="off" maxlength="20" class="required"
+                      pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+              </div>
+          </div>
+      </div>
+      <div class="static-text text-dis">
+          Укажите, требуется ли добавить виртуальный сервер в новую или существующую группу удаленного доступа
+      </div>
+
+      <div class="row horisontal">
+          <div class="row vertical hor-3-col-1">
+              <label for="vm_g03_skdpu_ports" title="Порты управления через СКДПУ">Порты управления через
+                  СКДПУ</label>
+              <div id="vm_g03_skdpu_ports_disp">
+                  <select id="vm_g03_skdpu_ports" class="required">
+                      <option value=""></option>
+                      <option value="rdp">RDP</option>
+                      <option value="ssh">SSH</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="row vertical hor-3-col-2">
+              <label for="vm_g03_skdpu_ports_number" title="Номер порта">Номер порта</label>
+              <div id="vm_g03_skdpu_ports_number_required">
+                  <input id="vm_g03_skdpu_ports_number" type="text" autocomplete="off">
+              </div>
+          </div>
+
+          <div class="row vertical hor-3-col-3" id="vm_g03_skdpu_protocol_disp" style="display:none">
+              <label for="vm_g03_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+              <div id="vm_g03_skdpu_protocol_required">
+                  <input id="vm_g03_skdpu_protocol" type="text" autocomplete="off" class="required">
+              </div>
+          </div>
+      </div>
+      <div class="static-text text-dis">
+          Выберите стандартный порт управления или укажите наименование протокола
+      </div>
+  </div>
+
+  <div id="add_groups_3_disp" style="display:none">
+      <div class="static-text text-span"> Параметры для третьей группы</div>
+      <div class="row horisontal">
+          <div class="row vertical hor-2-col-1">
+              <label for="vm_action_g04" title="Действие для третьей группы">Действие для третьей группы</label>
+              <div id="vm_action_g04_disp">
+                  <select id="vm_action_g04" class="required">
+                      <option value=""></option>
+                      <option value="create">Создать</option>
+                      <option value="add">Добавить</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="row vertical hor-2-col-2">
+              <label for="vm_g04_name" title="Имя группы">Имя группы</label>
+              <div id="vm_g04_name_required">
+                  <input id="vm_g04_name" type="text" autocomplete="off" maxlength="20" class="required"
+                      pattern="^[A-Za-zА-Яа-я0-9\-\.]+$">
+              </div>
+          </div>
+      </div>
+      <div class="static-text text-dis">
+          Укажите, требуется ли добавить виртуальный сервер в новую или существующую группу удаленного доступа
+      </div>
+
+      <div class="row horisontal">
+          <div class="row vertical hor-3-col-1">
+              <label for="vm_g04_skdpu_ports" title="Порты управления через СКДПУ">Порты управления через
+                  СКДПУ</label>
+              <div id="vm_g04_skdpu_ports_disp">
+                  <select id="vm_g04_skdpu_ports" class="required">
+                      <option value=""></option>
+                      <option value="rdp">RDP</option>
+                      <option value="ssh">SSH</option>
+                  </select>
+              </div>
+          </div>
+          <div class="row vertical hor-3-col-2">
+              <label for="vm_g04_skdpu_ports_number" title="Номер порта">Номер порта</label>
+              <div id="vm_g04_skdpu_ports_number_required">
+                  <input id="vm_g04_skdpu_ports_number" type="text" autocomplete="off">
+              </div>
+          </div>
+          <div class="row vertical hor-3-col-3" id="vm_g04_skdpu_protocol_disp" style="display:none">
+              <label for="vm_g04_skdpu_protocol" title="Наименование протокола">Наименование протокола</label>
+              <div id="vm_g04_skdpu_protocol_required">
+                  <input id="vm_g04_skdpu_protocol" type="text" autocomplete="off" class="required">
+              </div>
+          </div>
+      </div>
+      <div class="static-text text-dis">
+          Выберите стандартный порт управления или укажите наименование протокола
+      </div>
+  </div>
+
+  <div class="row vertical checkbox">
+      <input id="vm_add_disk" type="checkbox">
+      <label for="vm_add_disk" title="Требуются доп. диски">Требуются доп. диски</label>
+  </div>
+
+  <div id="additional_disks" style="display: none">
+      <div class="static-text text-dis">
+          Укажите объём дополнительных дисков в создаваемом виртуальном сервере. Для одного доступно добавление до 5
+          доп. дисков в рамках одного запроса
+      </div>
+
+      <div id="disk1">
+          <div class="row vertical">
+              <label for="vm_disk1" title="Диск 1, ГБ">Диск 1, ГБ</label>
+              <div id="vm_disk1_required">
+                  <input id="vm_disk1" type="number" min="1" autocomplete="off" class="required">
+              </div>
+          </div>
+      </div>
+
+      <div id="disk2" style="display:none">
+          <div class="row vertical">
+              <label for="vm_disk2" title="Диск 2, ГБ">Диск 2, ГБ</label>
+              <div id="vm_disk2_required">
+                  <input id="vm_disk2" type="number" min="1" autocomplete="off" class="required">
+              </div>
+          </div>
+      </div>
+    
+      <div id="disk3" style="display:none">
+          <div class="row vertical">
+              <label for="vm_disk3" title="Диск 3, ГБ">Диск 3, ГБ</label>
+              <div id="vm_disk3_required">
+                  <input id="vm_disk3" type="number" min="1" autocomplete="off" class="required">
+              </div>
+          </div>
+      </div>
+    
+      <div id="disk4" style="display:none">
+          <div class="row vertical">
+              <label for="vm_disk4" title="Диск 4, ГБ">Диск 4, ГБ</label>
+              <div id="vm_disk4_required">
+                  <input id="vm_disk4" type="number" min="1" autocomplete="off" class="required">
+              </div>
+          </div>
+      </div>
+    
+      <div id="disk5" style="display:none">
+          <div class="row vertical">
+              <label for="vm_disk5" title="Диск 5, ГБ">Диск 5, ГБ</label>
+              <div id="vm_disk5_required">
+                  <input id="vm_disk5" type="number" min="1" autocomplete="off" class="required">
+              </div>
+          </div>
+      </div>
+    
+      <div class="section" id="addDeleteDisk"><span class="section"></span>
+          <div class="row vertical stock">
+              <span class="btn check" id="add_disk"><span class="button">Добавить диск</span></span>
+              <span class="btn check" id="delete_disk" style="display:none"><span class="button">Удалить
+                      диск</span></span>
+              <br>
+              <br>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="section" id="addDeleteVM"><span class="section"></span>
+  <div class="row vertical stock">
+      <span class="btn check" id="add_vm"><span class="button">Добавить ВМ</span></span>
+      <span class="btn check" id="copy_vm"><span class="button">Копировать ВМ</span></span>
+      <span class="btn check" id="delete_vm" style="display:none"><span class="button">Удалить последнюю
+              ВМ</span></span>
+      <br>
+      <br>
+  </div>
+</div>
+
+<div class="section" id="tech_details">
+  <span class="section-header">Информация по создаваемым виртуальным серверам</span>
+
+  <div class="row vertical" id="number_vm_display" style="display: none">
+      <div class="row vertical">
+          <label for="number" title="Укажите номер виртуального сервера, который необходимо скорректировать">
+              Укажите номер виртуального сервера, который необходимо скорректировать</label>
+          <input id="number" type="number" autocomplete="off" min="1" max="20">
+          <span class="btn check" id="unload_vm"><span class="button">Выгрузить ВМ</span></span>
+      </div>
+      <div class="static-text text-dis">
+          Если после добавление виртуального сервера в таблицу вы обнаружили ошибку, укажите номер строки и нажмите на
+          кнопку "Скорректировать ВМ". Внесите изменения и добавьте ВМ обратно в таблицу
+      </div>
+  </div>
+
+  <div class="row vertical">
+      <!-- <label for="input_form" title="input_form">Таблица ВМ</label> -->
+      <div id="input_form" class="rich-text"></div>
+  </div>
+
+  <div class="row vertical" style="display: none">
+      <label for="input_json" title="Создаваемые ВМ">Создаваемые ВМ</label>
+      <textarea id="input_json" readonly></textarea>
+  </div>
+
+</div>
+
+<div class="section" id="tip">
+  <span class="section-header">После окончания добавления списка создаваемых ВМ нажмите чек-бокс ниже</span>
+
+  <div class="row vertical checkbox">
+      <input id="finish" type="checkbox" class="required">
+      <label for="finish" title="Заполнение формы завершено.">Заполнение формы завершено</label>
+  </div>
+</div>
+<div id="row_service" class="row vertical" style="display:none">
+  <label for="vm_service" title="Дополнить услугой">Дополнить услугой "Администрирование ОС"?</label>
+  <select id="vm_service">
+      <option value="среда_исполнения">Да</option>
+  </select>
+</div>

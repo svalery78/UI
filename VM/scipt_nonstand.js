@@ -7,10 +7,8 @@ var $VM;
 var $adminListNodes;
 var $isDCID;
 var $nameIS;
-var $isCODIS;
 var $role;
 var $networkCIDr;
-//var $networkCIDrSize;
 var $OS;
 var $instance;
 var $zone;
@@ -28,6 +26,14 @@ var $g04SkpduProtocol = "";
 var $g04SkpduPortsNumber = "";
 var $VM_additional = [];
 var createVM;
+var currentLoadedVMIndex = null; // Индекс VM, которую выгружаем на редактирование
+
+//если новый запрос из селфсервиса, скрыть поле комментарий
+if (ITRP.record.new) {
+    if (ITRP.context === 'self_service') {
+        $("#self_service_new_request_wizard_note-container").parent().parent().hide();
+    }
+}
 
 $("#input_form").readonly(true);
 
@@ -40,12 +46,10 @@ ISName.on('change', function () {
     if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
         $("#product").val(ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ'].id);
-        $isCODIS = ISName.data('item').custom_fields['ИС - Код ИС'];
     } else {
         $("#product").val("");
         $isDCID = null;
-        $isCODIS = null;
-    }
+    }    
 });
 
 var DC = $extension.find("#dc");
@@ -58,17 +62,15 @@ DC.on('change', function () {
 var adminList = $extension.find("#admin_list");
 adminList.on('change', function () {
 
-    setTimeout(function () {
-        $adminListNodes = adminList.data('items').map(function (item) {
-            return {
-                name: item.name,
-                email: item.primary_email
-            };
-        });
-        if (adminList.hasClass("empty")) {
-            adminList.removeClass("empty");
-        }
-    }, 500);
+    $adminListNodes = adminList.data('items').map(function (item) {
+        return {
+            name: item.name,
+            email: item.primary_email
+        };
+    });
+    if (adminList.hasClass("empty")) {
+        adminList.removeClass("empty");
+    }
 });
 
 var vmRole = $extension.find("#vm_role");
@@ -100,14 +102,12 @@ vmNetworkCIDrAction.on('change', function () {
         $("#vm_networkcidr_display").show();
         $("#vm_networkcidr_size_display").hide();
         vmNetworkCIDrSize.val(null);
-        //$networkCIDrSize = "";      
     }
     else {
         $("#vm_networkcidr_display").hide();
         $("#vm_networkcidr_size_display").hide();
         vmNetworkCIDrSize.val(null);
         $networkCIDr = "";
-        //$networkCIDrSize = "";
     }
 });
 
@@ -127,10 +127,7 @@ vmNetworkCIDrSize.on('change', function () {
         $("#vm_networkcidr_size_required").removeClass('empty');
     };
     setNetworkCIDr();
-
-
 });
-
 
 var vmVCPU = $extension.find("#vm_vcpu");
 var vmVCPURequired = $extension.find("#vm_cpu_required");
@@ -202,19 +199,16 @@ vmLinuxDescription.on('change', function () {
 
 var vmNFS = $extension.find("#vm_nfs");
 vmNFS.on('change', function () {
-    setTimeout(function () {
-        $NFS = vmNFS.data('items').map(function (item) {
-            return item.label;
-        });
-        if (vmNFS.hasClass("empty")) {
-            vmNFS.removeClass("empty");
-        }
-    }, 500);
+    $NFS = vmNFS.data('items').map(function (item) {
+        return item.label;
+    });
+    if (vmNFS.hasClass("empty")) {
+        vmNFS.removeClass("empty");
+    }
 });
 
 var vmAddNFS = $extension.find("#add_nfs");
 vmAddNFS.on("change", function () {
-
     if ($(this).is(":checked")) {
         $addNFS = true;
         $("#vm_nfs_display").show();
@@ -874,6 +868,9 @@ $("#unload_vm").on("click", function () {
         return;
     }
 
+    // СОХРАНЯЕМ ИНДЕКС для последующего обновления
+    currentLoadedVMIndex = vmNumber - 1;
+
     // Удаляем элемент массива
     var deletedVM = vms.splice(vmNumber - 1, 1)[0];
     var deletevmAdditioanal = $VM_additional.splice(vmNumber - 1, 1)[0];
@@ -910,21 +907,15 @@ $("#unload_vm").on("click", function () {
         $("#delete_vm").hide();
         $("#number_vm_display").hide();
         $("#input_json").val(null);
-
     }
 
 });
 
 function addVM() {
-
     var $package = $("#input_json").val();
     $package = $package.replace(/\n+$/m, '');
     var packageData = $package && $package != '' ? JSON.parse($package) : null;
     var newArray = packageData ? packageData.nodes : [];
-
-    // if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
-    //     $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
-    // }
 
     if (!packageData) {
         packageData = {
@@ -934,44 +925,49 @@ function addVM() {
         };
     }
 
-    var newVM = {
-        "vm": $count_vm,
-        "vm_role": $role, //$("#vm_role").val(),  //
-        "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
-        //"vm_networkcidr_size": $networkCIDrSize,
-        "vm_vcpu": $("#vm_vcpu").val(),
-        "vm_ram": $("#vm_ram").val(),
-        "vm_vmdk": $("#vm_vmdk").val(),
-        "vm_instance": $instance,
-        "vm_linux_description": $("#vm_linux_description").val(),
-        "vm_zone": $zone,
-        //"vm_os_family": vmOSFamily.val(),
-        "vm_os": $OS, //$("#vm_os").val(),  //
-        "vm_nfs": $NFS, //$("#vm_nfs").val(), //
-        "vm_action_g02": $("#vm_action_g02").val(),
-        "vm_g02_name": $("#vm_g02_name").val(),
-        "vm_g02_skdpu_protocol": $g02SkpduProtocol, //$("#vm_g02_skdpu_protocol").val(),  //
-        "vm_g02_skdpu_ports_number": $g02SkpduPortsNumber, //$("#vm_g02_skdpu_ports_number").val(), //
-        "vm_action_g03": $("#vm_action_g03").val(), //
-        "vm_g03_name": $("#vm_g03_name").val(),
-        "vm_g03_skdpu_protocol": $g03SkpduProtocol, //$("#vm_g03_skdpu_protocol").val(),  //
-        "vm_g03_skdpu_ports_number": $g03SkpduPortsNumber, //$("#vm_g03_skdpu_ports_number").val(),  //
-        "vm_action_g04": $("#vm_action_g04").val(),  //
-        "vm_g04_name": $("#vm_g04_name").val(),
-        "vm_g04_skdpu_protocol": $g04SkpduProtocol, //$("vm_g04_skdpu_protocol").val(),  //
-        "vm_g04_skdpu_ports_number": $g04SkpduPortsNumber, //$("#vm_g04_skdpu_ports_number").val(),  //
-        //"vm_authorization": $("#vm_authorization").val(),  //
-        //"vm_action_type": $("#vm_action_type").val(),  //
-        "vm_disk1": $("#vm_disk1").val(),
-        "vm_disk2": $("#vm_disk2").val(),
-        "vm_disk3": $("#vm_disk3").val(),
-        "vm_disk4": $("#vm_disk4").val(),
-        "vm_disk5": $("#vm_disk5").val(),
+    if (currentLoadedVMIndex !== null && currentLoadedVMIndex >= 0
+        && currentLoadedVMIndex <= $count_vm) {
+        var currentVM = currentLoadedVMIndex + 1;
+        var newVM = addNewVM(currentVM);
+        var newVMAdditional = vmAdditional(currentVM);
+        newArray.splice(currentLoadedVMIndex, 0, newVM);  // Вставляем НА позицию
+        $VM_additional.splice(currentLoadedVMIndex, 0, newVMAdditional);
+
+        // Пересчитываем номера VM после вставки
+        newArray.forEach(function (vm, index) {
+            vm.vm = index + 1;
+        });
+        $VM_additional.forEach(function (vm, index) {
+            vm.vm = index + 1;
+        });
+
+        // Очищаем индекс после вставки
+        currentLoadedVMIndex = null;
+
+    } else {
+        var newVM = addNewVM($count_vm);
+        newArray.push(newVM);
+        var newVMAdditional = vmAdditional($count_vm);
+        $VM_additional.push(newVMAdditional);
+    }
+    //var nodes =  newArray;
+    var nodes = {
+        //  "is_id": packageData.is_id,
+        //  "is_dc_id": packageData.is_dc_id,
+        //  "admin_list": packageData.admin_list,
+        "nodes": newArray
     };
-    newArray.push(newVM);
-    var vmLinuxDescriptionHTML = $("#vm_linux_description").val() ? '-' + $("#vm_linux_description").val() : '';
-    var newVMAdditional = {
-        vm: $count_vm,
+    $("#input_json").val(JSON.stringify(nodes)).change();
+
+    addVMToTable();
+    //alert($("#input_json"));
+    //var VM1 = "test"
+    //return VM1;
+}
+
+function vmAdditional(numberVM) {
+    return {
+        vm: numberVM,
         vmNetworkCIDrAction: vmNetworkCIDrAction.val(),
         vmNetworkCIDr: vmNetworkCIDr.val(),
         vmNetworkCIDrSize: vmNetworkCIDrSize.val(),
@@ -990,23 +986,46 @@ function addVM() {
         vmg03SkpduProtocol: vmg03SkpduProtocol.val(),
         vmg04SkpduPorts: vmg04SkpduPorts.val(),
         vmg04SkpduPortsNumber: vmg04SkpduPortsNumber.val(),
-        vmg04SkpduProtocol: vmg04SkpduProtocol.val(),
-        vmNameVM: $isCODIS + '-' + $role + '-***-' + $zone + vmLinuxDescriptionHTML
+        vmg04SkpduProtocol: vmg04SkpduProtocol.val()
     };
-    $VM_additional.push(newVMAdditional);
-    //var nodes =  newArray;
-    var nodes = {
-        //  "is_id": packageData.is_id,
-        //  "is_dc_id": packageData.is_dc_id,
-        //  "admin_list": packageData.admin_list,
-        "nodes": newArray
-    };
-    $("#input_json").val(JSON.stringify(nodes)).change();
+}
 
-    addVMToTable();
-    //alert($("#input_json"));
-    //var VM1 = "test"
-    //return VM1;
+function addNewVM(numberVM) {
+    return {
+        "vm": numberVM,
+        "vm_role": $role, //$("#vm_role").val(),  //
+        "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
+        "vm_vcpu": $("#vm_vcpu").val(),
+        "vm_ram": $("#vm_ram").val(),
+        "vm_vmdk": $("#vm_vmdk").val(),
+        "vm_instance": $instance,
+        "vm_linux_description": $("#vm_linux_description").val(),
+        "vm_zone": $zone,
+        //"vm_os_family": vmOSFamily.val(),
+        "vm_os": $OS, //$("#vm_os").val(),  //
+        "vm_nfs": $NFS, //$("#vm_nfs").val(), //
+        "vm_action_g02": $("#vm_action_g02").val(),
+        "vm_g02_name": $("#vm_g02_name").val(),
+        "vm_g02_skdpu_protocol": $g02SkpduProtocol, //$("#vm_g02_skdpu_protocol").val(),  //
+        "vm_g02_skdpu_ports_number": $g02SkpduPortsNumber, //$("#vm_g02_skdpu_ports_number").val(), //
+        "vm_action_g03": $("#vm_action_g03").val(), //
+        "vm_g03_name": $("#vm_g03_name").val(),
+        "vm_g03_skdpu_protocol": $g03SkpduProtocol, //$("#vm_g03_skdpu_protocol").val(),  //
+        "vm_g03_skdpu_ports_number": $g03SkpduPortsNumber, //$("#vm_g03_skdpu_ports_number").val(),  //
+        "vm_action_g04": $("#vm_action_g04").val(), //
+        "vm_g04_name": $("#vm_g04_name").val(),
+        "vm_g04_skdpu_protocol": $g04SkpduProtocol, //$("vm_g04_skdpu_protocol").val(),  //
+        "vm_g04_skdpu_ports_number": $g04SkpduPortsNumber, //$("#vm_g04_skdpu_ports_number").val(),  //
+
+
+        //"vm_authorization": $("#vm_authorization").val(),  //
+        //"vm_action_type": $("#vm_action_type").val(),  //
+        "vm_disk1": $("#vm_disk1").val(),
+        "vm_disk2": $("#vm_disk2").val(),
+        "vm_disk3": $("#vm_disk3").val(),
+        "vm_disk4": $("#vm_disk4").val(),
+        "vm_disk5": $("#vm_disk5").val(),
+    };
 }
 
 function resetValueVM() {
@@ -1055,12 +1074,10 @@ function resetValueVM() {
     $("#add_groups_3_disp").hide();
     $role = "";
     $networkCIDr = "";
-    //$networkCIDrSize = "";
     $OS = "";
     $NFS = "";
     $addNFS = "";
     $addGroups = "";
-    //$isCODIS = "";
     //$g02Action = "";
     //$g03Action = "";
     //$g04Action = "";
@@ -1128,15 +1145,12 @@ function addVMToTable() {
     //alert($("#input_json").val());
     $VMs = $VMs.replace(/\n+$/m, '');
     var VMsData = $VMs && $VMs != '' ? JSON.parse($VMs).nodes : null;
-    //var VMsDataAdditional = $VM_additional
     //alert("addVMToTable");
     if (!VMsData) {
         $('#input_form').val(null);
     };
     var table = ' <table id="vm_table" border="1"><tr><th>';
     table += '№';
-    table += '</th><th>';
-    table += 'Имя  ВМ';
     table += '</th><th>';
     table += 'Роль VM';
     table += '</th><th>';
@@ -1168,8 +1182,6 @@ function addVMToTable() {
 
         table += '<tr><td>';
         table += vmData.vm;
-        table += '</td><td>';
-        table += $VM_additional[index].vmNameVM; //$isCODIS + '-' + $role + '-***-' + $instance + '-' + $("#vm_linux_description").val();
         table += '</td><td>';
         table += (vmData.vm_role || '');
         table += '</td><td>';
@@ -1583,7 +1595,7 @@ function updateProtocolVisibility(vmSkpduPorts, vmSkpduProtocol, vmSkpduProtocol
 }
 
 // Функция заполнения формы данными ВМ
-//function fillFormWithVMData(vmD$isCODIS + '-' + $role + '-***-' + $instance + $("#vm_linux_description").val()ata) {
+//function fillFormWithVMData(vmData) {
 function fillFormWithVMData(vmData, vmDataAdditional) {
     // Основные поля
     $("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;
@@ -1595,7 +1607,6 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);
     $networkCIDr = vmData.vm_networkcidr; // === "new" ?  "new" : $("#vm_networkcidr").val();
     $("#vm_networkcidr_size").val(vmDataAdditional.vmNetworkCIDrSize);
-    //$networkCIDrSize = vmData.vm_networkcidr_size;
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
         $("#vm_vcpu").removeClass("required");
@@ -1858,7 +1869,6 @@ $("#justification").on("change", function () {
     }
 });
 
-
 //block_ui
 if (ITRP.record.initialValues.custom_data["block_ui"] == true) { $(this).hide(); }
 $("#correctness_mark").on("change", function () {
@@ -1888,35 +1898,19 @@ $(document).ready(function () {
 });
 
 // Достаем id запрашивающего из URL
-function setRequestor() {
-    if (ITRP.record.new) {
-        console.log("ITRP.context:", ITRP.context);
+if (ITRP.record.new) {
+    if (ITRP.context === 'self_service') {
+        $("#requestor").val($("#requested_for_id").val());
+    }
 
-        if (ITRP.context === "self_service") {
-            console.log("requested_for_id:", $("#requested_for_id").val());
-            $("#requestor").val($("#requested_for_id").val());
-        } else {
-            console.log("req_requested_for_id:", $("#req_requested_for_id").val());
-            $("#requestor").val($("#req_requested_for_id").val());
-        }
-
-        console.log("requestor after set:", $("#requestor").val());
+    if (ITRP.context != 'self_service') {
+        $("#requestor").val($("#req_requested_for_id").val());
     }
 }
 
-setRequestor();
-
-//когда ввод завершен (фокус ушел с поля)
-$("#req_requested_for").on("blur", function () {
-    console.log("blur:", this.id, "value:", $(this).val());
-    setRequestor();
-});
-
-// Анализ возврата на доработку
-$("#is_reopen").on("change", function () {
-    if ($(this).is(":checked")) {
-        $("#correctness_block").show();
-    } else {
-        $("#correctness_block").hide();
+$("#dc").on("change", function () {
+    var dc = $(this);
+    if (dc.val()) {
+        dc.readonly(true);
     }
 });

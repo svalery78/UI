@@ -22,15 +22,29 @@ function removedClass(selector, className) {
 };
 
 // Достаем id запрашивающего из URL
-if (ITRP.record.new) {
-    if (ITRP.context === 'self_service') {
-        $("#requestor").val($("#requested_for_id").val());
+function setRequestor() {
+  if (ITRP.record.new) {
+    console.log("ITRP.context:", ITRP.context);
+
+    if (ITRP.context === "self_service") {
+      console.log("requested_for_id:", $("#requested_for_id").val());
+      $("#requestor").val($("#requested_for_id").val());
+    } else {
+      console.log("req_requested_for_id:", $("#req_requested_for_id").val());
+      $("#requestor").val($("#req_requested_for_id").val());
     }
 
-    if (ITRP.context != 'self_service') {
-        $("#requestor").val($("#req_requested_for_id").val());
-    }
+    console.log("requestor after set:", $("#requestor").val());
+  }
 }
+
+setRequestor();
+
+//когда ввод завершен (фокус ушел с поля)
+$("#req_requested_for").on("blur", function () {
+  console.log("blur:", this.id, "value:", $(this).val());
+  setRequestor();
+});
 
 $("#is_ex_change").on("change", function () {
     if (!$(this).hasClass("disabled")) {
@@ -65,6 +79,13 @@ var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
     $nameIS = $("#name_is").val();
     removedClass(ISName, "empty");
+});
+
+var DC = $extension.find("#dc");
+DC.on('change', function () {
+    if (DC.val()) {
+        DC.readonly(true);
+    }
 });
 
 var vmNetworkCIDrCurrent = $extension.find("#vm_networkcidr_current");
@@ -110,7 +131,7 @@ vmNetworkCIDr.on('change', function () {
     if (vmNetworkCIDrAction.val() === "существующая") {
         $networkCIDr = vmNetworkCIDr.data('item').label;
     } else {
-        $networkCIDr = "new";
+        setNetworkCIDr();
     }
     if (vmNetworkCIDr.hasClass("empty")) {
         vmNetworkCIDr.removeClass("empty");
@@ -121,11 +142,7 @@ vmNetworkCIDrSize.on('change', function () {
     if ($("#vm_networkcidr_size_required").hasClass("empty")) {
         $("#vm_networkcidr_size_required").removeClass('empty');
     };
-    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
-        $networkCIDr = "new/" + vmNetworkCIDrSize.val();
-    } else {
-        $networkCIDr = "new";
-    };
+    setNetworkCIDr();
 });
 
 var vmHostName = $extension.find("#vm_hostname");
@@ -402,6 +419,15 @@ function finishUnChecked() {
     }
 
 }
+
+function setNetworkCIDr() {
+    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
+        $networkCIDr = "new/" + vmNetworkCIDrSize.val();
+    } else {
+        $networkCIDr = "new";
+    };
+};
+
 
 
 $(document).ready(function () {
