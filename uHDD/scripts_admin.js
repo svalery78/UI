@@ -67,14 +67,16 @@ $('#justification').on('change', function () {
 
 $('#name_is').on('change', function () {
   removedClass($('#name_is'), 'empty');
+  setTimeout(function () {
+    if (!$('#vm_hostname').val()) {
+      clearVMHost();
+    };
+  }, 500);
 });
 
 var vmHostName = $extension.find('#vm_hostname');
 vmHostName.on('change', function () {
-  console.log('vmHostName_vhange');
   setTimeout(function () {
-    console.log('vm_disk1_new - ' + $('#vm_disk1').val());
-    console.log('HDD1.val() - ' + HDD1.val());
     if (vmHostName.val()) {
       removedClass(vmHostName, "empty");
       if (vmHostName.data('item').name) {
@@ -88,7 +90,10 @@ vmHostName.on('change', function () {
       } else {
         vmOSFamily = "";
       };
-    }
+    };
+    if (!$('#vm_disk1').val()) {
+      clearDiskFields();
+    };
   }, 500);
   //vm_os_family
 });
@@ -102,8 +107,6 @@ vmDiskOperation1.on('change', function () {
 
 var HDD1 = $extension.find("#vm_disk1");
 HDD1.on('change', function () {
-  console.log('HDD1.val() - ' + HDD1.val());
-  console.log('vm_disk1 - ' + $('#vm_disk1').val());
   if (HDD1.val()) HDD(HDD1, 1);
 });
 
@@ -263,7 +266,7 @@ $('#add_vm').click(function () {
     $('#delete_vm').show();
     removedClass($("#delete_vm"), "disabled");
 
-    clearDiskFields();
+    clearVMHost();
 
     if (vmCounter >= maxVM) {
       $(this).addClass("disabled");
@@ -294,8 +297,6 @@ $("#delete_vm").on("click", function () {
           var lastAction = lastVM.vhd[i].operation;
           if (!action.includes(lastAction)) action.push(lastAction);
         };
-        //console.log(JSON.stringify(action));
-        //console.log('vmOSFamily - ' + vmOSFamily);
         if (action.includes('add') || action.includes('resize_down')
           || (action.includes('resize_up') && vmOSFamily != "windows")) {
           deleteJson(vmHostDelete, $('#json_create').val(), '#json_create');
@@ -397,7 +398,6 @@ function removeHDDCup(numberDisk) {
 function HDD(HDDN, numberDisk) {
   removedClass(HDDN, 'empty');
   removeHDDCup(numberDisk);
-  console.log("HDDN.data('item').id - " + HDDN.data('item').id);
   if (HDDN.data('item').id) {
     var HDDSize = HDDN ? HDDN.data('item').custom_fields['HDD'] : "";
     var HDDScsi = HDDN ? HDDN.data('item').custom_fields['SCSI ID'] : "";
@@ -741,10 +741,14 @@ function deleteJson(deleteHostName, jsonAction, jsonActionName) {
   };
 };
 
-function clearDiskFields() {
+function clearVMHost() {
   vmHostName.val(null);
   vmHostName.addClass('required');
   vmOSFamily = null;
+  clearDiskFields();
+};
+
+function clearDiskFields() {
 
   for (var index = 1; index <= currentDisk; index++) {
     hideDiskFields(index);
@@ -768,7 +772,7 @@ function removeRequiredDisk(diskNum) {
 function finishChecked() {
   $("#change").hide();
   $("#name_is").readonly(true);
-  clearDiskFields();
+  clearVMHost();
 };
 
 function finishUnChecked() {

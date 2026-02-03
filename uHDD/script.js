@@ -66,12 +66,28 @@ $('#justification').on('change', function () {
 
 $('#name_is').on('change', function () {
   removedClass($('#name_is'), 'empty');
+  setTimeout(function () {
+    if (!$('#vm_hostname').val()) {
+      clearVMHost();
+    };
+  }, 500);
 });
 
 var vmHostName = $extension.find('#vm_hostname');
 vmHostName.on('change', function () {
-  removedClass(vmHostName, "empty");
-  vmName = vmHostName.data('item').name;
+  setTimeout(function () {
+    if (vmHostName.val()) {
+      removedClass(vmHostName, "empty");
+      if (vmHostName.data('item').name) {
+        vmName = vmHostName.data('item').name;
+      } else {
+        vmName = "";
+      };
+    };
+    if (!$('#vm_disk1').val()) {
+      clearDiskFields();
+    };
+  }, 500);
 });
 
 // 2. Жесткие диски
@@ -241,7 +257,7 @@ $('#add_vm').click(function () {
     $('#delete_vm').show();
     removedClass($("#delete_vm"), "disabled");
 
-    clearDiskFields();
+    clearVMHost();
 
     if (vmCounter >= maxVM) {
       $(this).addClass("disabled");
@@ -446,22 +462,22 @@ function validateFields() {
     //return isError;
   };
   var isErrorDisk1 = validateFieldsDisk(vmDiskOperation1, HDD1, 1);
-  if(isErrorDisk1) isError = true;
+  if (isErrorDisk1) isError = true;
   if (currentDisk > 1) { //&& !isError) {
     var isErrorDisk2 = validateFieldsDisk(vmDiskOperation2, HDD2, 2);
-    if(isErrorDisk2) isError = true;
+    if (isErrorDisk2) isError = true;
   };
   if (currentDisk > 2) { //&& !isError) {
     var isErrorDisk3 = validateFieldsDisk(vmDiskOperation3, HDD3, 3);
-    if(isErrorDisk3) isError = true; 
+    if (isErrorDisk3) isError = true;
   };
   if (currentDisk > 3) { // && !isError) {
     var isErrorDisk4 = validateFieldsDisk(vmDiskOperation4, HDD4, 4);
-    if(isErrorDisk4) isError = true;
+    if (isErrorDisk4) isError = true;
   };
   if (currentDisk > 4) { //&& !isError) {
     var isErrorDisk5 = validateFieldsDisk(vmDiskOperation5, HDD5, 5);
-    if(isErrorDisk5) isError = true;
+    if (isErrorDisk5) isError = true;
   };
   return isError;
 
@@ -713,10 +729,13 @@ function deleteJson(deleteHostName, jsonAction, jsonActionName) {
   };
 };
 
-function clearDiskFields() {
+function clearVMHost() {
   vmHostName.val(null);
   vmHostName.addClass('required');
+  clearDiskFields();
+};
 
+function clearDiskFields() {
   for (var index = 1; index <= currentDisk; index++) {
     hideDiskFields(index);
   };
@@ -730,7 +749,7 @@ function clearDiskFields() {
 
 };
 
-function removeRequiredDisk(diskNum){
+function removeRequiredDisk(diskNum) {
   removedClass($('#vm_disk_operation_required' + diskNum), 'empty');
   removedClass($('#vm_disk' + diskNum), "empty");
   removedClass($('#hdd_cap_required' + diskNum), "empty");

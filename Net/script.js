@@ -147,6 +147,7 @@ var vmHostName = $extension.find('#vm_hostname');
 vmHostName.on('change', function () {
     removedClass(vmHostName, "empty");
     vmName = vmHostName.data('item').name;
+
 });
 
 vmNetworkCidr.on('change', function () {
@@ -260,6 +261,10 @@ $("#delete_delete_network").on("click", function () {
 $('#add_vm').click(function () {
     if (!$(this).hasClass("disabled")) {
 
+        if(valiadateHostname()){
+            return;
+        };
+
         if (validateFields()) {
             alert('Заполните корректно обязательные поля');
             return;
@@ -361,6 +366,53 @@ function validateFields() {
 
 };
 
+function valiadateHostname() {
+    
+    var isError = false;
+     
+     
+    if ($('#vm_hostname').val()!='') {
+
+        // Получаем данные выбранной КЕ
+        var selectedItem = vmHostName.data('item');
+        if (!selectedItem) return;
+
+        var newVmName = selectedItem.name; // Значение поля name у КЕ 
+
+        // Проверка уникальности: ищем совпадение в текущем JSON
+        var isDuplicate = false;
+        if (inputJson && inputJson.nodes) {
+            isDuplicate = inputJson.nodes.some(function (node) {
+                return node.hostname === newVmName;
+            });
+        }
+
+        if (isDuplicate) {
+            // 1. Очистить поле vm_hostname
+            vmHostName.val(null);
+            $('#vm_hostname').val();
+
+
+            // 2. Отобразить красной рамкой
+            //vmHostName.addClass('empty');
+            $('#vm_hostname').addClass('empty');
+            
+            
+            // 3. Отобразить комментарий
+            alert("Выберите другую Виртуальную машину. Имя '" + newVmName + "' уже добавлено в список.");
+
+            vmName = null;
+            isError = true;
+            
+        } else {
+            // Если проверка прошла успешно, сохраняем имя
+            vmName = newVmName;
+        }
+    }
+
+    return isError;
+};
+
 function visiabileRemoveNetwork(isShow) {
     toggleRowVisibility('#delete_network', isShow);
     $('#vm_hostname1').toggleClass('required', isShow);
@@ -417,6 +469,7 @@ function clearAddNetwork() {
     clearFields('#vm_networkcidr', false);
     clearFields('#vm_networkcidr_size', false);
     vmNetworkCidrLabel = "";
+    //vmHostName = "";
 };
 
 function clearDeleteNetwork() {
@@ -516,6 +569,13 @@ $("#is_reopen").on("change", function () {
         $("#correctness_block").show();
     } else {
         $("#correctness_block").hide();
+    }
+});
+
+$("#dc").on("change", function () {
+    var dc = $(this);
+    if (dc.val()) {
+        dc.readonly(true);
     }
 });
 
