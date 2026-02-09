@@ -28,16 +28,13 @@ var $g04SkpduProtocol = "";
 var $g04SkpduPortsNumber = "";
 var $VM_additional = [];
 var createVM;
-var currentLoadedVMIndex = null; // Индекс VM, которую выгружаем на редактирование
-
 
 $("#input_form").readonly(true);
 
-
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
-    if (ISName.hasClass("empty")) {
-        ISName.removeClass("empty");
+    if ($("#name_is").hasClass("empty")) {
+        $("#name_is").removeClass("empty");
     }
     $nameIS = $("#name_is").val();
     if ($nameIS != "") {
@@ -48,13 +45,6 @@ ISName.on('change', function () {
         $("#product").val("");
         $isDCID = null;
         $isCODIS = null;
-    }
-});
-
-var DC = $extension.find("#dc");
-DC.on('change', function () {
-    if (DC.val()) {
-        DC.readonly(true);
     }
 });
 
@@ -877,9 +867,6 @@ $("#unload_vm").on("click", function () {
         return;
     }
 
-    // СОХРАНЯЕМ ИНДЕКС для последующего обновления
-    currentLoadedVMIndex = vmNumber - 1;
-
     // Удаляем элемент массива
     var deletedVM = vms.splice(vmNumber - 1, 1)[0];
     var deletevmAdditioanal = $VM_additional.splice(vmNumber - 1, 1)[0];
@@ -928,7 +915,6 @@ function addVM() {
     var packageData = $package && $package != '' ? JSON.parse($package) : null;
     var newArray = packageData ? packageData.nodes : [];
 
-
     // if(vmNetworkCIDrSize.val()!="" || vmNetworkCIDrSize.val()){
     //     $networkCIDrSize = "new/" + vmNetworkCIDrSize.val();
     // }
@@ -941,50 +927,44 @@ function addVM() {
         };
     }
 
-    if (currentLoadedVMIndex !== null && currentLoadedVMIndex >= 0
-         && currentLoadedVMIndex <= $count_vm) {
-            var currentVM = currentLoadedVMIndex +1;
-            var newVM = addNewVM(currentVM);
-            var newVMAdditional = vmAdditional(currentVM);
-            newArray.splice(currentLoadedVMIndex, 0, newVM);  // Вставляем НА позицию
-            $VM_additional.splice(currentLoadedVMIndex, 0, newVMAdditional);
-        
-            // Пересчитываем номера VM после вставки
-            newArray.forEach(function(vm, index) {
-                vm.vm = index + 1;
-            });
-            $VM_additional.forEach(function(vm, index) {
-                vm.vm = index + 1;
-            });
-        
-        // Очищаем индекс после вставки
-        currentLoadedVMIndex = null;
-
-    } else {
-        var newVM = addNewVM($count_vm);
-        newArray.push(newVM);
-        var newVMAdditional = vmAdditional($count_vm);
-        $VM_additional.push(newVMAdditional);
-    }
-    //var nodes =  newArray;
-    var nodes = {
-        //  "is_id": packageData.is_id,
-        //  "is_dc_id": packageData.is_dc_id,
-        //  "admin_list": packageData.admin_list,
-        "nodes": newArray
+    var newVM = {
+        "vm": $count_vm,
+        "vm_role": $role, //$("#vm_role").val(),  //
+        "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
+        //"vm_networkcidr_size": $networkCIDrSize,
+        "vm_vcpu": $("#vm_vcpu").val(),
+        "vm_ram": $("#vm_ram").val(),
+        "vm_vmdk": $("#vm_vmdk").val(),
+        "vm_instance": $instance,
+        "vm_linux_description": $("#vm_linux_description").val(),
+        "vm_zone": $zone,
+        //"vm_os_family": vmOSFamily.val(),
+        "vm_os": $OS, //$("#vm_os").val(),  //
+        "vm_nfs": $NFS, //$("#vm_nfs").val(), //
+        "vm_action_g02": $("#vm_action_g02").val(),
+        "vm_g02_name": $("#vm_g02_name").val(),
+        "vm_g02_skdpu_protocol": $g02SkpduProtocol, //$("#vm_g02_skdpu_protocol").val(),  //
+        "vm_g02_skdpu_ports_number": $g02SkpduPortsNumber, //$("#vm_g02_skdpu_ports_number").val(), //
+        "vm_action_g03": $("#vm_action_g03").val(), //
+        "vm_g03_name": $("#vm_g03_name").val(),
+        "vm_g03_skdpu_protocol": $g03SkpduProtocol, //$("#vm_g03_skdpu_protocol").val(),  //
+        "vm_g03_skdpu_ports_number": $g03SkpduPortsNumber, //$("#vm_g03_skdpu_ports_number").val(),  //
+        "vm_action_g04": $("#vm_action_g04").val(),  //
+        "vm_g04_name": $("#vm_g04_name").val(),
+        "vm_g04_skdpu_protocol": $g04SkpduProtocol, //$("vm_g04_skdpu_protocol").val(),  //
+        "vm_g04_skdpu_ports_number": $g04SkpduPortsNumber, //$("#vm_g04_skdpu_ports_number").val(),  //
+        //"vm_authorization": $("#vm_authorization").val(),  //
+        //"vm_action_type": $("#vm_action_type").val(),  //
+        "vm_disk1": $("#vm_disk1").val(),
+        "vm_disk2": $("#vm_disk2").val(),
+        "vm_disk3": $("#vm_disk3").val(),
+        "vm_disk4": $("#vm_disk4").val(),
+        "vm_disk5": $("#vm_disk5").val(),
     };
-    $("#input_json").val(JSON.stringify(nodes)).change();
-
-    addVMToTable();
-    //alert($("#input_json"));
-    //var VM1 = "test"
-    //return VM1;
-}
-
-function vmAdditional(numberVM) {
+    newArray.push(newVM);
     var vmLinuxDescriptionHTML = $("#vm_linux_description").val() ? '-' + $("#vm_linux_description").val() : '';
     var newVMAdditional = {
-        vm: numberVM,
+        vm: $count_vm,
         vmNetworkCIDrAction: vmNetworkCIDrAction.val(),
         vmNetworkCIDr: vmNetworkCIDr.val(),
         vmNetworkCIDrSize: vmNetworkCIDrSize.val(),
@@ -1006,47 +986,20 @@ function vmAdditional(numberVM) {
         vmg04SkpduProtocol: vmg04SkpduProtocol.val(),
         vmNameVM: $isCODIS + '-' + $role + '-***-' + $zone + vmLinuxDescriptionHTML
     };
-    return newVMAdditional;
-}
-
-function addNewVM(numberVM) {
-    return {
-        "vm": numberVM,
-        "vm_role": $role, //$("#vm_role").val(),  //
-        "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
-
-        //"vm_networkcidr_size": $networkCIDrSize,
-        "vm_vcpu": $("#vm_vcpu").val(),
-        "vm_ram": $("#vm_ram").val(),
-        "vm_vmdk": $("#vm_vmdk").val(),
-        "vm_instance": $instance,
-        "vm_linux_description": $("#vm_linux_description").val(),
-        "vm_zone": $zone,
-        //"vm_os_family": vmOSFamily.val(),
-        "vm_os": $OS, //$("#vm_os").val(),  //
-        "vm_nfs": $NFS, //$("#vm_nfs").val(), //
-        "vm_action_g02": $("#vm_action_g02").val(),
-        "vm_g02_name": $("#vm_g02_name").val(),
-        "vm_g02_skdpu_protocol": $g02SkpduProtocol, //$("#vm_g02_skdpu_protocol").val(),  //
-        "vm_g02_skdpu_ports_number": $g02SkpduPortsNumber, //$("#vm_g02_skdpu_ports_number").val(), //
-        "vm_action_g03": $("#vm_action_g03").val(), //
-        "vm_g03_name": $("#vm_g03_name").val(),
-        "vm_g03_skdpu_protocol": $g03SkpduProtocol, //$("#vm_g03_skdpu_protocol").val(),  //
-        "vm_g03_skdpu_ports_number": $g03SkpduPortsNumber, //$("#vm_g03_skdpu_ports_number").val(),  //
-        "vm_action_g04": $("#vm_action_g04").val(), //
-        "vm_g04_name": $("#vm_g04_name").val(),
-        "vm_g04_skdpu_protocol": $g04SkpduProtocol, //$("vm_g04_skdpu_protocol").val(),  //
-        "vm_g04_skdpu_ports_number": $g04SkpduPortsNumber, //$("#vm_g04_skdpu_ports_number").val(),  //
-
-
-        //"vm_authorization": $("#vm_authorization").val(),  //
-        //"vm_action_type": $("#vm_action_type").val(),  //
-        "vm_disk1": $("#vm_disk1").val(),
-        "vm_disk2": $("#vm_disk2").val(),
-        "vm_disk3": $("#vm_disk3").val(),
-        "vm_disk4": $("#vm_disk4").val(),
-        "vm_disk5": $("#vm_disk5").val(),
+    $VM_additional.push(newVMAdditional);
+    //var nodes =  newArray;
+    var nodes = {
+        //  "is_id": packageData.is_id,
+        //  "is_dc_id": packageData.is_dc_id,
+        //  "admin_list": packageData.admin_list,
+        "nodes": newArray
     };
+    $("#input_json").val(JSON.stringify(nodes)).change();
+
+    addVMToTable();
+    //alert($("#input_json"));
+    //var VM1 = "test"
+    //return VM1;
 }
 
 function resetValueVM() {
