@@ -39,12 +39,22 @@ ISName.on('change', function () {
     $nameIS = $("#name_is").val();
     if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
-        $("#product").val(ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ'].id);
         $isCODIS = ISName.data('item').custom_fields['ИС - Код ИС'];
+        if (ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ']) {
+            $("#product").val(ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ'].id);
+        }
+
     } else {
         $("#product").val("");
         $isDCID = null;
         $isCODIS = null;
+    }
+});
+
+var DC = $extension.find("#dc");
+DC.on('change', function () {
+    if (DC.val()) {
+        DC.readonly(true);
     }
 });
 
@@ -1750,6 +1760,7 @@ function finishChecked() {
     $("#add_vm").hide();
     $("#copy_vm").hide();
     $("#delete_vm").hide();
+    $("#number_vm_display").hide();
     $("#is_ex_change").addClass("disabled");
     $("#justification").readonly(true);
     $("#inc_desc").readonly(true);
@@ -1769,6 +1780,7 @@ function finishUnChecked() {
     }
     if ($count_vm > 1) {
         $("#delete_vm").show();
+        $("#number_vm_display").show();
     }
     $("#is_ex_change").removeClass("disabled");
     $("#justification").readonly(false);

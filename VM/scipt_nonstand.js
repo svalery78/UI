@@ -1768,6 +1768,7 @@ function finishChecked() {
     $("#add_vm").hide();
     $("#copy_vm").hide();
     $("#delete_vm").hide();
+    $("#number_vm_display").hide();
     $("#is_ex_change").addClass("disabled");
     $("#justification").readonly(true);
     $("#inc_desc").readonly(true);
@@ -1787,6 +1788,7 @@ function finishUnChecked() {
     }
     if ($count_vm > 1) {
         $("#delete_vm").show();
+        $("#number_vm_display").show();
     }
     $("#is_ex_change").removeClass("disabled");
     $("#justification").readonly(false);

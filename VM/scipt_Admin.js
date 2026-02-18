@@ -32,9 +32,6 @@ $("#input_form").readonly(true);
 
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
-    if (ISName.hasClass("empty")) {
-        ISName.removeClass("empty");
-    }
     $nameIS = $("#name_is").val();
     if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
@@ -45,12 +42,8 @@ ISName.on('change', function () {
         $isDCID = null;
         $isCODIS = null;
     }
-});
-
-var DC = $extension.find("#dc");
-DC.on('change', function () {
-    if (DC.val()) {
-        DC.readonly(true);
+    if ($("#name_is").hasClass("empty")) {
+        $("#name_is").removeClass("empty");
     }
 });
 
@@ -112,7 +105,7 @@ vmNetworkCIDr.on('change', function () {
     if (vmNetworkCIDrAction.val() === "существующая") {
         $networkCIDr = vmNetworkCIDr.data('item').label;
     } else {
-        setNetworkCIDr();
+        $networkCIDr = "new";
     }
     if (vmNetworkCIDr.hasClass("empty")) {
         vmNetworkCIDr.removeClass("empty");
@@ -123,7 +116,11 @@ vmNetworkCIDrSize.on('change', function () {
     if ($("#vm_networkcidr_size_required").hasClass("empty")) {
         $("#vm_networkcidr_size_required").removeClass('empty');
     };
-    setNetworkCIDr();
+    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
+        $networkCIDr = "new/" + vmNetworkCIDrSize.val();
+    } else {
+        $networkCIDr = "new";
+    };
 });
 
 var vmVCPU = $extension.find("#vm_vcpu");
@@ -247,6 +244,13 @@ var vmg04SkpduPortsNumber = $extension.find("#vm_g04_skdpu_ports_number");
 var vmg04SkpduPortsNumberRequired = $extension.find("#vm_g04_skdpu_ports_number_required");
 
 var vmAddGroups = $extension.find("#add_groups");
+
+$("#dc").on("change", function () {
+    var dc = $(this);
+    if (dc.val()) {
+        dc.readonly(true);
+    }
+});
 
 vmAddGroups.on('change', function () {
     $addGroups = vmAddGroups.val();
@@ -1740,6 +1744,7 @@ function finishChecked() {
     $("#add_vm").hide();
     $("#copy_vm").hide();
     $("#delete_vm").hide();
+    $("#number_vm_display").hide();
     $("#is_ex_change").addClass("disabled");
     $("#justification").readonly(true);
     $("#inc_desc").readonly(true);
@@ -1759,6 +1764,7 @@ function finishUnChecked() {
     }
     if ($count_vm > 1) {
         $("#delete_vm").show();
+        $("#number_vm_display").show();
     }
     $("#is_ex_change").removeClass("disabled");
     $("#justification").readonly(false);
@@ -1769,15 +1775,6 @@ function finishUnChecked() {
     $("#admin_list").readonly(false);
     $("#vm_authorization").readonly(false);
 }
-
-function setNetworkCIDr() {
-    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
-        $networkCIDr = "new/" + vmNetworkCIDrSize.val();
-    } else {
-        $networkCIDr = "new";
-    };
-};
-
 
 $("#admin_privileges").on("change", function () {
     if (!$(this).hasClass("disabled")) {
@@ -1871,29 +1868,15 @@ $(document).ready(function () {
 });
 
 // Достаем id запрашивающего из URL
-function setRequestor() {
-  if (ITRP.record.new) {
-    console.log("ITRP.context:", ITRP.context);
-
-    if (ITRP.context === "self_service") {
-      console.log("requested_for_id:", $("#requested_for_id").val());
-      $("#requestor").val($("#requested_for_id").val());
-    } else {
-      console.log("req_requested_for_id:", $("#req_requested_for_id").val());
-      $("#requestor").val($("#req_requested_for_id").val());
+if (ITRP.record.new) {
+    if (ITRP.context === 'self_service') {
+        $("#requestor").val($("#requested_for_id").val());
     }
 
-    console.log("requestor after set:", $("#requestor").val());
-  }
+    if (ITRP.context != 'self_service') {
+        $("#requestor").val($("#req_requested_for_id").val());
+    }
 }
-
-setRequestor();
-
-//когда ввод завершен (фокус ушел с поля)
-$("#req_requested_for").on("blur", function () {
-  console.log("blur:", this.id, "value:", $(this).val());
-  setRequestor();
-});
 
 // Анализ возврата на доработку
 $("#is_reopen").on("change", function () {
