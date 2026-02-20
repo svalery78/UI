@@ -1756,6 +1756,7 @@ function finishChecked() {
     $("#admin_privileges").addClass("disabled");
     $("#admin_list").readonly(true);
     $("#vm_authorization").readonly(true);
+    $("#number").val(null).change();
     resetValueVM();
 }
 

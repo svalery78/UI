@@ -130,8 +130,6 @@ vmNetworkCIDrSize.on('change', function () {
         $("#vm_networkcidr_size_required").removeClass('empty');
     };
     setNetworkCIDr();
-
-
 });
 
 
@@ -1769,6 +1767,7 @@ function finishChecked() {
     $("#admin_privileges").addClass("disabled");
     $("#admin_list").readonly(true);
     $("#vm_authorization").readonly(true);
+    $("#number").val(null).change();
     resetValueVM();
 }
 

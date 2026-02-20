@@ -32,18 +32,28 @@ $("#input_form").readonly(true);
 
 var ISName = $extension.find("#name_is");
 ISName.on('change', function () {
+    if ($("#name_is").hasClass("empty")) {
+        $("#name_is").removeClass("empty");
+    }
     $nameIS = $("#name_is").val();
     if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
-        $("#product").val(ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ'].id);
         $isCODIS = ISName.data('item').custom_fields['ИС - Код ИС'];
+        if (ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ']) {
+            $("#product").val(ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ'].id);
+        }
+
     } else {
         $("#product").val("");
         $isDCID = null;
         $isCODIS = null;
     }
-    if ($("#name_is").hasClass("empty")) {
-        $("#name_is").removeClass("empty");
+});
+
+var DC = $extension.find("#dc");
+DC.on('change', function () {
+    if (DC.val()) {
+        DC.readonly(true);
     }
 });
 
@@ -105,7 +115,7 @@ vmNetworkCIDr.on('change', function () {
     if (vmNetworkCIDrAction.val() === "существующая") {
         $networkCIDr = vmNetworkCIDr.data('item').label;
     } else {
-        $networkCIDr = "new";
+        setNetworkCIDr();
     }
     if (vmNetworkCIDr.hasClass("empty")) {
         vmNetworkCIDr.removeClass("empty");
@@ -116,11 +126,7 @@ vmNetworkCIDrSize.on('change', function () {
     if ($("#vm_networkcidr_size_required").hasClass("empty")) {
         $("#vm_networkcidr_size_required").removeClass('empty');
     };
-    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
-        $networkCIDr = "new/" + vmNetworkCIDrSize.val();
-    } else {
-        $networkCIDr = "new";
-    };
+    setNetworkCIDr();
 });
 
 var vmVCPU = $extension.find("#vm_vcpu");
@@ -1753,6 +1759,7 @@ function finishChecked() {
     $("#admin_privileges").addClass("disabled");
     $("#admin_list").readonly(true);
     $("#vm_authorization").readonly(true);
+    $("#number").val(null).change();
     resetValueVM();
 }
 
@@ -1775,6 +1782,14 @@ function finishUnChecked() {
     $("#admin_list").readonly(false);
     $("#vm_authorization").readonly(false);
 }
+
+function setNetworkCIDr() {
+    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
+        $networkCIDr = "new/" + vmNetworkCIDrSize.val();
+    } else {
+        $networkCIDr = "new";
+    };
+};
 
 $("#admin_privileges").on("change", function () {
     if (!$(this).hasClass("disabled")) {
