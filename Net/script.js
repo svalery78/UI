@@ -147,7 +147,6 @@ var vmHostName = $extension.find('#vm_hostname');
 vmHostName.on('change', function () {
     removedClass(vmHostName, "empty");
     vmName = vmHostName.data('item').name;
-
 });
 
 vmNetworkCidr.on('change', function () {
@@ -264,7 +263,7 @@ $('#add_vm').click(function () {
         if(valiadateHostname()){
             return;
         };
-
+        
         if (validateFields()) {
             alert('Заполните корректно обязательные поля');
             return;
@@ -413,6 +412,7 @@ function valiadateHostname() {
     return isError;
 };
 
+
 function visiabileRemoveNetwork(isShow) {
     toggleRowVisibility('#delete_network', isShow);
     $('#vm_hostname1').toggleClass('required', isShow);
@@ -469,7 +469,6 @@ function clearAddNetwork() {
     clearFields('#vm_networkcidr', false);
     clearFields('#vm_networkcidr_size', false);
     vmNetworkCidrLabel = "";
-    //vmHostName = "";
 };
 
 function clearDeleteNetwork() {
@@ -573,10 +572,10 @@ $("#is_reopen").on("change", function () {
 });
 
 $("#dc").on("change", function () {
-    var dc = $(this);
-    if (dc.val()) {
-        dc.readonly(true);
-    }
+  var dc = $(this);
+  if(dc.val()) {
+    dc.readonly(true);
+  }
 });
 
 $(document).ready(function () {

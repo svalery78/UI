@@ -39,8 +39,11 @@ ISName.on('change', function () {
     $nameIS = $("#name_is").val();
     if ($nameIS != "") {
         $isDCID = ISName.data('item').custom_fields['Идентификатор ЦОД'];
-        $("#product").val(ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ'].id);
         $isCODIS = ISName.data('item').custom_fields['ИС - Код ИС'];
+        if (ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ']) {
+            $("#product").val(ISName.data('item').custom_fields['ИС - Продукт-владелец ДИТ'].id);
+        }
+
     } else {
         $("#product").val("");
         $isDCID = null;
