@@ -196,26 +196,27 @@ ITRP.hooks.register('after-prefill', function () {
         };
     });
 
+   // --- ЛОГИКА ДЛЯ КРАТКОГО НАИМЕНОВАНИЯ (LABEL) ---
     var $chgLabel = $("#chg_label");
-    var $labelRow = $("#label_row");
-    var $newLabelField = $("#new_label");
+    var $newLabelField = $("#label"); // ID из вашего HTML
+    var $newLabelRow = $newLabelField.closest('.row'); // Находим контейнер поля
 
     $chgLabel.on("change", function () {
         if ($(this).is(":checked")) {
-            $labelRow.show(); // Используем стандартный show() или ITRP.show()
+            show($newLabelRow);
             $newLabelField.required(true);
             
-            // Опционально: подставляем текущее значение как начальное для редактирования
+            // Если поле пустое, можно предзаполнить его текущим значением для удобства правки
             if (!$newLabelField.val()) {
                 $newLabelField.val($("#current_label").val());
             }
         } else {
-            $labelRow.hide();
-            $newLabelField.required(false);
+            hide($newLabelRow);
+            $newLabelField.required(false).val(""); // Очищаем значение при снятии галки
         }
     });
 
-    // Вызываем change сразу, чтобы проверить состояние при загрузке (если это редактирование)
+    // Инициализация при загрузке (для режима редактирования записи)
     $chgLabel.change();
 });
 $(".checkbox input").on("change", function () {
