@@ -1,0 +1,345 @@
+<div class="row vertical" data-searchable data-filterable>
+    <label for="is"
+        title="Выберите из выпадающего списка краткое наименование информационной системы, к которой относится ваш запрос.
+      
+Если требуемая вам ИС не доступна для выбора, значит вы не состоите в списке авторизованных лиц по данной ИС.
+Для подачи запроса или добавления вас в качестве авторизованного лица просьба обратиться к ответственному лицу за данную ИС.">
+        Наименование ИС <i class="ii icon-help"></i></label>
+    <div id="is" class="required" data-custom-view="ис" data-filter-name="user" data-filter-value="requestor"></div>
+</div>
+
+<div class="row vertical hide" style="display:none">
+    <div id="requestor" class="person-suggest hide"></div>
+</div>
+
+<div class="section hide" id="attr_is">
+    <span class="section-header">Атрибуты ИС</span>
+    <div class="row vertical" data-hidden>
+        <label for="current_status" title="Текущий статус ИС">Текущий статус ИС</label>
+        <select id="current_status" class="readonly">
+            <option value="in_production">В производстве</option>
+            <option value="being_built">В разработке</option>
+            <option value="being_tested">Испытывается</option>
+            <option value="archived">В архиве</option>
+        </select>
+    </div>
+    <div class="row vertical checkbox">
+        <input id="chg_status" class="change" type="checkbox">
+        <label for="chg_status" title="Активируйте чек-бокс, если требуется смена статуса у ИС">
+            Изменить статус ИС <i class="ii icon-help"></i></label>
+    </div>
+
+    <div class="row vertical">
+        <label for="status" title="Выберите, на какой статус требуется перевести ИС:
+- В разработке, если ИС находится на этапе разработки/проектирования;
+	- Испытывается, если ИС находится на этапе опытно-промышленной эксплуатации;
+	- В производстве, если ИС находится на этапе промышленной эксплуатации;">Новый статус КЕ</label>
+        <select id="status" class="required">
+            <option value="in_production">В производстве</option>
+            <option value="being_built">В разработке</option>
+            <option value="being_tested">Испытывается</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <div class="row vertical" data-hidden>
+        <label for="current_manager" title="Текущий Владелец КЕ ИС">Текущий Владелец КЕ ИС</label>
+        <div id="current_manager" class="readonly" data-custom-view="все_лица_в_т_ч_заблокированные"></div>
+    </div>
+    <div class="row vertical checkbox">
+        <input id="chg_manager" class="change" type="checkbox">
+        <label for="chg_manager" title="Активируйте чек-бокс, если требуется смена владельца ИС">
+            Изменить владельца КЕ ИС <i class="ii icon-help"></i></label>
+    </div>
+    <div class="row vertical">
+        <label for="manager"
+            title="Выберите из списка, на кого необходимо сменить владельца ИС. Данной роли назначаются следующие обязанности:
+- согласовывает изменение атрибутов КЕ ИС;
+	- контролирует операционную деятельность и доступность ИС;
+	- участвует в согласовании окон простоя;
+	- участвует в согласовании привилегированного доступа к ИС;
+	- контролирует актуальность данных в поле «Ответственный за ИБ»;
+	- получает сообщения событий автоматического аудита на наличие значения атрибута, признака блокировки, признак «Сотрудник ИБ».">
+            Новый владелец КЕ ИС <i class="ii icon-help"></i></label>
+        <div id="manager" class="required" data-custom-view="глобальные_учетные_записи"></div>
+    </div>
+
+    <hr>
+
+    <div class="row vertical" data-hidden>
+        <label for="current_is_manager" title="Текущий ответственный по ИС">Текущий ответственный по ИС</label>
+        <div id="current_is_manager" class="readonly" data-custom-view="все_лица_в_т_ч_заблокированные"></div>
+    </div>
+    <div class="row vertical checkbox">
+        <input id="chg_resp" class="change" type="checkbox">
+        <label for="chg_resp" title="Активируйте чек-бокс, если требуется смена ответственного по ИС">
+            Изменить ответственного по ИС <i class="ii icon-help"></i></label>
+    </div>
+    <div class="row vertical">
+        <label for="is_manager" title="Выберите из списка, на кого необходимо сменить ответственное лицо по ИС. Данной роли назначаются следующие обязанности:
+- согласовывает изменение атрибута «Владелец КЕ» КЕ ИС;
+	- управляет развитием ИС;
+	- участвует в согласовании изменений в ИС;
+	- участвует в согласовании назначения «Отв. за инф. безопасность»;
+	- участвует в группе рассылки по ППР и КИ (cod-product-managers@mos.ru).">
+            Новый ответственный по ИС <i class="ii icon-help"></i></label>
+        <div id="is_manager" class="required" data-custom-view="глобальные_учетные_записи"></div>
+    </div>
+
+    <hr>
+
+    <div class="row vertical" data-hidden>
+        <label for="current_name" title="Текущее полное наименование ИС">Текущее полное наименование ИС</label>
+        <input id="current_name" class="readonly" type="text" autocomplete="off">
+    </div>
+    <div class="row vertical checkbox">
+        <input id="chg_name" class="change" type="checkbox">
+        <label for="chg_name" title="Активируйте чек-бокс, если требуется смена текстового поля полного наименования ИС (её расшифровки).">
+            Изменить полное наименование ИС <i class="ii icon-help"></i></label>
+    </div>
+    <div class="row vertical">
+        <label for="name" title="Укажите новый текст поля полного наименования ИС">
+            Новое полное наименование ИС <i class="ii icon-help"></i></label>
+        <input id="name" type="text" autocomplete="off" class="required" maxlength="160">
+    </div>
+
+
+  
+ <div class="row vertical" data-hidden>
+        <label for="current_label" title="Текущее краткое наименование ИС">Текущее краткое наименование ИС</label>
+        <input id="current_label" class="readonly" type="text" autocomplete="off">
+    </div>
+    <div class="row vertical checkbox">
+        <input id="chg_label" class="change" type="checkbox">
+        <label for="chg_label" title="Активируйте чек-бокс, если требуется смена текстового поля краткого наименования ИС.">
+            Изменить краткое наименование ИС <i class="ii icon-help"></i></label>
+    </div>
+    <div class="row vertical">
+        <label for="label" title="Укажите новый текст поля краткого наименования ИС">
+            Новое краткое наименование ИС <i class="ii icon-help"></i></label>
+        <input id="label" type="text" autocomplete="off" class="required" maxlength="160">
+    </div>
+
+
+
+  
+    <div id="chg_is_code_row" class="row vertical checkbox">
+        <input id="chg_is_code" type="checkbox" class="change">
+        <label for="chg_is_code" title="Добавить код ИС">Добавить код ИС</label>
+    </div>
+
+    <div id="is_code_row" class="row vertical">
+        <label for="is_code" title="Введите код ИС">Введите код ИС</label>
+        <input id="is_code" type="text" autocomplete="off" pattern="[a-z][a-z0-9]{1,5}"
+            placeholder="От 2 до 6 символов." class="required" minlength="2" maxlength="6">
+    </div>
+
+    <div id="chg_is_code_dis" class="row vertical">
+        <div class="static-text">
+            <i class="ii icon-info"></i>
+            Уникальное краткое обозначение информационной системы на латинице, используемое в именовании объектов
+            инфраструктуры, обеспечивающей доступность ИС. Правила формирования кода ИС:<br>
+            • код ИС не должен совпадать с Кодом других ИС;<br>
+            • длина от 2 до 6 символов;<br>
+            • допустимые символы: a-z, 0-9;<br>
+            • не начинается с цифры.<br>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row vertical checkbox">
+        <input id="chg_remarks" class="change" type="checkbox">
+        <label for="chg_remarks" title="Изменить примечания">Изменить примечания</label>
+    </div>
+    <div class="row vertical" style="display:none">
+        <label for="remarks" title="Новые примечания">Новые примечания</label>
+        <textarea id="remarks" class="required" maxlength="500"></textarea>
+    </div>
+
+    <hr>
+
+    <div class="row vertical" data-hidden>
+        <label for="current_owner" title="Текущая организация собственник">Текущая организация собственник</label>
+        <div id="current_owner" class="readonly" data-custom-view="организации_с_инн"></div>
+    </div>
+    <div class="row vertical checkbox">
+        <input id="chg_owner" class="change" type="checkbox">
+        <label for="chg_owner" title="Активируйте чек-бокс, если требуется смена организации-собственника ИС">
+            Изменить организацию собственника ИС <i class="ii icon-help"></i></label>
+    </div>
+    <div class="row vertical">
+        <label for="owner" title="Выберите из списка организацию-собственник, на которую нужно заменить">
+            Новая организация собственник <i class="ii icon-help"></i></label>
+        <div id="owner" class="required " data-custom-view="организации_с_инн"></div>
+    </div>
+
+    <hr>
+
+    <div class="row vertical checkbox">
+        <input id="chg_critical" class="change" type="checkbox">
+        <label for="chg_critical" title="Активируйте чек-бокс, если требуется смена критичности ИС">
+            Изменить критичность ИС <i class="ii icon-help"></i></label>
+    </div>
+    <div class="row vertical">
+        <label for="critical" title="Выберите новое значение критичности ИС">
+            Новое значение критичности ИС <i class="ii icon-help"></i></label>
+        <select id="critical" class="required">
+            <option value=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <div class="row vertical checkbox">
+        <input id="chg_4me_account" class="change" type="checkbox">
+        <label for="chg_4me_account" title="Активируйте чек-бокс, если требуется смена пространства отображения ИС">
+            Изменить пространство отображения ИС <i class="ii icon-help"></i></label>
+    </div>
+    <div class="row vertical">
+        <label for="4me_account"
+            title="Укажите из списка новое пространство отображения в mos.itsm для отображения в ней новой ИС">
+            Новое пространство отображения ИС <i class="ii icon-help"></i></label>
+        <div id="4me_account" class="required" data-custom-view="пространства_4me" data-custom-view-account="moscow">
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row vertical" data-hidden>
+        <label for="current_interaction_with_dc" title="Текущий ответственный за взаимодействие с ЦОД">
+            Текущий ответственный за взаимодействие с ЦОД</label>
+        <div id="current_interaction_with_dc" class="readonly" data-custom-view="все_лица_в_т_ч_заблокированные"></div>
+    </div>
+    <div class="row vertical checkbox">
+        <input id="chg_interaction_with_dc" class="change" type="checkbox">
+        <label for="chg_interaction_with_dc"
+            title="Активируйте чек-бокс, если требуется смена ответственного за взаимодействие с ЦОД">
+            Изменить ответственного за взаимодействие с ЦОД <i class="ii icon-help"></i></label>
+    </div>
+
+    <div class="row vertical">
+        <label for="add_interaction_with_dc" title="Выберите из списка, на кого необходимо сменить ответственного за взаимодействие с ЦОД. Данной роли назначаются следующие обязанности:
+- контролирует операционную деятельность инфраструктурных объектов ИС;
+	- получает паспорта ИС по итогам выполнения некоторых изменений;
+	- согласовывает выполнения изменений;
+	- согласовывает предоставления консультаций;
+	- получает сообщения почтовой рассылки с новостями ЦОД;
+	- участвует в группе рассылки по ППР и КИ (cod-product-managers@mos.ru);
+	- является контактным лицом по всем вопросам взаимодействия (например, взаимодействие с аккаунтами по разным вопросам: просьбы по возвращению ресурсов/повышение утилизации; взаимодействие в рамках проектов по миграциям и т.п.);
+
+Назначается приказом инициированным Ответственным за ИС (ГИС)">
+            Новый ответственный за взаимодействие с ЦОД <i class="ii icon-help"></i></label>
+        <div id="add_interaction_with_dc" class="required" data-custom-view="глобальные_учетные_записи"></div>
+    </div>
+
+    <hr>
+
+    <div class="row vertical" data-hidden>
+        <label for="current_ib" title="Текущие ответственные за ИБ">Текущие ответственные за ИБ</label>
+        <div id="current_ib" class="readonly" data-multiple data-custom-view="все_лица_в_т_ч_заблокированные"></div>
+    </div>
+
+    <div class="row vertical checkbox">
+        <input id="chg_ib" class="change" type="checkbox">
+        <label for="chg_ib"
+            title="Активируйте чек-бокс, если требуется смена ответственных за информационную безопасность">
+            Изменить ответственных за ИБ <i class="ii icon-help"></i></label>
+    </div>
+    <div class="row vertical">
+        <label for="add_ib"
+            title="Выберите из списка ответственных за информационную безопасность ИС. Новый список ответственных лиц заменит текущий список.
+Данной роли назначаются следующие обязанности:
+- функциональные обязанности в соответствии с приказом «О мерах по защите информации в информационных системах и ресурсах города Москвы, создание, развитие (модернизацию), эксплуатацию которых осуществляет Государственное казенное учреждение города Москвы «Информационный город».
+- согласование выполнения большинства изменений
+- получение почтовой рассылки с новостями ЦОД
+- участие в группе рассылки по ППР и КИ (cod-product-managers@mos.ru)
+
+
+
+В случае отсутствия назначенного приказом ГКУ «Инфогород» ответственного за ИБ ИС, его функции и ответственность, установленные приказом, осуществляет ответственный за защиту информации ИС">Новый
+            состав лиц, ответственных за ИБ <i class="ii icon-help"></i></label>
+        <div id="add_ib" class="required" data-multiple data-min="1" data-custom-view="ответственные_за_иб"></div>
+    </div>
+
+    <hr>
+
+    <div class="row vertical" data-hidden>
+        <label for="current_user" title="Текущие авторизованные лица">Текущие авторизованные лица</label>
+        <div id="current_user" class="readonly" data-multiple data-custom-view="все_лица_в_т_ч_заблокированные"></div>
+    </div>
+
+    <div class="row vertical checkbox">
+        <input id="chg_user" class="change" type="checkbox">
+        <label for="chg_user"
+            title="Активируйте чек-бокс, если требуется смена списка авторизованных лиц от ИС.
+Авторизованные лица:
+сотрудники ДИТ, ОИВ, подрядных организаций, — которым доступны:
+⭐️ Просмотр карточки ИС на портале self-service 4me (https://datacenter.4me.mos.ru/self-service) в разделе «Мои активы (https://datacenter.4me.mos.ru/self-service/assets)»;
+⭐️ Просмотр всех запросов в ЦОД, поданных по этой ИС (все участники списка АЛ автоматически добавляются в наблюдатели всех запросов по ИС).">
+            Изменить список авторизованных лиц <i class="ii icon-help"></i></label>
+    </div>
+
+    <div class="row vertical" id="add_users_row" style="display:none">
+        <label for="add_users" title="Выберите из списка, кого требуется добавить в список авторизованных лиц">
+            Добавить в список <i class="ii icon-help"></i></label>
+        <div id="add_users" data-multiple data-custom-view="уз_для_списка_авторизованных_лиц"></div>
+    </div>
+
+    <div class="row vertical" id="del_users_row" style="display:none">
+        <label for="del_users" title="Выберите из списка, кого требуется удалить из списка авторизованных лиц">
+            Убрать из списка <i class="ii icon-help"></i></label>
+        <div id="del_users" data-multiple data-custom-view="все_лица_в_т_ч_заблокированные"></div>
+    </div>
+
+    <div class="section-help" id="user_info" style="display:none">При выборе пользователя необходимо выбирать из списка
+        "Текущие авторизованные лица". При выборе отсутствующего в списке лица ничего не произойдет.</div>
+
+
+
+
+
+    <div class="section" id="hpsm">
+        <span class="section-header">Требуется изменить атрибуты ИС в HPSM (команда сопровождения ИС работает в
+            HPSM)</span>
+        <div class="row vertical checkbox">
+            <input id="chg_direction" class="change" type="checkbox">
+            <label for="chg_direction" title="Активируйте чек-бокс, если требуется смена направления в HPSM">
+                Требуется изменить направление <i class="ii icon-help"></i></label>
+        </div>
+        <div class="row vertical">
+            <label for="direction" title="Выберите из списка новое направление HPSM ">
+                Новое направление <i class="ii icon-help"></i></label>
+            <div id="direction" class="required" data-custom-view="направления"></div>
+        </div>
+        <div class="row vertical hide" data-hidden>
+            <label for="current_admin_group" title="Текущая ответственная РГ">Текущая ответственная РГ</label>
+            <div id="current_admin_group" class="readonly" data-custom-view="рабочие_группы_из_hpsm"></div>
+        </div>
+        <div class="row vertical checkbox">
+            <input id="chg_admin_group" class="change" type="checkbox">
+            <label for="chg_admin_group" title="Активируйте чек-бокс, если требуется смена ответственной РГ в HPSM">
+                Требуется изменить ответственную РГ <i class="ii icon-help"></i></label>
+        </div>
+        <div class="row vertical">
+            <label for="admin_group" title="Выберите из списка новую ответственную РГ из HPSM">
+                Новая ответственная РГ <i class="ii icon-help"></i></label>
+            <div id="admin_group" class="required" data-custom-view="рабочие_группы_из_hpsm"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row vertical hide" style="display:none" data-hidden>
+    <label for="is_2" title="Выберите ИС">Выберите ИС</label>
+    <div id="is_2" class="required" data-custom-view="ис_код"></div>
+</div>
+
+<div class="row vertical hide" style="display:none" data-hidden>
+    <label for="is_code_old" title="Код ИС">Код ИС</label>
+    <input id="is_code_old" type="text" autocomplete="off">
+</div>
