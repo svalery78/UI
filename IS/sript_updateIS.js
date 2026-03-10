@@ -68,6 +68,40 @@ codeIS.on('change', function () {
   };
 });
 
+var label = $extension.find("#label");
+label.on('change', function () {
+  //alert('codeIS');
+  if (docLoad) {  
+    //alert('codeIS - changed');
+    if (label.val() != "") {
+        var filterContent = 'label: { values: "' + label.val() + '"}' ;
+        $.ajax({
+            beforeSend: function (request) {
+                request.setRequestHeader("Content-Type", 'application/json');
+            },
+            dataType: "json",
+            url: "https://eok-dev.mos.ru/robot/checkUniquenessISCode",
+            data: JSON.stringify({
+                "filterContent": filterContent
+            }),
+            //data: filterContent,
+            method: 'post',
+            success: function (data) {
+                if (data.messages){
+                    alert("Значение уже занято, введите новое значение");
+                    codeIS.val(null);
+                    codeIS.addClass("required");
+                }
+            },
+            error: function (data) {
+                alert(JSON.stringify(data));
+
+            }
+        });
+    };
+  };
+});
+
 
 
 
@@ -161,6 +195,28 @@ ITRP.hooks.register('after-prefill', function () {
             //$("#del_users").val(null).change();
         };
     });
+
+    var $chgLabel = $("#chg_label");
+    var $labelRow = $("#label_row");
+    var $newLabelField = $("#new_label");
+
+    $chgLabel.on("change", function () {
+        if ($(this).is(":checked")) {
+            $labelRow.show(); // Используем стандартный show() или ITRP.show()
+            $newLabelField.required(true);
+            
+            // Опционально: подставляем текущее значение как начальное для редактирования
+            if (!$newLabelField.val()) {
+                $newLabelField.val($("#current_label").val());
+            }
+        } else {
+            $labelRow.hide();
+            $newLabelField.required(false);
+        }
+    });
+
+    // Вызываем change сразу, чтобы проверить состояние при загрузке (если это редактирование)
+    $chgLabel.change();
 });
 $(".checkbox input").on("change", function () {
     var checkbox_div = $(this).parents("div.checkbox");
