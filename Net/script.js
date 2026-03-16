@@ -132,7 +132,7 @@ vmNetworkcidirAction.on('change', function () {
     else if (vmNetworkcidirAction.val() == "новая") {
         isShowNew = true;
         clearFields('#vm_networkcidr', false);
-        vmNetworkCidrLabel = "new";
+        setNetworkCIDr();
     } else {
         clearFields('#vm_networkcidr', false);
         clearFields("#vm_networkcidr_size", false);
@@ -154,17 +154,13 @@ vmNetworkCidr.on('change', function () {
     if (vmNetworkcidirAction.val() === "существующая") {
         vmNetworkCidrLabel = vmNetworkCidr.data('item').label;
     } else {
-        vmNetworkCidrLabel = "new";
+        setNetworkCIDr();
     }
 });
 
 vmNetworkCIDrSize.on('change', function () {
-    removedClass($("#vm_networkcidr_size_required"), "empty");
-    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
-        vmNetworkCidrLabel = "new/" + vmNetworkCIDrSize.val();
-    } else {
-        vmNetworkCidrLabel = "new";
-    };
+   removedClass($("#vm_networkcidr_size_required"), "empty");
+   setNetworkCIDr();
 });
 
 var vmHostName1 = $extension.find('#vm_hostname1');
@@ -561,6 +557,14 @@ function finishUnChecked() {
     }
     $("#name_is").readonly(false);
     $("#vm_ni_operation").readonly(false);
+};
+
+function setNetworkCIDr() {
+    if (vmNetworkCIDrSize.val() != "" || vmNetworkCIDrSize.val()) {
+        vmNetworkCidrLabel = "new/" + vmNetworkCIDrSize.val();
+    } else {
+        vmNetworkCidrLabel = "new";
+    };
 };
 
 $("#is_reopen").on("change", function () {
