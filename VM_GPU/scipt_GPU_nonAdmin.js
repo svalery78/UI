@@ -152,6 +152,27 @@ vmVMDK.on('change', function () {
     }
 });
 
+var vmGpuProduct = $extension.find('#vm_gpu_product');
+vmGpuProduct.on('change', function () {
+    if (vmGpuProduct.hasClass("empty")) {
+        vmGpuProduct.removeClass("empty");
+    }
+});
+
+var vmGpuProfile = $extension.find('#vm_gpu_profile');
+vmGpuProfile.on('change', function () {
+    if (vmGpuProfile.hasClass("empty")) {
+        vmGpuProfile.removeClass("empty");
+    }
+});
+
+var vmGpuAmount = $extension.find('#vm_gpu_amount');
+vmGpuAmount.on('change', function () {
+    if (vmGpuAmount.hasClass("empty")) {
+        vmGpuAmount.removeClass("empty");
+    }
+});
+
 var vmOSFamily = $extension.find("#vm_os_family");
 vmOSFamily.on('change', function () {
     if (vmOSFamily.hasClass("empty")) {
@@ -930,6 +951,9 @@ function addVM() {
         "vm_vcpu": $("#vm_vcpu").val(),
         "vm_ram": $("#vm_ram").val(),
         "vm_vmdk": $("#vm_vmdk").val(),
+        "vm_gpu_product": vmGpuProduct.val(),
+        "vm_gpu_profile": vmGpuProfile.val(),
+        "vm_gpu_amount": vmGpuAmount.val(),
         "vm_instance": $instance,
         "vm_linux_description": $("#vm_linux_description").val(),
         "vm_zone": $zone,
@@ -1015,6 +1039,15 @@ function resetValueVM() {
     vmVMDK.val(null);
     vmVMDK.addClass("required");
     vmVMDK.removeClass("invalid");
+    vmGpuProduct.val(null);
+    vmGpuProduct.addClass("required");
+    vmGpuProduct.removeClass("invalid");
+    vmGpuProfile.val(null);
+    vmGpuProfile.addClass("required");
+    vmGpuProfile.removeClass("invalid");
+    vmGpuAmount.val(null);
+    vmGpuAmount.addClass("required");
+    vmGpuAmount.removeClass("invalid");
     vmZone.val(null);
     vmZone.addClass("required");
     vmInstance.val(null);
@@ -1134,6 +1167,8 @@ function addVMToTable() {
     table += '</th><th>';
     table += 'Системный диск, ГБ';
     table += '</th><th>';
+    table += 'GPU';
+    table += '</th><th>';
     table += 'Зона';
     table += '</th><th>';
     table += 'Образ';
@@ -1166,6 +1201,10 @@ function addVMToTable() {
         table += (vmData.vm_ram || '');
         table += '</td><td>';
         table += (vmData.vm_vmdk || '');
+        table += '</td><td>';
+        table += (vmData.vm_gpu_amount || '');
+        table += ' ';
+        table += (vmData.vm_gpu_product || '');
         table += '</td><td>';
         table += (vmData.vm_zone || '');
         table += '</td><td>';
@@ -1288,6 +1327,18 @@ function checkingEnteredValue() {
     };
     if (!$("#vm_vmdk").val() || $("#vm_vmdk").hasClass("invalid")) {
         $("#vm_vmdk_required").addClass("empty");
+        isError = true;
+    };
+    if (!vmGpuProduct.val()) {
+        $("#vm_gpu_product").addClass("empty");
+        isError = true;
+    };
+    if (!vmGpuProfile.val()) {
+        $("#vm_gpu_profile").addClass("empty");
+        isError = true;
+    };
+    if (!vmGpuAmount.val()) {
+        $("#vm_gpu_amount_required").addClass("empty");
         isError = true;
     };
     if (!$("#vm_zone").val()) {
@@ -1596,6 +1647,21 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
         $("#vm_vmdk").removeClass("required");
         $("#vm_vmdk_required").removeClass("empty");
     };
+    $("#vm_gpu_product").val(vmData.vm_gpu_product);
+    if ($("#vm_gpu_product").val()) {
+        $("#vm_gpu_product").removeClass("required");
+        $("#vm_gpu_product").removeClass("empty");
+    };
+    $("#vm_gpu_profile").val(vmData.vm_gpu_profile);
+    if ($("#vm_gpu_profile").val()) {
+        $("#vm_gpu_profile").removeClass("required");
+        $("#vm_gpu_profile").removeClass("empty");
+    };
+    $("#vm_gpu_amount").val(vmData.vm_gpu_amount);
+    if ($("#vm_gpu_amount").val()) {
+        $("#vm_gpu_amount").removeClass("required");
+        $("#vm_gpu_amount_required").removeClass("empty");
+    }
     // Устанавливаем значение "Среды" и триггерим событие изменения
     $("#vm_instance").val(vmDataAdditional.vmInstance).trigger('change');
     // Ждем обновления списка зон (если требуется асинхронная загрузка)
