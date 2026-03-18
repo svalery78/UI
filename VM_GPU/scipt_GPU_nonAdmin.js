@@ -167,9 +167,10 @@ vmGpuProfile.on('change', function () {
 });
 
 var vmGpuAmount = $extension.find('#vm_gpu_amount');
+var vmGpuAmountRequired = $extension.find('#vm_gpu_amount_required');
 vmGpuAmount.on('change', function () {
-    if (vmGpuAmount.hasClass("empty")) {
-        vmGpuAmount.removeClass("empty");
+    if (vmGpuAmountRequired.hasClass("empty")) {
+        vmGpuAmountRequired.removeClass("empty");
     }
 });
 
