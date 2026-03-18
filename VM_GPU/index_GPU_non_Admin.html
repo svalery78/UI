@@ -159,7 +159,7 @@
             </div>
         </div>
 
-        <div class="row vertical" style="width: 33%; margin-left: 0px; padding-right:0px">
+        <div class="row vertical" style="width: 33%; margin-left: 0px;">
             <label for="vm_vmdk" title="VMDK, ГБ">Системный диск, ГБ</label>
             <div id="vm_vmdk_required">
                 <input id="vm_vmdk" type="number" autocomplete="off" min="22" max="500" class="required">
@@ -180,7 +180,9 @@
 
         <div class="row vertical" style="width: 33%; margin-left: 0px; padding-right:0px">
             <label for="vm_gpu_amount" title="Количество GPU">Количество GPU</label>
-            <input id="vm_gpu_amount" type="number" autocomplete="off" min="1" max="2" class="required">
+            <div id="vm_gpu_amount_required">
+                <input id="vm_gpu_amount" type="number" autocomplete="off" min="1" max="2" class="required">
+            </div>
         </div>
 
 
