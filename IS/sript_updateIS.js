@@ -89,8 +89,8 @@ label.on('change', function () {
             success: function (data) {
                 if (data.messages){
                     alert("Значение уже занято, введите новое значение");
-                    codeIS.val(null);
-                    codeIS.addClass("required");
+                    label.val(null);
+                    label.addClass("required");
                 }
             },
             error: function (data) {
@@ -155,8 +155,10 @@ $("#is_code_old").on("change", function () {
 $("#chg_is_code").on("change", function () {
     if ($(this).is(":checked")) {
         show($("#is_code_row"));
+        show($("#chg_is_code_dis"));
     } else {
         hide($("#is_code_row"));
+        hide($("#chg_is_code_dis"));
     };
 }).change();
 
@@ -207,9 +209,9 @@ ITRP.hooks.register('after-prefill', function () {
             $newLabelField.required(true);
             
             // Если поле пустое, можно предзаполнить его текущим значением для удобства правки
-            if (!$newLabelField.val()) {
-                $newLabelField.val($("#current_label").val());
-            }
+            // if (!$newLabelField.val()) {
+            //     $newLabelField.val($("#current_label").val());
+            // }
         } else {
             hide($newLabelRow);
             $newLabelField.required(false).val(""); // Очищаем значение при снятии галки
