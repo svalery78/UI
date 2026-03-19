@@ -292,7 +292,7 @@ $("#delete_vm").on("click", function () {
         vmCounter--;
         if (vmCounter == 0) {
             $(this).addClass("disabled");
-            $(this).hide();
+            $(this).hide();            
         }
 
     };
@@ -496,6 +496,7 @@ function deleteJson(input_json) {
         var lastVM = newArray.pop();
         if (newArray.length == 0) {
             $("#input_json").val(null);
+            inputJson = null;
         } else {
             var nodes = { "nodes": newArray };
             $("#input_json").val(JSON.stringify(nodes)).change();
