@@ -2,16 +2,41 @@ var $ = ITRP.$;            // jQuery
 var $extension = $(this);  // The UI Extension container with custom HTML
 var docLoad;
 
-// Достаем id запрашивающего из URL
-if (ITRP.record.new){
-  if (ITRP.context === 'self_service') { 
-    $("#requestor").val($("#requested_for_id").val());
-  }
+// // Достаем id запрашивающего из URL
+// if (ITRP.record.new){
+//   if (ITRP.context === 'self_service') { 
+//     $("#requestor").val($("#requested_for_id").val());
+//   }
 
-  if (ITRP.context != 'self_service') { 
-    $("#requestor").val($("#req_requested_for_id").val());
+//   if (ITRP.context != 'self_service') { 
+//     $("#requestor").val($("#req_requested_for_id").val());
+//   }
+// }
+
+function setRequestor() {
+  if (ITRP.record.new) {
+    console.log("ITRP.context:", ITRP.context);
+
+    if (ITRP.context === "self_service") {
+      console.log("requested_for_id:", $("#requested_for_id").val());
+      $("#requestor").val($("#requested_for_id").val());
+    } else {
+      console.log("req_requested_for_id:", $("#req_requested_for_id").val());
+      $("#requestor").val($("#req_requested_for_id").val());
+    }
+
+    console.log("requestor after set:", $("#requestor").val());
   }
 }
+
+setRequestor();
+
+//когда ввод завершен (фокус ушел с поля)
+$("#req_requested_for").on("blur", function () {
+  console.log("blur:", this.id, "value:", $(this).val());
+  setRequestor();
+});
+
 
 var cview_Map = new Map([
     ["current_user", ["users", "id"]],
@@ -74,7 +99,7 @@ label.on('change', function () {
   if (docLoad) {  
     //alert('codeIS - changed');
     if (label.val() != "") {
-        var filterContent = 'label: { values: "' + label.val() + '"}' ;
+        var filterContent = 'label: { values: "' + label.val().trim() + '"}' ;
         $.ajax({
             beforeSend: function (request) {
                 request.setRequestHeader("Content-Type", 'application/json');
