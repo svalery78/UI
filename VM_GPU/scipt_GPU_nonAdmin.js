@@ -27,6 +27,8 @@ var $g04SkpduProtocol = "";
 var $g04SkpduPortsNumber = "";
 var $VM_additional = [];
 var createVM;
+var $gpuProduct;
+var $gpuProfile;
 
 $("#input_form").readonly(true);
 
@@ -157,6 +159,10 @@ vmGpuProduct.on('change', function () {
     if (vmGpuProduct.hasClass("empty")) {
         vmGpuProduct.removeClass("empty");
     }
+
+    $gpuProduct = vmGpuProduct.data('item').display_name;     
+
+    console.log('vmGpuProduct - ' + JSON.stringify(vmGpuProduct.data('item')) );
 });
 
 var vmGpuProfile = $extension.find('#vm_gpu_profile');
@@ -164,6 +170,10 @@ vmGpuProfile.on('change', function () {
     if (vmGpuProfile.hasClass("empty")) {
         vmGpuProfile.removeClass("empty");
     }
+
+    $gpuProfile = vmGpuProfile.data('item').display_name;
+
+    console.log('vmGpuProfile - ' + JSON.stringify(vmGpuProfile.data('item')) );
 });
 
 var vmGpuAmount = $extension.find('#vm_gpu_amount');
@@ -952,8 +962,8 @@ function addVM() {
         "vm_vcpu": $("#vm_vcpu").val(),
         "vm_ram": $("#vm_ram").val(),
         "vm_vmdk": $("#vm_vmdk").val(),
-        "vm_gpu_product": vmGpuProduct.val(),
-        "vm_gpu_profile": vmGpuProfile.val(),
+        "vm_gpu_product": $gpuProduct, //vmGpuProduct.val(),
+        "vm_gpu_profile": $gpuProfile,  ///vmGpuProfile.val(),
         "vm_gpu_amount": vmGpuAmount.val(),
         "vm_instance": $instance,
         "vm_linux_description": $("#vm_linux_description").val(),
@@ -989,6 +999,8 @@ function addVM() {
         vmNetworkCIDr: vmNetworkCIDr.val(),
         vmNetworkCIDrSize: vmNetworkCIDrSize.val(),
         vmRole: vmRole.val(),
+        vmGpuProduct: vmGpuProduct.val(),
+        vmGpuProfile: vmGpuProfile.val(), 
         vmOS: vmOS.val(),
         vmOSFamily: vmOSFamily.val(),
         vmInstance: vmInstance.val(),
@@ -1081,6 +1093,8 @@ function resetValueVM() {
     $NFS = "";
     $addNFS = "";
     $addGroups = "";
+    $gpuProduct = "";
+    $gpuProfile = "";
     //$isCODIS = "";
     //$g02Action = "";
     //$g03Action = "";
@@ -1648,17 +1662,20 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
         $("#vm_vmdk").removeClass("required");
         $("#vm_vmdk_required").removeClass("empty");
     };
-    $("#vm_gpu_product").val(vmData.vm_gpu_product);
+    $("#vm_gpu_product").val(vmDataAdditional.vmGpuProduct);
+    $gpuProduct = vmData.vmGpuProduct;
     if ($("#vm_gpu_product").val()) {
         $("#vm_gpu_product").removeClass("required");
         $("#vm_gpu_product").removeClass("empty");
     };
-    $("#vm_gpu_profile").val(vmData.vm_gpu_profile);
+    $("#vm_gpu_profile").val(vmDataAdditional.vmGpuProfile);    
+    $gpuProfile = vmData.vmGpuProfile;
     if ($("#vm_gpu_profile").val()) {
         $("#vm_gpu_profile").removeClass("required");
         $("#vm_gpu_profile").removeClass("empty");
     };
     $("#vm_gpu_amount").val(vmData.vm_gpu_amount);
+    
     if ($("#vm_gpu_amount").val()) {
         $("#vm_gpu_amount").removeClass("required");
         $("#vm_gpu_amount_required").removeClass("empty");
