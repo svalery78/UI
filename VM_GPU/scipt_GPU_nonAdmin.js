@@ -1352,7 +1352,7 @@ function checkingEnteredValue() {
         $("#vm_gpu_profile").addClass("empty");
         isError = true;
     };
-    if (!vmGpuAmount.val()) {
+    if (!vmGpuAmount.val() || vmGpuAmount.hasClass("invalid")) {
         $("#vm_gpu_amount_required").addClass("empty");
         isError = true;
     };
