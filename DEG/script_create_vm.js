@@ -136,7 +136,7 @@ vmNetworkCIDr.on('change', function () {
 vmNetworkCIDrSize.on('change', function () {
     console.log("vmNetworkCIDrSize" + vmNetworkCIDrSize.val());
     if ($("#vm_networkcidr_size_required").hasClass("empty")) {
-        $("#vm_networkcidr_size_required").removeClass('empty');   
+        $("#vm_networkcidr_size_required").removeClass('empty');
     };
     setNetworkCIDr();
 });
@@ -1022,8 +1022,10 @@ function addVM() {
 }
 
 function resetValueVM() {
-    vmRole.val(null);
-    vmRole.addClass("required");
+    // vmRole.val(null);
+    // vmRole.addClass("required");
+    vmHostName.val(null);
+    vmHostName.addClass("required");
     vmNetworkCIDrAction.val(null);
     vmNetworkCIDrAction.addClass("required");
     vmNetworkCIDr.val(null);
@@ -1039,39 +1041,39 @@ function resetValueVM() {
     vmVMDK.val(null);
     vmVMDK.addClass("required");
     vmVMDK.removeClass("invalid");
-    vmZone.val(null);
-    vmZone.addClass("required");
-    vmInstance.val(null);
-    vmInstance.addClass("required");
+    // vmZone.val(null);
+    // vmZone.addClass("required");
+    // vmInstance.val(null);
+    // vmInstance.addClass("required");
     vmOSFamily.val(null);
     vmOS.val(null);
-    vmLinuxDescription.val(null);
-    vmLinuxDescription.removeClass("invalid");
-    $("#vm_linux_description_display").hide();
-    $("#add_nfs").prop("checked", false);
-    vmNFS.val(null);
-    vmNFS.addClass("required");
-    $("#vm_nfs-multitrack").addClass("required");
-    $("#add_groups").val(null);
-    resetValueVMg02();
-    resetValueVMg03();
-    resetValueVMg04();
-    resetValueDisk();
+    // vmLinuxDescription.val(null);
+    // vmLinuxDescription.removeClass("invalid");
+    // $("#vm_linux_description_display").hide();
+    // $("#add_nfs").prop("checked", false);
+    // vmNFS.val(null);
+    // vmNFS.addClass("required");
+    // $("#vm_nfs-multitrack").addClass("required");
+    // $("#add_groups").val(null);
+    // resetValueVMg02();
+    // resetValueVMg03();
+    // resetValueVMg04();
+    // resetValueDisk();
     $("#vm_networkcidr_display").hide();
     $("#vm_networkcidr_size_display").hide();
     $("#additional_disks").hide();
     $("#vm_add_disk").prop("checked", false);
-    $("#vm_nfs_display").hide();
-    $("#add_groups_1_disp").hide();
-    $("#add_groups_2_disp").hide();
-    $("#add_groups_3_disp").hide();
-    $role = "";
+    // $("#vm_nfs_display").hide();
+    // $("#add_groups_1_disp").hide();
+    // $("#add_groups_2_disp").hide();
+    // $("#add_groups_3_disp").hide();
+    //$role = "";
     $networkCIDr = "";
     //$networkCIDrSize = "";
     $OS = "";
-    $NFS = "";
-    $addNFS = "";
-    $addGroups = "";
+    // $NFS = "";
+    // $addNFS = "";
+    // $addGroups = "";
     //$isCODIS = "";
     //$g02Action = "";
     //$g03Action = "";
@@ -1086,54 +1088,54 @@ function resetValueDisk() {
     additonalDisksRemoveClass(0);
 }
 
-function resetValueVMg04() {
-    $("#vm_action_g04").val(null);
-    $("#vm_g04_name").val(null);
-    $("#vm_g04_name").removeClass("invalid");
-    $("#vm_g04_skdpu_protocol").val(null);
-    $("#vm_g04_skdpu_ports_number").val(null);
-    $("#vm_g04_skdpu_ports_number").removeClass("invalid");
-    $("#vm_g04_skdpu_ports").val(null);
-    $g04SkpduProtocol = "";
-    $g04SkpduPortsNumber = "";
-    vmActionG04.addClass("required");
-    vmG04Name.addClass("required");
-    vmg04SkpduPorts.addClass("required");
-    vmg04SkpduProtocol.addClass("required");
-}
+// function resetValueVMg04() {
+//     $("#vm_action_g04").val(null);
+//     $("#vm_g04_name").val(null);
+//     $("#vm_g04_name").removeClass("invalid");
+//     $("#vm_g04_skdpu_protocol").val(null);
+//     $("#vm_g04_skdpu_ports_number").val(null);
+//     $("#vm_g04_skdpu_ports_number").removeClass("invalid");
+//     $("#vm_g04_skdpu_ports").val(null);
+//     $g04SkpduProtocol = "";
+//     $g04SkpduPortsNumber = "";
+//     vmActionG04.addClass("required");
+//     vmG04Name.addClass("required");
+//     vmg04SkpduPorts.addClass("required");
+//     vmg04SkpduProtocol.addClass("required");
+// }
 
-function resetValueVMg03() {
-    $("#vm_action_g03").val(null);
-    $("#vm_g03_name").val(null);
-    $("#vm_g03_name").removeClass("invalid");
-    $("#vm_g03_skdpu_protocol").val(null);
-    $("#vm_g03_skdpu_ports_number").val(null);
-    $("#vm_g03_skdpu_ports_number").removeClass("invalid");
-    $("#vm_g04_skdpu_protocol_disp").show(); $("#vm_g03_skdpu_ports").val(null);
-    $g03SkpduProtocol = "";
-    $g03SkpduPortsNumber = "";
-    vmActionG03.addClass("required");
-    vmG03Name.addClass("required");
-    vmg03SkpduPorts.addClass("required");
-    vmg03SkpduPorts.addClass("required");
-    vmg03SkpduProtocol.addClass("required");
-}
+// function resetValueVMg03() {
+//     $("#vm_action_g03").val(null);
+//     $("#vm_g03_name").val(null);
+//     $("#vm_g03_name").removeClass("invalid");
+//     $("#vm_g03_skdpu_protocol").val(null);
+//     $("#vm_g03_skdpu_ports_number").val(null);
+//     $("#vm_g03_skdpu_ports_number").removeClass("invalid");
+//     $("#vm_g04_skdpu_protocol_disp").show(); $("#vm_g03_skdpu_ports").val(null);
+//     $g03SkpduProtocol = "";
+//     $g03SkpduPortsNumber = "";
+//     vmActionG03.addClass("required");
+//     vmG03Name.addClass("required");
+//     vmg03SkpduPorts.addClass("required");
+//     vmg03SkpduPorts.addClass("required");
+//     vmg03SkpduProtocol.addClass("required");
+// }
 
-function resetValueVMg02() {
-    $("#vm_action_g02").val(null);
-    $("#vm_g02_name").val(null);
-    $("#vm_g02_name").removeClass("invalid");
-    $("#vm_g02_skdpu_protocol").val(null);
-    $("#vm_g02_skdpu_ports_number").val(null);
-    $("#vm_g02_skdpu_ports_number").removeClass("invalid");
-    $("#vm_g02_skdpu_ports").val(null);
-    $g02SkpduProtocol = "";
-    $g02SkpduPortsNumber = "";
-    vmActionG02.addClass("required");
-    vmG02Name.addClass("required");
-    vmg02SkpduPorts.addClass("required");
-    vmg02SkpduProtocol.addClass("required");
-}
+// function resetValueVMg02() {
+//     $("#vm_action_g02").val(null);
+//     $("#vm_g02_name").val(null);
+//     $("#vm_g02_name").removeClass("invalid");
+//     $("#vm_g02_skdpu_protocol").val(null);
+//     $("#vm_g02_skdpu_ports_number").val(null);
+//     $("#vm_g02_skdpu_ports_number").removeClass("invalid");
+//     $("#vm_g02_skdpu_ports").val(null);
+//     $g02SkpduProtocol = "";
+//     $g02SkpduPortsNumber = "";
+//     vmActionG02.addClass("required");
+//     vmG02Name.addClass("required");
+//     vmg02SkpduPorts.addClass("required");
+//     vmg02SkpduProtocol.addClass("required");
+// }
 
 function addVMToTable() {
     var $VMs = $("#input_json").val();
@@ -1614,15 +1616,24 @@ function updateProtocolVisibility(vmSkpduPorts, vmSkpduProtocol, vmSkpduProtocol
 //function fillFormWithVMData(vmD$isCODIS + '-' + $role + '-***-' + $instance + $("#vm_linux_description").val()ata) {
 function fillFormWithVMData(vmData, vmDataAdditional) {
     // Основные поля
-    $("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;
-    $role = $("#vm_role").val();
+    //$("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;
+    //$role = $("#vm_role").val();
     $("#vm_networkcidr_action").val(vmDataAdditional.vmNetworkCIDrAction).change();
+    $("#vm_hostname").val(vmData.vm_hostname);
+    if ($("#vm_hostname").val()) {
+        $("#vm_hostname").removeClass("required");
+        $("#vm_hostname_required").removeClass("empty");
+    };
     //$("#vm_networkcidr").val( vmData.vm_networkcidr === "new" ? "new" : 
     //    {reference: vmData.vm_networkcidr }).change();
     //alert( $("#vm_networkcidr").val());
     $("#vm_networkcidr").val(vmDataAdditional.vmNetworkCIDr);
     $networkCIDr = vmData.vm_networkcidr; // === "new" ?  "new" : $("#vm_networkcidr").val();
     $("#vm_networkcidr_size").val(vmDataAdditional.vmNetworkCIDrSize);
+    if ($("#vm_networkcidr_size").val()) {
+        $("#vm_networkcidr_size").removeClass("required");
+        $("#vm_networkcidr_size_required").removeClass("empty");
+    };
     //$networkCIDrSize = vmData.vm_networkcidr_size;
     $("#vm_vcpu").val(vmData.vm_vcpu);
     if ($("#vm_vcpu").val()) {
@@ -1640,37 +1651,37 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
         $("#vm_vmdk_required").removeClass("empty");
     };
     // Устанавливаем значение "Среды" и триггерим событие изменения
-    $("#vm_instance").val(vmDataAdditional.vmInstance).trigger('change');
-    // Ждем обновления списка зон (если требуется асинхронная загрузка)
-    setTimeout(function () {
-        // Устанавливаем зону после обновления данных
-        $("#vm_zone").val(vmDataAdditional.vmZone).trigger('change');
-        $zone = vmData.vm_Zone;
-    }, 500); // Задержка для обработки изменений
-    $instance = vmData.vm_instance;
+    // $("#vm_instance").val(vmDataAdditional.vmInstance).trigger('change');
+    // // Ждем обновления списка зон (если требуется асинхронная загрузка)
+    // setTimeout(function () {
+    //     // Устанавливаем зону после обновления данных
+    //     $("#vm_zone").val(vmDataAdditional.vmZone).trigger('change');
+    //     $zone = vmData.vm_Zone;
+    // }, 500); // Задержка для обработки изменений
+    // $instance = vmData.vm_instance;
     $("#vm_os_family").val(vmDataAdditional.vmOSFamily).trigger('change');
     setTimeout(function () {
         $("#vm_os").val(vmDataAdditional.vmOS).trigger('change');
         $OS = vmData.vm_os;
     }, 500);
-    $("#vm_linux_description").val(vmData.vm_linux_description);
-    $("#add_nfs").prop("checked", vmDataAdditional.vmNFS.length > 0).change();
-    $("#vm_nfs").val(vmDataAdditional.vmNFS);
-    $NFS = vmData.vm_nfs;
-    $("#add_groups").val(vmDataAdditional.vmAddGroups).change();
-    //alert("add_groups=" + $("#add_groups").val());
+    //$("#vm_linux_description").val(vmData.vm_linux_description);
+    // $("#add_nfs").prop("checked", vmDataAdditional.vmNFS.length > 0).change();
+    // $("#vm_nfs").val(vmDataAdditional.vmNFS);
+    // $NFS = vmData.vm_nfs;
+    // $("#add_groups").val(vmDataAdditional.vmAddGroups).change();
+    // //alert("add_groups=" + $("#add_groups").val());
 
-    if ($("#add_groups").val() >= 1) {
-        fillFormWithG02(vmData, vmDataAdditional);
-    }
+    // if ($("#add_groups").val() >= 1) {
+    //     fillFormWithG02(vmData, vmDataAdditional);
+    // }
 
-    if ($("#add_groups").val() >= 2) {
-        fillFormWithG03(vmData, vmDataAdditional);
-    }
+    // if ($("#add_groups").val() >= 2) {
+    //     fillFormWithG03(vmData, vmDataAdditional);
+    // }
 
-    if ($("#add_groups").val() >= 3) {
-        fillFormWithG04(vmData, vmDataAdditional);
-    }
+    // if ($("#add_groups").val() >= 3) {
+    //     fillFormWithG04(vmData, vmDataAdditional);
+    // }
 
     // Диски
     $("#vm_add_disk").prop("checked", !!vmData.vm_disk1).change();
@@ -1711,74 +1722,74 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
 
 }
 
-function fillFormWithG02(vmData, vmDataAdditional) {
-    $("#vm_action_g02").val(vmData.vm_action_g02);
-    $("#vm_action_g02").removeClass("required");
-    $("#vm_g02_name").val(vmData.vm_g02_name);
-    $("#vm_g02_name").removeClass("required");
-    $("#vm_g02_skdpu_ports").val(vmDataAdditional.vmg02SkpduPorts);
-    $("#vm_g02_skdpu_ports_number").val(vmDataAdditional.vmg02SkpduPortsNumber);
-    $("#vm_g02_skdpu_protocol").val(vmDataAdditional.vmg02SkpduProtocol);
-    if ($("#vm_g02_skdpu_protocol").val()) {
-        $("#vm_g02_skdpu_protocol").removeClass("required");
-        $g02SkpduProtocol = $("#vm_g02_skdpu_ports").val() ? $("#vm_g02_skdpu_ports").val() : ($("#vm_g02_skdpu_protocol").val() ? $("#vm_g02_skdpu_protocol").val() : "");
-    };
-    if ($("#vm_g02_skdpu_ports").val()) {
-        $("#vm_g02_skdpu_ports").removeClass("required");
-        $g02SkpduProtocol = $("#vm_g02_skdpu_ports").val() ? $("#vm_g02_skdpu_ports").val() : ($("#vm_g02_skdpu_protocol").val() ? $("#vm_g02_skdpu_protocol").val() : "");
-        $g02SkpduPortsNumber = $("#vm_g02_skdpu_ports_number").val() ? $("#vm_g02_skdpu_ports_number").val() : ($("#vm_g02_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g02_skdpu_ports").val() === "ssh" ? "22" : ""));
-    }
-    if ($("#vm_g02_skdpu_ports_number").val()) {
-        $g02SkpduPortsNumber = $("#vm_g02_skdpu_ports_number").val() ? $("#vm_g02_skdpu_ports_number").val() : ($("#vm_g02_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g02_skdpu_ports").val() === "ssh" ? "22" : ""));
-    };
-    updateProtocolVisibility($("#vm_g02_skdpu_ports"), $("#vm_g02_skdpu_protocol"), $("#vm_g02_skdpu_protocol_disp"));
-}
+// function fillFormWithG02(vmData, vmDataAdditional) {
+//     $("#vm_action_g02").val(vmData.vm_action_g02);
+//     $("#vm_action_g02").removeClass("required");
+//     $("#vm_g02_name").val(vmData.vm_g02_name);
+//     $("#vm_g02_name").removeClass("required");
+//     $("#vm_g02_skdpu_ports").val(vmDataAdditional.vmg02SkpduPorts);
+//     $("#vm_g02_skdpu_ports_number").val(vmDataAdditional.vmg02SkpduPortsNumber);
+//     $("#vm_g02_skdpu_protocol").val(vmDataAdditional.vmg02SkpduProtocol);
+//     if ($("#vm_g02_skdpu_protocol").val()) {
+//         $("#vm_g02_skdpu_protocol").removeClass("required");
+//         $g02SkpduProtocol = $("#vm_g02_skdpu_ports").val() ? $("#vm_g02_skdpu_ports").val() : ($("#vm_g02_skdpu_protocol").val() ? $("#vm_g02_skdpu_protocol").val() : "");
+//     };
+//     if ($("#vm_g02_skdpu_ports").val()) {
+//         $("#vm_g02_skdpu_ports").removeClass("required");
+//         $g02SkpduProtocol = $("#vm_g02_skdpu_ports").val() ? $("#vm_g02_skdpu_ports").val() : ($("#vm_g02_skdpu_protocol").val() ? $("#vm_g02_skdpu_protocol").val() : "");
+//         $g02SkpduPortsNumber = $("#vm_g02_skdpu_ports_number").val() ? $("#vm_g02_skdpu_ports_number").val() : ($("#vm_g02_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g02_skdpu_ports").val() === "ssh" ? "22" : ""));
+//     }
+//     if ($("#vm_g02_skdpu_ports_number").val()) {
+//         $g02SkpduPortsNumber = $("#vm_g02_skdpu_ports_number").val() ? $("#vm_g02_skdpu_ports_number").val() : ($("#vm_g02_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g02_skdpu_ports").val() === "ssh" ? "22" : ""));
+//     };
+//     updateProtocolVisibility($("#vm_g02_skdpu_ports"), $("#vm_g02_skdpu_protocol"), $("#vm_g02_skdpu_protocol_disp"));
+// }
 
-function fillFormWithG03(vmData, vmDataAdditional) {
-    $("#vm_action_g03").val(vmData.vm_action_g03);
-    $("#vm_action_g03").removeClass("required");
-    $("#vm_g03_name").val(vmData.vm_g03_name);
-    $("#vm_g03_name").removeClass("required");
-    $("#vm_g03_skdpu_ports").val(vmDataAdditional.vmg03SkpduPorts);
-    $("#vm_g03_skdpu_ports_number").val(vmDataAdditional.vmg03SkpduPortsNumber);
-    $("#vm_g03_skdpu_protocol").val(vmDataAdditional.vmg03SkpduProtocol);
-    if ($("#vm_g03_skdpu_protocol").val()) {
-        $("#vm_g03_skdpu_protocol").removeClass("required");
-        $g03SkpduProtocol = $("#vm_g03_skdpu_ports").val() ? $("#vm_g03_skdpu_ports").val() : ($("#vm_g03_skdpu_protocol").val() ? $("#vm_g03_skdpu_protocol").val() : "");
-    };
-    if ($("#vm_g03_skdpu_ports").val()) {
-        $("#vm_g03_skdpu_ports").removeClass("required");
-        $g03SkpduProtocol = $("#vm_g03_skdpu_ports").val() ? $("#vm_g03_skdpu_ports").val() : ($("#vm_g03_skdpu_protocol").val() ? $("#vm_g03_skdpu_protocol").val() : "");
-        $g03SkpduPortsNumber = $("#vm_g03_skdpu_ports_number").val() ? $("#vm_g03_skdpu_ports_number").val() : ($("#vm_g03_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g03_skdpu_ports").val() === "ssh" ? "22" : ""));
-    }
-    if ($("#vm_g03_skdpu_ports_number").val()) {
-        $g03SkpduPortsNumber = $("#vm_g03_skdpu_ports_number").val() ? $("#vm_g03_skdpu_ports_number").val() : ($("#vm_g03_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g03_skdpu_ports").val() === "ssh" ? "22" : ""));
-    };
-    updateProtocolVisibility($("#vm_g03_skdpu_ports"), $("#vm_g03_skdpu_protocol"), $("#vm_g03_skdpu_protocol_disp"));
-}
+// function fillFormWithG03(vmData, vmDataAdditional) {
+//     $("#vm_action_g03").val(vmData.vm_action_g03);
+//     $("#vm_action_g03").removeClass("required");
+//     $("#vm_g03_name").val(vmData.vm_g03_name);
+//     $("#vm_g03_name").removeClass("required");
+//     $("#vm_g03_skdpu_ports").val(vmDataAdditional.vmg03SkpduPorts);
+//     $("#vm_g03_skdpu_ports_number").val(vmDataAdditional.vmg03SkpduPortsNumber);
+//     $("#vm_g03_skdpu_protocol").val(vmDataAdditional.vmg03SkpduProtocol);
+//     if ($("#vm_g03_skdpu_protocol").val()) {
+//         $("#vm_g03_skdpu_protocol").removeClass("required");
+//         $g03SkpduProtocol = $("#vm_g03_skdpu_ports").val() ? $("#vm_g03_skdpu_ports").val() : ($("#vm_g03_skdpu_protocol").val() ? $("#vm_g03_skdpu_protocol").val() : "");
+//     };
+//     if ($("#vm_g03_skdpu_ports").val()) {
+//         $("#vm_g03_skdpu_ports").removeClass("required");
+//         $g03SkpduProtocol = $("#vm_g03_skdpu_ports").val() ? $("#vm_g03_skdpu_ports").val() : ($("#vm_g03_skdpu_protocol").val() ? $("#vm_g03_skdpu_protocol").val() : "");
+//         $g03SkpduPortsNumber = $("#vm_g03_skdpu_ports_number").val() ? $("#vm_g03_skdpu_ports_number").val() : ($("#vm_g03_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g03_skdpu_ports").val() === "ssh" ? "22" : ""));
+//     }
+//     if ($("#vm_g03_skdpu_ports_number").val()) {
+//         $g03SkpduPortsNumber = $("#vm_g03_skdpu_ports_number").val() ? $("#vm_g03_skdpu_ports_number").val() : ($("#vm_g03_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g03_skdpu_ports").val() === "ssh" ? "22" : ""));
+//     };
+//     updateProtocolVisibility($("#vm_g03_skdpu_ports"), $("#vm_g03_skdpu_protocol"), $("#vm_g03_skdpu_protocol_disp"));
+// }
 
-function fillFormWithG04(vmData, vmDataAdditional) {
-    $("#vm_action_g04").val(vmData.vm_action_g04);
-    $("#vm_action_g04").removeClass("required");
-    $("#vm_g04_name").val(vmData.vm_g04_name);
-    $("#vm_g04_name").removeClass("required");
-    $("#vm_g04_skdpu_ports").val(vmDataAdditional.vmg04SkpduPorts);
-    $("#vm_g04_skdpu_ports_number").val(vmDataAdditional.vmg04SkpduPortsNumber);
-    $("#vm_g04_skdpu_protocol").val(vmDataAdditional.vmg04SkpduProtocol);
-    if ($("#vm_g04_skdpu_protocol").val()) {
-        $("#vm_g04_skdpu_protocol").removeClass("required");
-        $g04SkpduProtocol = $("#vm_g04_skdpu_ports").val() ? $("#vm_g04_skdpu_ports").val() : ($("#vm_g04_skdpu_protocol").val() ? $("#vm_g04_skdpu_protocol").val() : "");
-    };
-    if ($("#vm_g04_skdpu_ports").val()) {
-        $("#vm_g04_skdpu_ports").removeClass("required");
-        $g04SkpduProtocol = $("#vm_g04_skdpu_ports").val() ? $("#vm_g04_skdpu_ports").val() : ($("#vm_g04_skdpu_protocol").val() ? $("#vm_g04_skdpu_protocol").val() : "");
-        $g04SkpduPortsNumber = $("#vm_g04_skdpu_ports_number").val() ? $("#vm_g04_skdpu_ports_number").val() : ($("#vm_g04_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g04_skdpu_ports").val() === "ssh" ? "22" : ""));
-    }
-    if ($("#vm_g04_skdpu_ports_number").val()) {
-        $g04SkpduPortsNumber = $("#vm_g04_skdpu_ports_number").val() ? $("#vm_g04_skdpu_ports_number").val() : ($("#vm_g04_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g04_skdpu_ports").val() === "ssh" ? "22" : ""));
-    };
-    updateProtocolVisibility($("#vm_g04_skdpu_ports"), $("#vm_g04_skdpu_protocol"), $("#vm_g04_skdpu_protocol_disp"));
-}
+// function fillFormWithG04(vmData, vmDataAdditional) {
+//     $("#vm_action_g04").val(vmData.vm_action_g04);
+//     $("#vm_action_g04").removeClass("required");
+//     $("#vm_g04_name").val(vmData.vm_g04_name);
+//     $("#vm_g04_name").removeClass("required");
+//     $("#vm_g04_skdpu_ports").val(vmDataAdditional.vmg04SkpduPorts);
+//     $("#vm_g04_skdpu_ports_number").val(vmDataAdditional.vmg04SkpduPortsNumber);
+//     $("#vm_g04_skdpu_protocol").val(vmDataAdditional.vmg04SkpduProtocol);
+//     if ($("#vm_g04_skdpu_protocol").val()) {
+//         $("#vm_g04_skdpu_protocol").removeClass("required");
+//         $g04SkpduProtocol = $("#vm_g04_skdpu_ports").val() ? $("#vm_g04_skdpu_ports").val() : ($("#vm_g04_skdpu_protocol").val() ? $("#vm_g04_skdpu_protocol").val() : "");
+//     };
+//     if ($("#vm_g04_skdpu_ports").val()) {
+//         $("#vm_g04_skdpu_ports").removeClass("required");
+//         $g04SkpduProtocol = $("#vm_g04_skdpu_ports").val() ? $("#vm_g04_skdpu_ports").val() : ($("#vm_g04_skdpu_protocol").val() ? $("#vm_g04_skdpu_protocol").val() : "");
+//         $g04SkpduPortsNumber = $("#vm_g04_skdpu_ports_number").val() ? $("#vm_g04_skdpu_ports_number").val() : ($("#vm_g04_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g04_skdpu_ports").val() === "ssh" ? "22" : ""));
+//     }
+//     if ($("#vm_g04_skdpu_ports_number").val()) {
+//         $g04SkpduPortsNumber = $("#vm_g04_skdpu_ports_number").val() ? $("#vm_g04_skdpu_ports_number").val() : ($("#vm_g04_skdpu_ports").val() === "rdp" ? "3389" : ($("#vm_g04_skdpu_ports").val() === "ssh" ? "22" : ""));
+//     };
+//     updateProtocolVisibility($("#vm_g04_skdpu_ports"), $("#vm_g04_skdpu_protocol"), $("#vm_g04_skdpu_protocol_disp"));
+// }
 
 function finishChecked() {
     $("#vm_1").hide();
@@ -1826,18 +1837,18 @@ function setNetworkCIDr() {
     };
 };
 
-$("#admin_privileges").on("change", function () {
-    if (!$(this).hasClass("disabled")) {
-        if ($(this).is(":checked")) {
-            $("#for_admin").show();
-        } else {
-            $("#for_admin").hide();
-            //alert($("#admin_list").val());
-            $("#admin_list").val(null);
+// $("#admin_privileges").on("change", function () {
+//     if (!$(this).hasClass("disabled")) {
+//         if ($(this).is(":checked")) {
+//             $("#for_admin").show();
+//         } else {
+//             $("#for_admin").hide();
+//             //alert($("#admin_list").val());
+//             $("#admin_list").val(null);
 
-        }
-    }
-});
+//         }
+//     }
+// });
 
 $("#finish").on("change", function () {
     if (createVM || createVM == false) {
