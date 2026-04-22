@@ -27,6 +27,7 @@ var $g04Action;
 var $g04SkpduProtocol = "";
 var $g04SkpduPortsNumber = "";
 var $VM_additional = [];
+var $OSFamily;
 var createVM;
 
 $("#input_form").readonly(true);
@@ -171,6 +172,7 @@ vmOSFamily.on('change', function () {
     if (vmOSFamily.hasClass("empty")) {
         vmOSFamily.removeClass("empty");
     }
+    $OSFamily = vmOSFamily.data('item').name;
     if (vmOSFamily.data('item').name === 'linux' || vmOSFamily.data('item').name === 'mosos') {
         $("#vm_linux_description_display").show();
     } else {
@@ -957,7 +959,7 @@ function addVM() {
         //"vm_instance": $instance,
         //"vm_linux_description": $("#vm_linux_description").val(),
         //"vm_zone": $zone,
-        "vm_os_family": vmOSFamily.val(),
+        "vm_os_family": $OSFamily,
         "vm_os": $OS, //$("#vm_os").val(),  //
         //"vm_nfs": $NFS, //$("#vm_nfs").val(), //
         // "vm_action_g02": $("#vm_action_g02").val(),
@@ -1058,7 +1060,7 @@ function resetValueVM() {
     // resetValueVMg02();
     // resetValueVMg03();
     // resetValueVMg04();
-    // resetValueDisk();
+    resetValueDisk();
     $("#vm_networkcidr_display").hide();
     $("#vm_networkcidr_size_display").hide();
     $("#additional_disks").hide();
@@ -1071,6 +1073,7 @@ function resetValueVM() {
     $networkCIDr = "";
     //$networkCIDrSize = "";
     $OS = "";
+    $OSFamily = "";
     // $NFS = "";
     // $addNFS = "";
     // $addGroups = "";
