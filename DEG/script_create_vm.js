@@ -81,7 +81,7 @@ ISName.on('change', function () {
 //     $role = vmRole.data('item').reference;
 // });
 
-var vmHostName = $extension.find("#vm_hostname");   // vm_hostname
+var vmHostName = $extension.find("#vm_hostname");   // hostname
 vmHostName.on('change', function () {
     if (vmHostName.hasClass("empty")) {
         vmHostName.removeClass("empty");
@@ -950,7 +950,7 @@ function addVM() {
     var newVM = {
         "vm": $count_vm,
         //"vm_role": $role, //$("#vm_role").val(),  //
-        "vm_hostname": vmHostName.val(),
+        "hostname": vmHostName.val(),
         "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
         //"vm_networkcidr_size": $networkCIDrSize,
         "vm_vcpu": $("#vm_vcpu").val(),
@@ -1028,6 +1028,7 @@ function resetValueVM() {
     // vmRole.addClass("required");
     vmHostName.val(null);
     vmHostName.addClass("required");
+    vmHostName.removeClass("invalid");
     vmNetworkCIDrAction.val(null);
     vmNetworkCIDrAction.addClass("required");
     vmNetworkCIDr.val(null);
@@ -1192,7 +1193,7 @@ function addVMToTable() {
         table += '</td><td>';
         // table += $VM_additional[index].vmNameVM; //$isCODIS + '-' + $role + '-***-' + $instance + '-' + $("#vm_linux_description").val();
         // table += '</td><td>';
-        table += vmData.vm_hostname;
+        table += vmData.hostname;
         table += '</td><td>';
         // table += (vmData.vm_role || '');
         // table += '</td><td>';
@@ -1302,7 +1303,7 @@ function checkingEnteredValue() {
     //     };
     // };
 
-    if (!vmHostName.val()) {
+    if (!vmHostName.val() || vmHostName.hasClass("invalid")) {
         vmHostName.addClass("empty");
         isError = true;
     };
@@ -1622,7 +1623,7 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     //$("#vm_role").val({ reference: vmData.vm_role }); //.change();  //   vmRole.data('item').reference;
     //$role = $("#vm_role").val();
     $("#vm_networkcidr_action").val(vmDataAdditional.vmNetworkCIDrAction).change();
-    $("#vm_hostname").val(vmData.vm_hostname);
+    $("#vm_hostname").val(vmData.hostname);
     if ($("#vm_hostname").val()) {
         $("#vm_hostname").removeClass("required");
         $("#vm_hostname_required").removeClass("empty");
