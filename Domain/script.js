@@ -14,6 +14,7 @@ ITRP.hooks.register("after-prefill", function() {
     }
   });
 
+  var result;
   var domainName = $extension.find("#domain_name");
   $("#domain_name").on("change", function() {
     var fields = $("#chg_domain, #chg_location, #chg_locations").closest(".row");
@@ -24,7 +25,7 @@ ITRP.hooks.register("after-prefill", function() {
       hide(fields);
     }
     if (domainName.val() != ""){
-        var filter = 'label: { values: ["' + domainName.val() + '"] }';
+        var filter = 'label: { values: ["' + domainName.data('item').label + '"] }';
         $.ajax({
             beforeSend: function (request) {
                 request.setRequestHeader("Content-Type", 'application/json');
@@ -38,11 +39,9 @@ ITRP.hooks.register("after-prefill", function() {
             method: 'post',
             success: function (data) {
                 console.log('data - ' + JSON.stringify(data.data));
-                // if (data.messages){
-                //     alert("Значение уже занято, введите новое значение");
-                //     codeIS.val(null);
-                //     codeIS.addClass("required");
-                // }
+                result = getCustomFieldsJQuery(data.data);
+                console.log(JSON.stringify(result));
+                $("#dc").val() = result.dc;
             },
             error: function (data) {
                 alert(JSON.stringify(data));
@@ -152,6 +151,18 @@ function fillItemFields(cvmap, $item) {
 
   });
 }
+
+function getCustomFieldsJQuery(data) {
+  var result = {};
+  var fields = (data[0] && data[0].customFields) || [];
+  console.log('fields' + JSON.stringify(fields));  
+  $.each(fields, function(i, field) {
+      result[field.id] = field.value;
+  });
+  
+  return result;
+}
+
 
 /**** Кнопки ****/
 $(".button.add").on("click", function() {
