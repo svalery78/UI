@@ -516,7 +516,7 @@ function addVM() {
 
     var newVM = {
         "vm": $count_vm,
-        "hostname": vmHostName.val(),
+        "vm_hostname": vmHostName.val(),
         "vm_networkcidr": $networkCIDr, //$("#vm_networkcidr").val(), //
         "vm_vcpu": $("#vm_vcpu").val(),
         "vm_ram": $("#vm_ram").val(),
@@ -621,7 +621,7 @@ function addVMToTable() {
         table += '<tr><td>';
         table += vmData.vm;
         table += '</td><td>';
-        table += vmData.hostname;
+        table += vmData.vm_hostname;
         table += '</td><td>';
         table += (vmData.vm_networkcidr || '');
         table += '</td><td>';
@@ -844,7 +844,7 @@ function updateProtocolVisibility(vmSkpduPorts, vmSkpduProtocol, vmSkpduProtocol
 function fillFormWithVMData(vmData, vmDataAdditional) {
     // Основные поля
     $("#vm_networkcidr_action").val(vmDataAdditional.vmNetworkCIDrAction).change();
-    $("#vm_hostname").val(vmData.hostname);
+    $("#vm_hostname").val(vmData.vm_hostname);
     if ($("#vm_hostname").val()) {
         $("#vm_hostname").removeClass("required");
         $("#vm_hostname_required").removeClass("empty");
