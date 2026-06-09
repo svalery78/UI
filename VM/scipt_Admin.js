@@ -959,10 +959,15 @@ function addVM() {
         //"vm_authorization": $("#vm_authorization").val(),  //
         //"vm_action_type": $("#vm_action_type").val(),  //
         "vm_disk1": $("#vm_disk1").val(),
+        "vm_disk1_letter": $("#vm_disk1_letter").val(),
         "vm_disk2": $("#vm_disk2").val(),
+        "vm_disk2_letter": $("#vm_disk2_letter").val(),
         "vm_disk3": $("#vm_disk3").val(),
+        "vm_disk3_letter": $("#vm_disk3_letter").val(),        
         "vm_disk4": $("#vm_disk4").val(),
+        "vm_disk4_letter": $("#vm_disk4_letter").val(),        
         "vm_disk5": $("#vm_disk5").val(),
+        "vm_disk5_letter": $("vm_disk5_letter").val()
     };
     newArray.push(newVM);
     var vmLinuxDescriptionHTML = $("#vm_linux_description").val() ? '-' + $("#vm_linux_description").val() : '';
@@ -1209,14 +1214,24 @@ function addVMToTable() {
         table += '; ';
         table += '</td><td>';
         table += (vmData.vm_disk1 || '');
+        table += ' ';
+        table += (vmData.vm_disk1_letter || '');
         table += '; <br> ';
         table += (vmData.vm_disk2 || '');
+        table += ' ';
+        table += (vmData.vm_disk2_letter || '');
         table += '; <br> ';
         table += (vmData.vm_disk3 || '');
+        table += ' ';
+        table += (vmData.vm_disk3_letter || '');
         table += '; <br>';
         table += (vmData.vm_disk4 || '');
+        table += ' ';
+        table += (vmData.vm_disk4_letter || '');
         table += '; <br>';
         table += (vmData.vm_disk5 || '');
+        table += ' ';
+        table += (vmData.vm_disk5_letter || '');
         table += '; ';
         table += '</td></tr>';
     }
@@ -1408,20 +1423,20 @@ function checkingEnteredValue() {
             vmDisk1Required.addClass("empty");
             isError = true;
         };
-        // if (!vmDisk1Letter.val()) {
-        //   vmDisk1LetterRequired.addClass("empty");
-        //   isError = true;
-        // };
+        if (!vmDisk1Letter.val()) {
+          vmDisk1LetterRequired.addClass("empty");
+          isError = true;
+        };
 
         if ($("#disk2").css("display") === "block") {
             if (!vmDisk2.val() || vmDisk2.hasClass("invalid")) {
                 vmDisk2Required.addClass("empty");
                 isError = true;
             };
-            // if (!vmDisk2Letter.val()) {
-            //   vmDisk2LetterRequired.addClass("empty");
-            //   isError = true;
-            // };
+            if (!vmDisk2Letter.val()) {
+              vmDisk2LetterRequired.addClass("empty");
+              isError = true;
+            };
         };
 
         if ($("#disk3").css("display") === "block") {
@@ -1429,10 +1444,10 @@ function checkingEnteredValue() {
                 vmDisk3Required.addClass("empty");
                 isError = true;
             };
-            // if (!vmDisk3Letter.val()) {
-            //   vmDisk3LetterRequired.addClass("empty");
-            //   isError = true;
-            // };
+            if (!vmDisk3Letter.val()) {
+              vmDisk3LetterRequired.addClass("empty");
+              isError = true;
+            };
         };
 
 
@@ -1441,10 +1456,10 @@ function checkingEnteredValue() {
                 vmDisk4Required.addClass("empty");
                 isError = true;
             };
-            // if (!vmDisk4Letter.val()) {
-            //   vmDisk4LetterRequired.addClass("empty");
-            //   isError = true;
-            // };
+            if (!vmDisk4Letter.val()) {
+              vmDisk4LetterRequired.addClass("empty");
+              isError = true;
+            };
         };
 
 
@@ -1453,10 +1468,10 @@ function checkingEnteredValue() {
                 vmDisk5Required.addClass("empty");
                 isError = true;
             };
-            // if (!vmDisk5Letter.val()) {
-            //   vmDisk5LetterRequired.addClass("empty");
-            //   isError = true;
-            // };
+            if (!vmDisk5Letter.val()) {
+              vmDisk5LetterRequired.addClass("empty");
+              isError = true;
+            };
         };
 
     };
@@ -1470,14 +1485,14 @@ function additonalDisksRemoveClass(diskNumber) {
             vmDisk1Required.removeClass("empty");
         };
         //var vmDisk1Letter = $extension.find("#vm_disk1_letter");
-        // if (vmDisk1LetterRequired.hasClass("empty")) {
-        //     vmDisk1LetterRequired.removeClass("empty");
-        // };
+        if (vmDisk1LetterRequired.hasClass("empty")) {
+            vmDisk1LetterRequired.removeClass("empty");
+        };
         vmDisk1.addClass("required");
         vmDisk1.removeClass("invalid");
-        //vmDisk1Letter.addClass("required");
+        vmDisk1Letter.addClass("required");
         vmDisk1.val(null);
-        //vmDisk1Letter.val(null);
+        vmDisk1Letter.val(null);
         //$("#disk1").hide();
     };
 
@@ -1487,14 +1502,14 @@ function additonalDisksRemoveClass(diskNumber) {
             vmDisk2Required.removeClass("empty");
         };
         //var vmDisk2Letter = $extension.find("#vm_disk2_letter");
-        // if (vmDisk2LetterRequired.hasClass("empty")) {
-        //     vmDisk2LetterRequired.removeClass("empty");
-        // };
+        if (vmDisk2LetterRequired.hasClass("empty")) {
+            vmDisk2LetterRequired.removeClass("empty");
+        };
         vmDisk2.addClass("required");
         vmDisk2.removeClass("invalid");
-        //vmDisk2Letter.addClass("required");
+        vmDisk2Letter.addClass("required");
         vmDisk2.val(null);
-        //mDisk2Letter.val(null);
+        vmDisk2Letter.val(null);
         $("#disk2").hide();
     };
 
@@ -1504,14 +1519,14 @@ function additonalDisksRemoveClass(diskNumber) {
             vmDisk3Required.removeClass("empty");
         };
         //var vmDisk3Letter = $extension.find("#vm_disk3_letter");
-        // if (vmDisk3LetterRequired.hasClass("empty")) {
-        //   vmDisk3LetterRequired.removeClass("empty");
-        // };
+        if (vmDisk3LetterRequired.hasClass("empty")) {
+          vmDisk3LetterRequired.removeClass("empty");
+        };
         vmDisk3.addClass("required");
         vmDisk3.removeClass("invalid");
-        //mDisk3Letter.addClass("required");
+        vmDisk3Letter.addClass("required");
         vmDisk3.val(null);
-        //vmDisk3Letter.val(null);
+        vmDisk3Letter.val(null);
         $("#disk3").hide();
     };
 
@@ -1521,14 +1536,14 @@ function additonalDisksRemoveClass(diskNumber) {
             vmDisk4Required.removeClass("empty");
         };
         //var vmDisk4Letter = $extension.find("#vm_disk4_letter");
-        // if (vmDisk4LetterRequired.hasClass("empty")) {
-        //   vmDisk4LetterRequired.removeClass("empty");
-        // };
+        if (vmDisk4LetterRequired.hasClass("empty")) {
+          vmDisk4LetterRequired.removeClass("empty");
+        };
         vmDisk4.addClass("required");
         vmDisk4.removeClass("invalid");
-        //vmDisk4Letter.addClass("required");
+        vmDisk4Letter.addClass("required");
         vmDisk4.val(null);
-        //vmDisk4Letter.val(null);
+        vmDisk4Letter.val(null);
         $("#disk4").hide();
     };
 
@@ -1544,14 +1559,14 @@ function additonalDisksRemoveClass(diskNumber) {
             vmDisk5Required.removeClass("empty");
         };
         //var vmDisk5Letter = $extension.find("#vm_disk5_letter");
-        // if (vmDisk5LetterRequired.hasClass("empty")) {
-        //   vmDisk5LetterRequired.removeClass("empty");
-        // };
+        if (vmDisk5LetterRequired.hasClass("empty")) {
+          vmDisk5LetterRequired.removeClass("empty");
+        };
         vmDisk5.addClass("required");
         vmDisk5.removeClass("invalid");
-        //vmDisk5Letter.addClass("required");
+        vmDisk5Letter.addClass("required");
         vmDisk5.val(null);
-        //vmDisk5Letter.val(null);
+        vmDisk5Letter.val(null);
         $("#disk5").hide();
     };
 };
@@ -1642,23 +1657,33 @@ function fillFormWithVMData(vmData, vmDataAdditional) {
     if (vmData.vm_disk1) {
         $("#vm_disk1").val(vmData.vm_disk1);
         $("#vm_disk1").removeClass("required");
+        $("#vm_disk1_letter").val(vmData.vm_disk1_letter);
+        $("#vm_disk1_letter").removeClass("required");
         $("#delete_disk").show();
         $("#delete_disk").removeClass("disabled");
         if (vmData.vm_disk2) {
             $("#vm_disk2").val(vmData.vm_disk2);
             $("#vm_disk2").removeClass("required");
+            $("#vm_disk2_letter").val(vmData.vm_disk2_letter);
+            $("#vm_disk2_letter").removeClass("required");
             $("#disk2").show();
             if (vmData.vm_disk3) {
                 $("#vm_disk3").val(vmData.vm_disk3);
                 $("#vm_disk3").removeClass("required");
+                $("#vm_disk3_letter").val(vmData.vm_disk3_letter);
+                $("#vm_disk3_letter").removeClass("required");
                 $("#disk3").show();
                 if (vmData.vm_disk4) {
                     $("#vm_disk4").val(vmData.vm_disk4);
                     $("#vm_disk4").removeClass("required");
+                    $("#vm_disk4_letter").val(vmData.vm_disk4_letter);
+                    $("#vm_disk4_letter").removeClass("required");
                     $("#disk4").show();
                     if (vmData.vm_disk5) {
                         $("#vm_disk5").val(vmData.vm_disk5);
                         $("#vm_disk5").removeClass("required");
+                        $("#vm_disk5_letter").val(vmData.vm_disk5_letter);
+                        $("#vm_disk5_letter").removeClass("required");
                         $("#disk5").show();
                         $("#add_disk").addClass("disabled");
                         $("#add_disk").hide();
